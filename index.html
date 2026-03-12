@@ -195,6 +195,66 @@ a{text-decoration:none;color:inherit}
 .ev-stat-label{font-size:.7rem;color:var(--text-muted);text-transform:uppercase}
 
 /* ============================================
+   ODDSJAM-STYLE EV TABLE
+   ============================================ */
+.ev-page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.ev-tabs{display:flex;gap:0;border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden}
+.ev-tab{background:var(--bg-card);border:none;color:var(--text-muted);padding:9px 18px;font-size:.82rem;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:7px;white-space:nowrap}
+.ev-tab.active{background:var(--accent-blue);color:#fff}
+.ev-tab:hover:not(.active){background:var(--bg-hover);color:var(--text-primary)}
+.ev-tab .tab-count{background:rgba(255,255,255,.2);padding:2px 7px;border-radius:20px;font-size:.7rem;font-weight:700}
+.ev-tab.active .tab-count{background:rgba(255,255,255,.25)}
+.ev-tab:not(.active) .tab-count{background:var(--bg-tertiary);color:var(--text-muted)}
+.ev-actions{display:flex;align-items:center;gap:10px}
+.btn-ev-action{background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-secondary);padding:8px 14px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px}
+.btn-ev-action:hover{border-color:var(--accent-blue);color:var(--text-primary)}
+.btn-ev-action.primary{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff}
+.btn-ev-action.primary:hover{background:var(--accent-blue-dark)}
+.ev-notify-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:var(--radius-md);margin-bottom:16px;font-size:.82rem;color:var(--text-secondary)}
+.ev-notify-bar a{color:var(--accent-blue);font-weight:600;text-decoration:none}
+/* OddsJam table */
+.oj-table-wrap{background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border-color);overflow:hidden;margin-bottom:25px}
+.oj-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.oj-table thead{background:var(--bg-tertiary);position:sticky;top:0;z-index:10}
+.oj-table th{padding:10px 12px;text-align:left;font-weight:700;color:var(--text-muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.7px;white-space:nowrap;border-bottom:1px solid var(--border-color);cursor:pointer;user-select:none}
+.oj-table th:hover{color:var(--text-primary)}
+.oj-table th .sort-icon{margin-left:4px;opacity:.5}
+/* EV row grouping */
+.oj-row-pos td{background:rgba(16,185,129,.05);border-bottom:none}
+.oj-row-neg td{background:rgba(239,68,68,.03);border-bottom:1px solid var(--border-color)}
+.oj-row-pos:hover td,.oj-row-neg:hover td{filter:brightness(1.1)}
+.oj-row-pos td,.oj-row-neg td{padding:9px 12px;vertical-align:middle;transition:var(--transition)}
+/* EV percent cell */
+.ev-pct-cell{font-size:1rem;font-weight:800;color:var(--accent-green);white-space:nowrap}
+.ev-pct-neg{color:var(--accent-red)}
+/* Stake cell */
+.stake-cell{font-size:.85rem;font-weight:700;color:var(--text-primary);white-space:nowrap}
+/* Date cell */
+.date-cell{font-size:.75rem;color:var(--text-muted);white-space:nowrap;line-height:1.5}
+/* Event cell */
+.event-cell{min-width:180px}
+.event-name{font-weight:700;color:var(--text-primary);font-size:.85rem;line-height:1.3}
+.event-league{font-size:.72rem;color:var(--text-muted);margin-top:2px;display:flex;align-items:center;gap:4px}
+/* Market cell */
+.market-cell{font-size:.8rem;color:var(--text-secondary);white-space:nowrap;font-weight:500}
+/* Bet cell */
+.bet-name-pos{font-weight:700;color:var(--accent-green);font-size:.85rem;white-space:nowrap}
+.bet-name-neg{font-size:.8rem;color:var(--text-secondary);white-space:nowrap}
+.bet-odd-pos{font-weight:800;color:var(--accent-green);font-size:.9rem;white-space:nowrap;font-family:monospace}
+.bet-odd-neg{font-size:.8rem;color:var(--text-muted);white-space:nowrap;font-family:monospace}
+/* Books cell */
+.books-cell{display:flex;gap:4px;align-items:center;flex-wrap:wrap;max-width:120px}
+.bm-pill{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+/* No-vig odds */
+.novig-pos{font-size:.82rem;font-weight:700;color:var(--accent-green);font-family:monospace;white-space:nowrap}
+.novig-neg{font-size:.75rem;color:var(--text-muted);font-family:monospace;white-space:nowrap}
+/* Width cell */
+.width-cell{font-size:.85rem;font-weight:700;color:var(--text-secondary);text-align:center}
+/* Kelly cell */
+.kelly-badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:.7rem;font-weight:700;background:rgba(16,185,129,.12);color:var(--accent-green);white-space:nowrap}
+.oj-empty{text-align:center;padding:60px 20px;color:var(--text-muted)}
+
+/* ============================================
    INFO BANNER
    ============================================ */
 .info-banner{display:flex;gap:15px;padding:15px 20px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-md);margin-bottom:20px;align-items:flex-start}
@@ -405,20 +465,68 @@ a{text-decoration:none;color:inherit}
 
         <!-- ===== +EV FINDER ===== -->
         <div id="page-positive-ev" class="page">
-            <div class="page-header"><h1><i class="fas fa-chart-line"></i> Positive EV Finder</h1><p>Apostas com valor esperado positivo</p></div>
-            <div class="info-banner"><i class="fas fa-info-circle"></i><div><strong>O que é +EV?</strong><p>Uma aposta +EV tem odd MAIOR que a odd justa. A longo prazo gera lucro consistente.</p></div></div>
-            <div class="filters-bar">
-                <div class="filter-group"><label>Desporto</label><select id="ev-sport-filter" onchange="loadEVData()"><option value="all">Todos</option></select></div>
-                <div class="filter-group"><label>EV Mínimo</label><select id="ev-min-filter" onchange="loadEVData()"><option value="0">Todos</option><option value="1" selected>+1%</option><option value="2">+2%</option><option value="3">+3%</option><option value="5">+5%</option></select></div>
-                <button class="btn-primary" onclick="loadEVData()"><i class="fas fa-search"></i> Encontrar +EV</button>
+            <!-- Top header row -->
+            <div class="ev-page-header">
+                <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                    <h1 style="font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:8px"><i class="fas fa-chart-line" style="color:var(--accent-green)"></i> Positive EV Bets</h1>
+                    <div class="ev-tabs">
+                        <button class="ev-tab active" onclick="setEVTab('prematch',this)"><i class="fas fa-calendar-alt"></i> Pré-jogo <span class="tab-count" id="tab-prematch-count">0</span></button>
+                        <button class="ev-tab" onclick="setEVTab('live',this)"><i class="fas fa-circle" style="color:var(--accent-red);font-size:.5rem"></i> Live <span class="tab-count" id="tab-live-count">0</span></button>
+                    </div>
+                </div>
+                <div class="ev-actions">
+                    <button class="btn-ev-action" onclick="showEVSettings()"><i class="fas fa-cog"></i> Definições</button>
+                    <button class="btn-ev-action" onclick="loadEVData()"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                    <button class="btn-ev-action primary" onclick="toggleEVFilters()"><i class="fas fa-sliders-h"></i> Filtros <span id="filter-badge" style="background:rgba(255,255,255,.25);padding:1px 7px;border-radius:20px;font-size:.7rem;font-weight:700">1</span></button>
+                </div>
             </div>
+
+            <!-- Notify bar -->
+            <div class="ev-notify-bar">
+                <span><i class="fas fa-bell" style="color:var(--accent-blue);margin-right:6px"></i>Ativa notificações para +EV bets em tempo real. <a href="#">Saber mais →</a></span>
+            </div>
+
+            <!-- Collapsible filters -->
+            <div id="ev-filters-panel" style="display:none;margin-bottom:16px">
+                <div class="filters-bar" style="margin-bottom:0">
+                    <div class="filter-group"><label>Desporto</label><select id="ev-sport-filter" onchange="loadEVData()"><option value="all">Todos</option></select></div>
+                    <div class="filter-group"><label>EV Mínimo</label><select id="ev-min-filter" onchange="loadEVData()"><option value="0">Todos</option><option value="1" selected>+1%</option><option value="2">+2%</option><option value="3">+3%</option><option value="5">+5%</option></select></div>
+                    <div class="filter-group"><label>Mercado</label><select id="ev-mkt-filter" onchange="loadEVData()"><option value="all">Todos</option><option value="h2h">Moneyline</option><option value="totals">Totais</option><option value="spreads">Handicap</option></select></div>
+                    <button class="btn-primary" onclick="loadEVData()"><i class="fas fa-search"></i> Aplicar</button>
+                </div>
+            </div>
+
+            <!-- Summary bar -->
             <div class="ev-stats-bar">
                 <div class="ev-stat"><span class="ev-stat-value" id="total-ev">0</span><span class="ev-stat-label">Total +EV</span></div>
                 <div class="ev-stat"><span class="ev-stat-value" id="avg-ev">0%</span><span class="ev-stat-label">EV Médio</span></div>
                 <div class="ev-stat"><span class="ev-stat-value" id="best-ev">0%</span><span class="ev-stat-label">Melhor EV</span></div>
                 <div class="ev-stat"><span class="ev-stat-value" id="ev-sports">0</span><span class="ev-stat-label">Desportos</span></div>
             </div>
-            <div class="table-container"><table class="data-table"><thead><tr><th>Desporto</th><th>Jogo</th><th>Mercado</th><th>Aposta</th><th>Casa</th><th>Odd</th><th>Fair</th><th>Prob%</th><th>+EV%</th><th>Kelly%</th><th>Início</th><th>Info</th></tr></thead><tbody id="ev-tbody"><tr><td colspan="12" class="loading-cell"><div class="loader"></div>A procurar +EV...</td></tr></tbody></table></div>
+
+            <!-- OddsJam-style table -->
+            <div class="oj-table-wrap">
+                <table class="oj-table">
+                    <thead>
+                        <tr>
+                            <th style="width:70px">EV% <i class="fas fa-sort-down sort-icon"></i></th>
+                            <th style="width:80px">STAKE REC.</th>
+                            <th style="width:110px">DATA</th>
+                            <th>EVENTO</th>
+                            <th style="width:130px">MERCADO</th>
+                            <th style="width:200px">APOSTAS</th>
+                            <th style="width:100px">CASAS</th>
+                            <th style="width:100px">NO-VIG</th>
+                            <th style="width:60px;text-align:center">WIDTH</th>
+                            <th style="width:70px;text-align:center">KELLY</th>
+                            <th style="width:40px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="ev-tbody">
+                        <tr><td colspan="11" class="oj-empty"><div class="loader"></div><br>A procurar +EV bets...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ===== ARBITRAGE ===== -->
@@ -706,10 +814,78 @@ function getFairOdd(game,mktKey,outName){
     return ref*1.03;
 }
 
+// OddsJam-style: group bets into paired rows (positive + counter)
+function buildEVGrouped(evBets){
+    // Group by game+market: find the counter outcome for each +EV bet
+    const groups=[];
+    const seen=new Set();
+    evBets.forEach((b,idx)=>{
+        const key=b.game+'|'+b.market+'|'+b.outcome+'|'+b.bookmaker;
+        if(seen.has(key))return;
+        seen.add(key);
+        // Find counter outcome (the opposite side)
+        const counterOut=findCounterOutcome(b);
+        groups.push({pos:b,neg:counterOut,idx});
+    });
+    return groups;
+}
+
+function findCounterOutcome(b){
+    // Try to find the paired outcome from allData
+    const game=allData.find(g=>g.home_team===b.home&&g.away_team===b.away);
+    if(!game)return null;
+    // For totals: Over↔Under, for h2h: find the other outcomes
+    let counterName=null;
+    if(b.outcome.toLowerCase().startsWith('over'))counterName=b.outcome.replace(/over/i,'Under');
+    else if(b.outcome.toLowerCase().startsWith('under'))counterName=b.outcome.replace(/under/i,'Over');
+    else{
+        // h2h — just show a different bookmaker's odd for same outcome as reference
+        const mkt=game.bookmakers?.[0]?.markets?.find(m=>m.key==='h2h');
+        if(mkt){
+            const others=mkt.outcomes.filter(o=>o.name!==b.outcome);
+            if(others.length){counterName=others[0].name;}
+        }
+    }
+    if(!counterName)return null;
+    // Find best counter odd across all bookmakers
+    let bestPrice=0,bestBm='';
+    game.bookmakers?.forEach(bm=>{
+        bm.markets?.forEach(m=>{
+            m.outcomes?.forEach(o=>{
+                if(o.name===counterName&&o.price>bestPrice){bestPrice=o.price;bestBm=bm.title;}
+            });
+        });
+    });
+    if(!bestPrice)return null;
+    const novig=calcNoVig(game,b.market==='Moneyline'?'h2h':b.market==='O/U'?'totals':'spreads',counterName);
+    return{outcome:counterName,odds:bestPrice,bookmaker:bestBm,novig:novig?novig.toFixed(2):null};
+}
+
+function calcNoVig(game,mktKey,outName){
+    const refBm=game.bookmakers?.find(b=>['pinnacle','betfair_ex_eu','betfair'].includes(b.key))||game.bookmakers?.[0];
+    if(!refBm)return null;
+    const m=refBm.markets?.find(mk=>mk.key===mktKey);
+    if(!m)return null;
+    const total=m.outcomes.reduce((s,o)=>s+1/o.price,0);
+    const o=m.outcomes.find(oc=>oc.name===outName);
+    if(!o)return null;
+    return 1/((1/o.price)/total);
+}
+
+function dec2amStr(d){
+    if(!d||d<=1)return'—';
+    const am=d>=2?Math.round((d-1)*100):Math.round(-100/(d-1));
+    return(am>0?'+':'')+am;
+}
+
 function renderEVRows(id,bets,compact=false){
     const tb=document.getElementById(id);
-    if(!bets.length){tb.innerHTML=`<tr><td colspan="12" class="empty-cell"><i class="fas fa-search" style="font-size:2rem;color:var(--text-muted)"></i><br>Nenhuma +EV encontrada</td></tr>`;return}
+    if(!bets.length){
+        tb.innerHTML=`<tr><td colspan="${compact?8:11}" class="oj-empty"><i class="fas fa-search" style="font-size:2rem;color:var(--text-muted);display:block;margin-bottom:10px"></i>Nenhuma +EV encontrada</td></tr>`;
+        return;
+    }
     if(compact){
+        // Dashboard compact view — keep original simple format
         tb.innerHTML=bets.map(b=>`<tr>
             <td><span class="sport-badge">${b.sportIcon} ${b.sport}</span></td>
             <td><strong>${b.home}</strong><br><span style="color:var(--text-muted)">vs ${b.away}</span></td>
@@ -720,27 +896,116 @@ function renderEVRows(id,bets,compact=false){
             <td><span class="ev-positive" style="font-size:1rem">+${b.ev}%</span></td>
             <td>${formatDate(b.time)}</td>
         </tr>`).join('');
-    }else{
-        tb.innerHTML=bets.map((b,i)=>`<tr>
-            <td><span class="sport-badge">${b.sportIcon} ${b.sport}</span></td>
-            <td><strong>${b.home}</strong><br><span style="color:var(--text-muted)">vs ${b.away}</span></td>
-            <td>${b.market}</td>
-            <td><strong>${b.outcome}</strong>${b.point!=null?` (${b.outcome.toLowerCase().includes('under')?'-':'+'}${Math.abs(b.point)})`:''}</td>
-            <td><div class="bookmaker-cell"><span class="bookmaker-dot" style="background:${bmColor(b.bookmaker)}"></span>${b.bookmaker}</div></td>
-            <td class="odd-cell best">${b.odds.toFixed(2)}</td>
-            <td class="odd-cell">${b.fair}</td>
-            <td>${b.prob}%</td>
-            <td><span class="ev-positive" style="font-size:1rem">+${b.ev}%</span></td>
-            <td>${b.kelly}%</td>
-            <td>${formatDate(b.time)}</td>
-            <td><button class="btn-small" onclick="showDetail(${i})"><i class="fas fa-info-circle"></i></button></td>
-        </tr>`).join('');
+        return;
     }
+
+    // OddsJam-style paired rows
+    const groups=buildEVGrouped(bets);
+    const rows=groups.map((g,i)=>{
+        const b=g.pos;
+        const neg=g.neg;
+        const amPos=dec2amStr(b.odds);
+        const amNeg=neg?dec2amStr(neg.odds):'—';
+        const novigPos=b.fair?dec2amStr(parseFloat(b.fair)):'—';
+        const novigNeg=neg?.novig?dec2amStr(parseFloat(neg.novig)):'—';
+        const width=neg?Math.abs(parseFloat(b.fair)-parseFloat(neg.novig||0)).toFixed(1):'—';
+        const recStake='€'+Math.max(10,Math.round(parseFloat(b.kelly)*2)*5);
+        const sportEmoji=b.sportIcon||'⚽';
+        const leagueStr=`${sportEmoji} ${b.sport}`;
+
+        return `
+        <tr class="oj-row-pos" onclick="showDetailEV(${i})" style="cursor:pointer">
+            <td rowspan="2" class="ev-pct-cell">+${b.ev}%</td>
+            <td rowspan="2" class="stake-cell">${recStake}</td>
+            <td rowspan="2" class="date-cell">${formatDateOJ(b.time)}</td>
+            <td rowspan="2" class="event-cell">
+                <div class="event-name">${b.home} vs ${b.away}</div>
+                <div class="event-league">${leagueStr}</div>
+            </td>
+            <td rowspan="2" class="market-cell">${b.market}${b.point!=null?' '+Math.abs(b.point):''}</td>
+            <td>
+                <span class="bet-name-pos">${b.outcome}${b.point!=null?' '+(b.outcome.toLowerCase().includes('under')?'-':'+')+Math.abs(b.point):''}</span>
+                <span class="bet-odd-pos" style="margin-left:10px">${amPos}</span>
+            </td>
+            <td>
+                <div class="books-cell">
+                    <div class="bm-pill" style="background:${bmColor(b.bookmaker)}" title="${b.bookmaker}">${b.bookmaker.slice(0,2)}</div>
+                </div>
+            </td>
+            <td class="novig-pos">${novigPos}</td>
+            <td rowspan="2" class="width-cell">${width}</td>
+            <td rowspan="2"><span class="kelly-badge">${b.kelly}%</span></td>
+            <td rowspan="2"><button class="btn-small" onclick="event.stopPropagation();showDetailEV(${i})"><i class="fas fa-ellipsis-v"></i></button></td>
+        </tr>
+        <tr class="oj-row-neg">
+            <td>
+                <span class="bet-name-neg">${neg?neg.outcome:'—'}${b.point!=null?' '+(neg&&neg.outcome.toLowerCase().includes('under')?'-':'+')+Math.abs(b.point):''}</span>
+                <span class="bet-odd-neg" style="margin-left:10px">${amNeg}</span>
+            </td>
+            <td>
+                ${neg?`<div class="books-cell"><div class="bm-pill" style="background:${bmColor(neg.bookmaker)}" title="${neg.bookmaker}">${neg.bookmaker.slice(0,2)}</div></div>`:'<span style="color:var(--text-muted)">—</span>'}
+            </td>
+            <td class="novig-neg">${novigNeg}</td>
+        </tr>`;
+    });
+    tb.innerHTML=rows.join('');
 }
 
+function formatDateOJ(d){
+    const date=new Date(d),now=new Date(),diff=date-now;
+    if(diff<0)return`<span style="color:var(--accent-red);font-weight:700">A decorrer</span>`;
+    const days=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const day=days[date.getDay()];
+    const time=date.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
+    const dateStr=date.toLocaleDateString('pt-PT',{day:'2-digit',month:'short'});
+    return`${day}, ${dateStr}<br><span style="color:var(--text-muted)">${time}</span>`;
+}
+
+function showDetailEV(i){
+    const groups=buildEVGrouped(evBetsGlobal);
+    const g=groups[i];if(!g)return;
+    const b=g.pos;
+    document.getElementById('modal-title').textContent='Detalhe +EV Bet';
+    document.getElementById('modal-body').innerHTML=`
+        <div style="display:grid;gap:12px">
+            <div class="result-row"><span>Evento:</span><span><strong>${b.game}</strong></span></div>
+            <div class="result-row"><span>Desporto:</span><span>${b.sportIcon} ${b.sport}</span></div>
+            <div class="result-row"><span>Mercado:</span><span>${b.market}</span></div>
+            <div class="result-row"><span>Aposta:</span><span><strong>${b.outcome}</strong></span></div>
+            <div class="result-row"><span>Casa:</span><span>${b.bookmaker}</span></div>
+            <hr style="border-color:var(--border-color)">
+            <div class="result-row"><span>Odd Decimal:</span><span class="ev-positive" style="font-size:1.2rem">${b.odds.toFixed(2)}</span></div>
+            <div class="result-row"><span>Odd Americana:</span><span class="ev-positive">${dec2amStr(b.odds)}</span></div>
+            <div class="result-row"><span>No-Vig (Justa):</span><span>${b.fair} (${dec2amStr(parseFloat(b.fair))})</span></div>
+            <div class="result-row"><span>Prob Implícita:</span><span>${b.prob}%</span></div>
+            <div class="result-row"><span>+EV:</span><span class="ev-positive" style="font-size:1.3rem">+${b.ev}%</span></div>
+            <div class="result-row"><span>Kelly%:</span><span>${b.kelly}%</span></div>
+            <div class="result-row"><span>Kelly ¼ (sugerido):</span><span style="color:var(--accent-cyan)">${(parseFloat(b.kelly)/4).toFixed(2)}%</span></div>
+            <hr style="border-color:var(--border-color)">
+            <div class="result-row"><span>Início:</span><span>${formatDate(b.time)}</span></div>
+        </div>`;
+    document.getElementById('modal-overlay').classList.add('active');
+}
+
+let evTabMode='prematch';
+function setEVTab(mode,el){
+    evTabMode=mode;
+    document.querySelectorAll('.ev-tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    renderEVRows('ev-tbody',evBetsGlobal.filter(b=>{
+        const diff=new Date(b.time)-new Date();
+        return mode==='live'?diff<0:diff>=0;
+    }));
+}
+function toggleEVFilters(){
+    const p=document.getElementById('ev-filters-panel');
+    p.style.display=p.style.display==='none'?'block':'none';
+}
+function showEVSettings(){toast('Definições em breve!','info')}
+
 async function loadEVData(){
-    const sport=document.getElementById('ev-sport-filter').value;
-    const minEV=parseFloat(document.getElementById('ev-min-filter').value);
+    const sport=document.getElementById('ev-sport-filter')?.value||'all';
+    const minEV=parseFloat(document.getElementById('ev-min-filter')?.value||1);
     
     if(!allData.length){
         const toFetch=SPORTS.filter(s=>['soccer_epl','soccer_spain_la_liga','basketball_nba'].includes(s.key));
@@ -750,7 +1015,19 @@ async function loadEVData(){
     let filtered=sport==='all'?allData:allData.filter(g=>g.sportKey===sport);
     const evBets=findAllEV(filtered,minEV);
     evBetsGlobal=evBets;
-    renderEVRows('ev-tbody',evBets);
+
+    // Update tab counts
+    const now=new Date();
+    const prematch=evBets.filter(b=>new Date(b.time)>=now);
+    const live=evBets.filter(b=>new Date(b.time)<now);
+    const tc1=document.getElementById('tab-prematch-count');
+    const tc2=document.getElementById('tab-live-count');
+    if(tc1)tc1.textContent=prematch.length;
+    if(tc2)tc2.textContent=live.length;
+
+    // Render based on current tab
+    const toShow=evTabMode==='live'?live:prematch;
+    renderEVRows('ev-tbody',toShow);
 
     document.getElementById('total-ev').textContent=evBets.length;
     if(evBets.length){
@@ -761,28 +1038,7 @@ async function loadEVData(){
     }
 }
 
-function showDetail(i){
-    const b=evBetsGlobal[i];if(!b)return;
-    document.getElementById('modal-title').textContent='Detalhe +EV Bet';
-    document.getElementById('modal-body').innerHTML=`
-        <div style="display:grid;gap:12px">
-            <div class="result-row"><span>Jogo:</span><span><strong>${b.game}</strong></span></div>
-            <div class="result-row"><span>Desporto:</span><span>${b.sportIcon} ${b.sport}</span></div>
-            <div class="result-row"><span>Mercado:</span><span>${b.market}</span></div>
-            <div class="result-row"><span>Aposta:</span><span><strong>${b.outcome}</strong></span></div>
-            <div class="result-row"><span>Casa:</span><span>${b.bookmaker}</span></div>
-            <hr style="border-color:var(--border-color)">
-            <div class="result-row"><span>Odd Oferecida:</span><span class="ev-positive" style="font-size:1.3rem">${b.odds.toFixed(2)}</span></div>
-            <div class="result-row"><span>Odd Justa:</span><span>${b.fair}</span></div>
-            <div class="result-row"><span>Prob Implícita:</span><span>${b.prob}%</span></div>
-            <div class="result-row"><span>+EV:</span><span class="ev-positive" style="font-size:1.3rem">+${b.ev}%</span></div>
-            <div class="result-row"><span>Kelly:</span><span>${b.kelly}%</span></div>
-            <div class="result-row"><span>Kelly ¼ (sugerido):</span><span style="color:var(--accent-cyan)">${(parseFloat(b.kelly)/4).toFixed(2)}%</span></div>
-            <hr style="border-color:var(--border-color)">
-            <div class="result-row"><span>Início:</span><span>${formatDate(b.time)}</span></div>
-        </div>`;
-    document.getElementById('modal-overlay').classList.add('active');
-}
+// showDetailEV defined above in renderEVRows section
 
 // ============================================
 // ARBITRAGE
