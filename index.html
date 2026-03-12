@@ -78,7 +78,7 @@ input,select,textarea{font-family:var(--font)}
   min-height:var(--topbar);gap:13px;
 }
 .sb-logo-icon{
-  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  width:48px;height:48px;border-radius:12px;flex-shrink:0;
   background:linear-gradient(145deg,#0ea87a,#0d9468,#0a7d58);
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 14px rgba(14,168,122,.45),0 0 0 1px rgba(255,255,255,.08);
@@ -90,7 +90,7 @@ input,select,textarea{font-family:var(--font)}
 }
 .sb-logo-icon i{font-size:1.15rem;color:#fff;position:relative;z-index:1}
 .sb-logo-text{display:flex;flex-direction:column;gap:1px;line-height:1}
-.sb-logo-name{font-family:var(--display);font-size:.95rem;font-weight:900;letter-spacing:.5px;color:#fff;white-space:nowrap}
+.sb-logo-name{font-family:var(--display);font-size:1rem;font-weight:900;letter-spacing:.3px;color:#fff;white-space:nowrap;line-height:1}
 .sb-logo-name em{color:var(--green);font-style:normal}
 .sb-logo-sub{font-size:.6rem;font-weight:700;letter-spacing:1.8px;color:var(--t3);text-transform:uppercase}
 
@@ -1065,7 +1065,7 @@ input,select,textarea{font-family:var(--font)}
     <div class="sb-logo-icon"><i class="fas fa-trophy"></i></div>
     <div class="sb-logo-text">
       <div class="sb-logo-name">MANUEL <em>DANÇA</em></div>
-      <div class="sb-logo-sub">Premium Sports Picks</div>
+      <div class="sb-logo-sub">Premium&nbsp;Sports&nbsp;Picks</div>
     </div>
   </div>
   <div class="sb-nav">
@@ -1090,8 +1090,8 @@ input,select,textarea{font-family:var(--font)}
       <a class="sb-item" onclick="go('live',this)"><i class="fas fa-broadcast-tower si"></i><span>Live Scores</span><span class="sb-chip chip-live">Live</span></a>
     </div>
     <div class="sb-section">
-      <span class="sb-label">Sports</span>
-      <div id="sport-nav"></div>
+      <span class="sb-label">Desportos</span>
+      <div id="sport-nav"><div style="padding:8px 18px;color:var(--t3);font-size:.72rem">A carregar…</div></div>
     </div>
     <div class="sb-section">
       <span class="sb-label">Account</span>
@@ -1106,7 +1106,7 @@ input,select,textarea{font-family:var(--font)}
         <span class="sb-1x-name">1XBET</span>
         <span class="sb-1x-tag">Parceiro</span>
       </div>
-      <div class="sb-1x-bonus">🎁 Bónus 200% até 13.200 MZN</div>
+      <div class="sb-1x-bonus">🎁 200% Bónus — 13.200 MZN</div>
       <div class="sb-1x-sub">Clica para te registares agora →</div>
     </a>
     <div class="api-status">
@@ -1227,7 +1227,7 @@ input,select,textarea{font-family:var(--font)}
             <div class="i1x-desc">Acesso a mais de 1000 eventos diários · Odds competitivas · Pagamentos rápidos · Suporte 24/7</div>
           </div>
           <div class="i1x-right">
-            <div class="i1x-bonus-big">13.200 MZN</div>
+            <div class="i1x-bonus-big" style="font-size:1.1rem;letter-spacing:-0.5px">13.200 MZN</div>
             <div class="i1x-bonus-sub">Bónus 200% boas-vindas</div>
             <div class="i1x-btn">Registar Agora</div>
           </div>
@@ -1264,7 +1264,7 @@ input,select,textarea{font-family:var(--font)}
           <div class="i1x-desc">A 1XBET tem algumas das odds mais altas do mercado — ideal para apostas +EV. Regista-te agora!</div>
         </div>
         <div class="i1x-right">
-          <div class="i1x-bonus-big">13.200 MZN</div>
+          <div class="i1x-bonus-big" style="font-size:1.1rem;letter-spacing:-0.5px">13.200 MZN</div>
           <div class="i1x-bonus-sub">Bónus 200% boas-vindas</div>
           <div class="i1x-btn">Abrir Conta</div>
         </div>
@@ -1543,10 +1543,24 @@ input,select,textarea{font-family:var(--font)}
         <div class="pricing-header">
           <h1>Escolhe o teu <span>Plano</span></h1>
           <p>Começa grátis. Faz upgrade para desbloquear todas as casas e ferramentas profissionais.</p>
+          <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px">
+              <i class="fas fa-mobile-alt" style="color:#1da462;font-size:1rem"></i>
+              <span style="font-size:.78rem;font-weight:800;color:var(--t1)">M-Pesa</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px">
+              <i class="fas fa-mobile-alt" style="color:#e63946;font-size:1rem"></i>
+              <span style="font-size:.78rem;font-weight:800;color:var(--t1)">e-Mola</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px">
+              <i class="fab fa-whatsapp" style="color:#25d366;font-size:1rem"></i>
+              <span style="font-size:.78rem;font-weight:800;color:var(--t1)">WhatsApp</span>
+            </div>
+          </div>
           <div style="margin-top:14px">
             <div class="pricing-toggle">
               <button class="pt-opt active" id="pt-m" onclick="setPlanPeriod('monthly')">Mensal</button>
-              <button class="pt-opt" id="pt-a" onclick="setPlanPeriod('annual')">Anual <span class="save-tag">-30%</span></button>
+              <button class="pt-opt" id="pt-a" onclick="setPlanPeriod('annual')">Anual <span class="save-tag">Poupa 30%</span></button>
             </div>
           </div>
         </div>
@@ -1794,22 +1808,25 @@ function closeModal() { $('modal-bg').classList.remove('open'); }
    NAVIGATION
    ───────────────────────────────────────────────────────────── */
 function go(pid, el) {
-  $$('.page').forEach(p=>p.classList.remove('active'));
-  const pg = $('pg-'+pid); if(pg) pg.classList.add('active');
-  $$('.sb-item').forEach(i=>i.classList.remove('active'));
-  if(el) el.classList.add('active');
-  else $$('.sb-item').forEach(i=>{if(i.getAttribute('onclick')?.includes("'"+pid+"'")) i.classList.add('active')});
-  S.page = pid;
-  $('sidebar').classList.remove('open');
-  switch(pid) {
-    case 'dashboard':   loadDash(); break;
-    case 'ev':          loadEVPage(); break;
-    case 'arbitrage':   loadArbPage(); break;
-    case 'live':        loadLive(); break;
-    case 'historical':  renderHistTable(); updateHistStats(); break;
-    case 'pricing':     renderPricing(); break;
-    case 'models':      initModels(); break;
-  }
+  try {
+    $$('.page').forEach(p=>p.classList.remove('active'));
+    const pg = $('pg-'+pid);
+    if(pg) pg.classList.add('active');
+    $$('.sb-item').forEach(i=>i.classList.remove('active'));
+    if(el) el.classList.add('active');
+    else $$('.sb-item').forEach(i=>{try{if(i.getAttribute('onclick')?.includes("'"+pid+"'")) i.classList.add('active');}catch(e){}});
+    S.page = pid;
+    const sb=$('sidebar');if(sb)sb.classList.remove('open');
+    switch(pid) {
+      case 'dashboard':   loadDash(); break;
+      case 'ev':          loadEVPage(); break;
+      case 'arbitrage':   loadArbPage(); break;
+      case 'live':        loadLive(); break;
+      case 'historical':  renderHistTable(); updateHistStats(); break;
+      case 'pricing':     renderPricing(); break;
+      case 'models':      initModels(); break;
+    }
+  } catch(e) { console.error('go('+pid+'):', e); }
 }
 function toggleSB() { $('sidebar').classList.toggle('open'); }
 function setFmt(f,el) {
@@ -2862,49 +2879,49 @@ function tryRestoreSession(){
    ───────────────────────────────────────────────────────────── */
 const PLANS = [
   {
-    id:'free', name:'Free', monthly:0, annual:0, period:'free',
+    id:'free', name:'Free', monthly:0, annual:0, mzn_m:0, mzn_a:0,
     cta:'Começar Grátis', ctaCls:'free',
     books:['bet365','pinnacle','unibet'],
     features:[
       {text:'3 casas de apostas',ok:true},
-      {text:'Odds Screen (delay 60s)',ok:true},
+      {text:'Sportsbook Screen (delay 60s)',ok:true},
       {text:'Calculadoras básicas',ok:true},
-      {text:'Positive EV (limitado)',ok:true},
+      {text:'Positive EV (limitado 5/dia)',ok:true},
       {text:'Arbitragem',ok:false},
       {text:'Dados históricos',ok:false},
-      {text:'Modelos estatísticos',ok:false},
-      {text:'Alertas em tempo real',ok:false},
+      {text:'Modelos Poisson/ELO',ok:false},
+      {text:'Alertas WhatsApp',ok:false},
       {text:'Suporte prioritário',ok:false},
     ]
   },
   {
-    id:'starter', name:'Starter', monthly:9.99, annual:6.99, period:'mês', badge:'Mais Popular',
-    cta:'Iniciar Teste 7 Dias', ctaCls:'starter',
+    id:'basic', name:'Básico', monthly:9.99, annual:6.99, mzn_m:250, mzn_a:175, badge:'Mais Popular',
+    cta:'Subscrever Agora', ctaCls:'starter',
     books:['bet365','pinnacle','unibet','bwin','betano','1xbet','williamhill','betclic'],
     features:[
       {text:'15+ casas de apostas EU',ok:true,bold:true},
       {text:'Odds em tempo real',ok:true,bold:true},
       {text:'Positive EV completo',ok:true},
       {text:'Arbitragem',ok:true},
-      {text:'Alertas em tempo real',ok:true},
-      {text:'Modelos estatísticos',ok:true},
+      {text:'Alertas WhatsApp',ok:true},
+      {text:'Modelos Poisson/ELO/Kelly',ok:true},
       {text:'Histórico 30 dias',ok:true},
-      {text:'Suporte chat',ok:true},
+      {text:'Suporte via chat',ok:true},
       {text:'Todas as ligas',ok:false},
       {text:'API access',ok:false},
     ]
   },
   {
-    id:'pro', name:'Pro', monthly:29.99, annual:20.99, period:'mês',
-    cta:'Iniciar Teste 7 Dias', ctaCls:'pro',
+    id:'premium', name:'Premium', monthly:29.99, annual:19.99, mzn_m:500, mzn_a:350,
+    cta:'Subscrever Premium', ctaCls:'pro',
     books:['bet365','pinnacle','unibet','bwin','betano','1xbet','williamhill','betclic','888sport','betfair','smarkets','ladbrokes'],
     features:[
       {text:'50+ casas globais',ok:true,bold:true},
       {text:'Todos os mercados',ok:true,bold:true},
       {text:'Positive EV + Low Hold',ok:true},
       {text:'Arbitragem + Middles',ok:true},
-      {text:'Alertas WhatsApp/Email',ok:true},
-      {text:'Modelos avançados (Poisson/ELO)',ok:true},
+      {text:'Alertas WhatsApp + Email',ok:true},
+      {text:'Todos os modelos estatísticos',ok:true},
       {text:'Histórico ilimitado',ok:true},
       {text:'Todas as ligas + nichos',ok:true},
       {text:'API access',ok:true},
@@ -2922,21 +2939,48 @@ const FAQS=[
 ];
 
 function renderPricing(){
-  const pg=$('plans-grid');const period=S.planPeriod;
+  const pg=$('plans-grid');
+  if(!pg) return;
+  const period=S.planPeriod;
+
   pg.innerHTML=PLANS.map(p=>{
-    const price=period==='monthly'?p.monthly:p.annual;
-    const priceStr=price===0?'Grátis':`€${price.toFixed(2)}`;
-    return `<div class="plan-card ${p.id==='starter'?'popular':''}">
-      ${p.badge?`<span class="plan-badge">${p.badge}</span>`:''}
-      <div class="plan-name">${p.name}</div>
-      <div class="plan-price"><span class="plan-currency">€</span><span class="plan-amt">${price===0?'0':price.toFixed(2)}</span></div>
-      <div class="plan-period">${price===0?'Para sempre grátis':'por '+(period==='monthly'?'mês':'mês (faturado anualmente)')}</div>
-      <div class="plan-books">${p.books.map(b=>`<div class="plan-book-dot" style="background:${bmColor(b)}" title="${b}">${b.slice(0,3).toUpperCase()}</div>`).join('')}${p.books.length>8?`<div style="font-size:.6rem;color:var(--t2);align-self:center">+${p.books.length-8}</div>`:''}</div>
-      <ul class="plan-features">${p.features.map(f=>`<li class="${f.bold?'bold':''}"><i class="fas ${f.ok?'fa-check':'fa-times'}"></i>${f.text}</li>`).join('')}</ul>
-      <button class="plan-cta ${p.ctaCls}" onclick="selectPlan('${p.id}')">${p.cta}</button>
+    const mzn = period==='monthly' ? p.mzn_m : p.mzn_a;
+    const mznStr = mzn===0 ? 'Grátis' : mzn+'MT';
+    const mznOld = period==='annual' && mzn>0 ? p.mzn_m+'MT' : null;
+    const perLabel = mzn===0 ? 'Para sempre grátis' : (period==='monthly' ? 'por mês' : 'por mês · faturado anualmente');
+    const isPopular = p.id==='basic';
+    const booksHtml = p.books.slice(0,8).map(b=>`<div class="plan-book-dot" style="background:${bmColor(b)}" title="${b}">${b.slice(0,3).toUpperCase()}</div>`).join('') +
+      (p.books.length>8 ? `<div style="font-size:.6rem;color:var(--t2);align-self:center;margin-left:2px">+${p.books.length-8}</div>` : '');
+    const featuresHtml = p.features.map(f=>`<li class="${f.bold?'bold':''}"><i class="fas ${f.ok?'fa-check':'fa-times'}"></i>${f.text}</li>`).join('');
+
+    return `<div class="plan-card ${isPopular?'popular':''}">
+      ${p.badge ? `<span class="plan-badge">${p.badge}</span>` : ''}
+      <div class="plan-name">${p.name.toUpperCase()} <span style="color:var(--t3);font-weight:400;text-transform:none;font-size:.68rem">PLAN</span></div>
+      <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:2px">
+        ${mznOld ? `<span style="font-size:.85rem;color:var(--t3);text-decoration:line-through">${mznOld}</span>` : ''}
+        <span style="font-family:var(--display);font-size:${mzn===0?'2':'2.5'}rem;font-weight:900;color:var(--t1);letter-spacing:-2px;line-height:1">${mznStr}</span>
+      </div>
+      <div class="plan-period" style="margin-bottom:14px">${perLabel}</div>
+      <div class="plan-books" style="margin-bottom:16px">${booksHtml}</div>
+      <ul class="plan-features">${featuresHtml}</ul>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:0">
+        ${mzn>0 ? `
+        <div style="display:flex;gap:6px">
+          <button class="plan-cta ${p.ctaCls}" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px" onclick="selectPlan('${p.id}','mpesa')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/200px-M-PESA_LOGO-01.svg.png" style="height:16px;filter:brightness(10)" onerror="this.style.display='none'">
+            M-Pesa
+          </button>
+          <button class="plan-cta ${p.ctaCls}" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#e63946,#c1121f)" onclick="selectPlan('${p.id}','emola')">
+            <i class="fas fa-mobile-alt"></i>
+            e-Mola
+          </button>
+        </div>` : `<button class="plan-cta ${p.ctaCls}" onclick="selectPlan('${p.id}','free')">${p.cta}</button>`}
+      </div>
     </div>`;
   }).join('');
+
   const faqEl=$('faq-list');
+  if(!faqEl) return;
   faqEl.innerHTML=FAQS.map((f,i)=>`
     <div style="border-bottom:1px solid var(--border);padding:14px 0">
       <div onclick="toggleFAQ(${i})" style="cursor:pointer;font-weight:700;font-size:.84rem;display:flex;justify-content:space-between;align-items:center">
@@ -2955,29 +2999,66 @@ function toggleFAQ(i){
 
 function setPlanPeriod(p){
   S.planPeriod=p;
-  $('pt-m').classList.toggle('active',p==='monthly');
-  $('pt-a').classList.toggle('active',p==='annual');
+  const ptm=$('pt-m'),pta=$('pt-a');
+  if(ptm)ptm.classList.toggle('active',p==='monthly');
+  if(pta)pta.classList.toggle('active',p==='annual');
   renderPricing();
 }
 
-function selectPlan(planId){
-  if(!S.user){openAuth('register');$('a-reg-plan').value=planId;return;}
+function selectPlan(planId, method){
+  if(!S.user){openAuth('register');const rp=$('a-reg-plan');if(rp)rp.value=planId;return;}
   if(planId==='free'){toast('Já estás no plano Free!','i');return;}
-  openModal('💳 Pagamento — '+planId.charAt(0).toUpperCase()+planId.slice(1),`
-    <div style="display:grid;gap:14px">
-      <div style="padding:14px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:8px;font-size:.8rem;color:var(--t2)">
-        <strong style="color:var(--cyan)">Plano ${planId.toUpperCase()}</strong> — ${planId==='starter'?'€9.99/mês':'€29.99/mês'}<br>
-        7 dias de teste gratuito. Cancela quando quiseres.
-      </div>
-      <div style="font-size:.82rem;font-weight:700;color:var(--t2)">Formas de pagamento:</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="btn btn-ghost" style="justify-content:center;padding:14px" onclick="toast('Redireccionando para M-Pesa…','i')"><i class="fas fa-mobile-alt" style="color:var(--green)"></i>M-Pesa</button>
-        <button class="btn btn-ghost" style="justify-content:center;padding:14px" onclick="toast('Redireccionando para cartão…','i')"><i class="fas fa-credit-card" style="color:var(--cyan)"></i>Cartão</button>
-        <button class="btn btn-ghost" style="justify-content:center;padding:14px" onclick="toast('Contacta via WhatsApp!','i')"><i class="fab fa-whatsapp" style="color:#25d366"></i>M-Pesa Business</button>
-        <button class="btn btn-ghost" style="justify-content:center;padding:14px" onclick="toast('Dados de transferência enviados por email!','i')"><i class="fas fa-university" style="color:var(--purple)"></i>Transf. Bancária</button>
-      </div>
-      <div style="font-size:.72rem;color:var(--t3);text-align:center">Contacta <strong style="color:var(--t2)">(+258) 840 330 540</strong> via WhatsApp para pagamento imediato</div>
-    </div>`);
+  const plan=PLANS.find(p=>p.id===planId);
+  const mzn=S.planPeriod==='monthly'?plan?.mzn_m:plan?.mzn_a;
+  const pLabel=plan?.name||planId;
+
+  if(method==='mpesa'){
+    openModal('📱 Pagamento M-Pesa — '+pLabel,`
+      <div style="display:grid;gap:14px">
+        <div style="padding:16px;background:rgba(26,244,160,.06);border:1px solid rgba(26,244,160,.15);border-radius:10px;text-align:center">
+          <div style="font-size:.65rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Valor a pagar</div>
+          <div style="font-family:var(--display);font-size:2.2rem;font-weight:900;color:var(--green)">${mzn} MT</div>
+          <div style="font-size:.72rem;color:var(--t2);margin-top:3px">Plano ${pLabel} · ${S.planPeriod==='monthly'?'Mensal':'Anual'}</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
+          <div style="font-size:.72rem;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Instruções M-Pesa:</div>
+          <ol style="font-size:.8rem;color:var(--t2);display:flex;flex-direction:column;gap:8px;padding-left:18px">
+            <li>Marca <strong style="color:var(--t1)">*150*1#</strong> no teu telemóvel</li>
+            <li>Seleciona <strong style="color:var(--t1)">Pagamentos</strong></li>
+            <li>Número de referência: <strong style="color:var(--cyan)">840 330 540</strong></li>
+            <li>Valor: <strong style="color:var(--green)">${mzn} MZN</strong></li>
+            <li>Envia o comprovativo via WhatsApp para activar</li>
+          </ol>
+        </div>
+        <a href="https://wa.me/258840330540?text=Paguei%20o%20plano%20${pLabel}%20de%20${mzn}MT%20via%20M-Pesa" target="_blank" class="btn btn-cta" style="justify-content:center;padding:13px;text-decoration:none;font-size:.85rem">
+          <i class="fab fa-whatsapp" style="margin-right:7px"></i>Enviar Comprovativo via WhatsApp
+        </a>
+      </div>`);
+  } else if(method==='emola'){
+    openModal('📱 Pagamento e-Mola — '+pLabel,`
+      <div style="display:grid;gap:14px">
+        <div style="padding:16px;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:10px;text-align:center">
+          <div style="font-size:.65rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Valor a pagar</div>
+          <div style="font-family:var(--display);font-size:2.2rem;font-weight:900;color:#e63946">${mzn} MT</div>
+          <div style="font-size:.72rem;color:var(--t2);margin-top:3px">Plano ${pLabel} · ${S.planPeriod==='monthly'?'Mensal':'Anual'}</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px">
+          <div style="font-size:.72rem;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Instruções e-Mola:</div>
+          <ol style="font-size:.8rem;color:var(--t2);display:flex;flex-direction:column;gap:8px;padding-left:18px">
+            <li>Abre a app <strong style="color:var(--t1)">e-Mola</strong> ou marca <strong style="color:var(--t1)">*844#</strong></li>
+            <li>Seleciona <strong style="color:var(--t1)">Pagamentos</strong></li>
+            <li>Número: <strong style="color:#e63946">877 480 775</strong></li>
+            <li>Valor: <strong style="color:var(--green)">${mzn} MZN</strong></li>
+            <li>Envia o comprovativo via WhatsApp para activar</li>
+          </ol>
+        </div>
+        <a href="https://wa.me/258877480775?text=Paguei%20o%20plano%20${pLabel}%20de%20${mzn}MT%20via%20e-Mola" target="_blank" class="btn btn-cta" style="justify-content:center;padding:13px;text-decoration:none;font-size:.85rem;background:linear-gradient(135deg,#e63946,#c1121f)">
+          <i class="fab fa-whatsapp" style="margin-right:7px"></i>Enviar Comprovativo via WhatsApp
+        </a>
+      </div>`);
+  } else {
+    toast('Plano Free activado!','s');
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -3043,26 +3124,10 @@ setInterval(()=>{
   if(S.countdown<=0){S.countdown=60;refreshAll();}
 },1000);
 
-/* ─────────────────────────────────────────────────────────────
-   SEARCH
-   ───────────────────────────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded',()=>{
-  const si=$('search-in');if(si)si.addEventListener('input',e=>{
-    const q=e.target.value.trim().toLowerCase();
-    if(!q||q.length<2) return;
-    const hits=S.ev.filter(b=>b.game.toLowerCase().includes(q)||b.outcome.toLowerCase().includes(q));
-    if(hits.length) toast(`${hits.length} resultados para "${q}"…`,'i');
-  });
-});
+/* Search & keyboard shortcuts */
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape') closeModal();
   if(e.ctrlKey&&e.key==='r'){e.preventDefault();refreshAll();}
-});
-
-/* BETTING / FANTASY TOGGLE */
-document.addEventListener('DOMContentLoaded',()=>{
-  $('tb-bet').addEventListener('click',()=>{$('tb-bet').classList.add('active');$('tb-fan').classList.remove('active');});
-  $('tb-fan').addEventListener('click',()=>{$('tb-fan').classList.add('active');$('tb-bet').classList.remove('active');toast('Fantasy em breve!','i');});
 });
 
 /* ─────────────────────────────────────────────────────────────
@@ -3101,16 +3166,37 @@ function updateFloatOdds() {
 
 document.addEventListener('DOMContentLoaded', async ()=>{
   console.log('🏆 Manuel Dança Premium Sports Picks v3.0');
+
+  // Search input
+  const si=$('search-in');
+  if(si) si.addEventListener('input',e=>{
+    const q=e.target.value.trim().toLowerCase();
+    if(!q||q.length<2) return;
+    const hits=S.ev.filter(b=>b.game.toLowerCase().includes(q)||b.outcome.toLowerCase().includes(q));
+    if(hits.length) toast(`${hits.length} resultados para "${q}"…`,'i');
+  });
+
+  // Betting / Fantasy toggle
+  const tbBet=$('tb-bet'), tbFan=$('tb-fan');
+  if(tbBet) tbBet.addEventListener('click',()=>{tbBet.classList.add('active');tbFan.classList.remove('active');});
+  if(tbFan) tbFan.addEventListener('click',()=>{tbFan.classList.add('active');tbBet.classList.remove('active');toast('Fantasy em breve!','i');});
+
+  // Core init
   initMenus();
   renderTracker();
   tryRestoreSession();
   renderPricing();
-  // Open IndexedDB
-  try { await openDB(); await loadHistData(); updateHistStats(); } catch(e){ console.warn('IndexedDB:',e); }
-  // Load sportsbook screen with EPL on boot
-  $('sb-sport').value='soccer_epl';
-  loadSB();
-  toast('Manuel Dança Premium Sports Picks carregado! 🏆','s');
+
+  // IndexedDB (non-blocking)
+  openDB().then(()=>loadHistData()).then(()=>updateHistStats()).catch(e=>console.warn('DB:',e));
+
+  // Boot: load EPL sportsbook
+  setTimeout(()=>{
+    $('sb-sport').value='soccer_epl';
+    loadSB();
+  }, 100);
+
+  toast('Manuel Dança Premium Sports Picks! 🏆','s');
   initModels();
 });
 
