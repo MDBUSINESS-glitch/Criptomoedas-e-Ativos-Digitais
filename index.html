@@ -37,9 +37,14 @@ a{text-decoration:none;color:inherit}
    SIDEBAR
    ============================================ */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-width);background:var(--bg-secondary);border-right:1px solid var(--border-color);display:flex;flex-direction:column;z-index:1000;transition:var(--transition);overflow-y:auto;overflow-x:hidden}
-.sidebar-header{padding:20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);min-height:65px}
-.logo{display:flex;align-items:center;gap:10px;font-size:1rem;font-weight:800;background:linear-gradient(135deg,var(--accent-green),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
-.logo i{font-size:1.8rem;-webkit-text-fill-color:var(--accent-green);flex-shrink:0}
+.sidebar-header{padding:15px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);min-height:80px;background:linear-gradient(135deg,#0d1520 0%,#111f2e 100%)}
+.logo{display:flex;align-items:center;gap:10px;line-height:1;text-decoration:none}
+.logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--accent-green),#0d9488);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(16,185,129,.35);position:relative;overflow:hidden}
+.logo-icon::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent)}
+.logo-text{display:flex;flex-direction:column;gap:1px}
+.logo-name{font-size:.8rem;font-weight:900;color:#fff;letter-spacing:.5px;text-transform:uppercase;line-height:1.1}
+.logo-name span{color:var(--accent-green)}
+.logo-sub{font-size:.58rem;font-weight:600;color:var(--text-muted);letter-spacing:1.8px;text-transform:uppercase}
 .sidebar-toggle{background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:1.2rem;padding:5px;border-radius:var(--radius-sm);transition:var(--transition)}
 .sidebar-toggle:hover{color:var(--text-primary);background:var(--bg-hover)}
 .sidebar-menu{flex:1;padding:10px 0}
@@ -288,7 +293,13 @@ a{text-decoration:none;color:inherit}
 <!-- ==================== SIDEBAR ==================== -->
 <nav id="sidebar" class="sidebar">
     <div class="sidebar-header">
-        <div class="logo"><i class="fas fa-bolt"></i><span>Manuel Dança Premium Sports Picks</span></div>
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-trophy"></i></div>
+            <div class="logo-text">
+                <div class="logo-name">Manuel <span>Dança</span></div>
+                <div class="logo-sub">Premium Sports Picks</div>
+            </div>
+        </div>
         <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     </div>
     <div class="sidebar-menu">
@@ -328,9 +339,9 @@ a{text-decoration:none;color:inherit}
                 <span class="contact-icon wa-icon"><i class="fab fa-whatsapp"></i></span>
                 <span>(+258) 877 480 775</span>
             </a>
-            <a href="mailto:dancamanuel@gmail.com" class="contact-link">
+            <a href="/cdn-cgi/l/email-protection#8aeeebe4e9ebe7ebe4ffefe6caede7ebe3e6a4e9e5e7" class="contact-link">
                 <span class="contact-icon em-icon"><i class="fas fa-envelope"></i></span>
-                <span>dancamanuel@gmail.com</span>
+                <span><span class="__cf_email__" data-cfemail="91f5f0fff2f0fcf0ffe4f4fdd1f6fcf0f8fdbff2fefc">[email&#160;protected]</span></span>
             </a>
         </div>
     </div>
@@ -473,7 +484,7 @@ a{text-decoration:none;color:inherit}
 <!-- ============================================
      JAVASCRIPT COMPLETO
      ============================================ -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ============================================
 // CONFIG
 // ============================================
@@ -596,11 +607,11 @@ function closeModal(){document.getElementById('modal-overlay').classList.remove(
 // DASHBOARD
 // ============================================
 async function loadDashboard(){
-    if(allData.length===0){
-        const toFetch=SPORTS.filter(s=>['soccer_epl','soccer_spain_la_liga','basketball_nba','soccer_portugal_primeira_liga'].includes(s.key));
-        allData=await fetchMultipleSports(toFetch.slice(0,3));
-    }
+    const toFetch=SPORTS.filter(s=>['soccer_epl','soccer_spain_la_liga','basketball_nba','soccer_portugal_primeira_liga'].includes(s.key));
+    allData=await fetchMultipleSports(toFetch.slice(0,3));
     if(!allData.length){toast('Sem dados disponíveis','warning');return}
+    const now=new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
+    const el=document.getElementById('api-usage');if(el)el.innerHTML+=` — Atualizado: ${now}`;
 
     document.getElementById('games-count').textContent=allData.length;
     const bms=new Set();allData.forEach(g=>g.bookmakers?.forEach(b=>bms.add(b.title)));
@@ -700,7 +711,7 @@ function renderEVRows(id,bets,compact=false){
             <td><span class="sport-badge">${b.sportIcon} ${b.sport}</span></td>
             <td><strong>${b.home}</strong><br><span style="color:var(--text-muted)">vs ${b.away}</span></td>
             <td>${b.market}</td>
-            <td><strong>${b.outcome}</strong>${b.point?' ('+b.point+')':''}</td>
+            <td><strong>${b.outcome}</strong>${b.point!=null?` (${b.outcome.toLowerCase().includes('under')?'-':'+'}${Math.abs(b.point)})`:''}</td>
             <td><div class="bookmaker-cell"><span class="bookmaker-dot" style="background:${bmColor(b.bookmaker)}"></span>${b.bookmaker}</div></td>
             <td class="odd-cell best">${b.odds.toFixed(2)}</td>
             <td class="odd-cell">${b.fair}</td>
@@ -889,7 +900,7 @@ async function loadOddsScreen(){
             }
             html+='<tr>';
             if(idx===0)html+=`<td rowspan="${n}" style="border-right:1px solid var(--border-color)"><strong>${game.home_team}</strong><br><span style="color:var(--text-muted)">vs ${game.away_team}</span></td><td rowspan="${n}">${formatTime(game.commence_time)}<br><small style="color:var(--text-muted)">${formatDate(game.commence_time)}</small></td>`;
-            let lbl=out.name;if(out.point)lbl+=` (${out.point>0?'+':''}${out.point})`;
+            let lbl=out.name;if(out.point!=null){const isUnder=out.name.toLowerCase().includes('under');lbl+=` (${isUnder?'-':'+'}${Math.abs(out.point)})`;};
             html+=`<td><strong>${lbl}</strong></td>`;
             bmList.forEach(b=>{
                 const o=oddsMap[b];
@@ -1044,6 +1055,7 @@ function updateTrStats(){
 // ============================================
 function refreshData(){
     countdown=60;allData=[];
+    toast('A buscar odds em tempo real...','info');
     switch(currentPage){
         case'dashboard':loadDashboard();break;
         case'odds-screen':loadOddsScreen();break;
@@ -1083,13 +1095,4 @@ document.addEventListener('keydown',e=>{
     if(e.key==='r'&&e.ctrlKey){e.preventDefault();refreshData()}
 });
 
-document.addEventListener('DOMContentLoaded',()=>{
-    console.log('🚀 Manuel Dança Premium Sports Picks iniciando...');
-    initSportsMenus();
-    renderTracker();
-    loadDashboard();
-    toast('Manuel Dança Premium Sports Picks iniciado!','success');
-});
-</script>
-</body>
-</html>
+document.addEventListener('DOMContentLoad
