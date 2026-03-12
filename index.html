@@ -9,17 +9,18 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg0:#07090f;--bg1:#0b0f1a;--bg2:#0f1520;--bg3:#151e2e;--bg4:#1c2840;
-  --t1:#eef2ff;--t2:#7a90bb;--t3:#3d5070;--t4:#243045;
-  --cyan:#00d4ff;--green:#1af4a0;--red:#ff4055;--yellow:#ffd600;
-  --purple:#a78bfa;--orange:#ff8c42;
-  --bd:#131c2e;--bd2:#1e2d45;
+  --bg0:#081520;--bg1:#0b1c2c;--bg2:#0e2035;--bg3:#122540;--bg4:#1a3255;
+  --t1:#f0f7ff;--t2:#7fb3d4;--t3:#3a607f;--t4:#1e3d57;
+  --cyan:#38bdf8;--green:#4ade80;--red:#f87171;--yellow:#fbbf24;
+  --purple:#a78bfa;--orange:#fb923c;
+  --bd:#122030;--bd2:#1e3650;
   --fw:'Plus Jakarta Sans',sans-serif;
   --fd:'Syne',sans-serif;
   --mono:'JetBrains Mono',monospace;
   --sb:228px;
+  --accent:#38bdf8;
 }
-html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font-family:var(--fw);font-size:14px}
+html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font-family:var(--fw);font-size:14.5px}
 *{scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
@@ -38,25 +39,26 @@ input,select,button{font-family:var(--fw)}
 
 /* ─────── LOGO ─────── */
 .logo-wrap{
-  display:flex;align-items:center;gap:11px;
-  padding:11px 14px 11px 14px;
+  display:flex;align-items:center;gap:12px;
+  padding:13px 16px;
   border-bottom:1px solid var(--bd);flex-shrink:0;
 }
 .logo-icon{
-  width:48px;height:48px;border-radius:13px;flex-shrink:0;
-  background:linear-gradient(145deg,#0fc47a,#0a9e60,#077a49);
+  width:48px;height:48px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(145deg,#10d47e,#0ab368,#089255);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(15,196,122,.4),0 0 0 1px rgba(255,255,255,.1);
+  box-shadow:0 4px 22px rgba(16,212,126,.38),0 0 0 1px rgba(255,255,255,.09);
 }
-.logo-icon i{color:#fff;font-size:1.3rem}
-.logo-text{line-height:1;display:flex;flex-direction:column;gap:2px}
+.logo-icon i{color:#fff;font-size:1.35rem}
+.logo-text{line-height:1;display:flex;flex-direction:column;gap:3px}
 .logo-name{
-  font-family:var(--fd);font-size:1.05rem;font-weight:900;
-  color:#fff;letter-spacing:.1px;white-space:nowrap;
+  font-family:var(--fd);font-size:1.1rem;font-weight:900;
+  letter-spacing:.5px;white-space:nowrap;line-height:1;
+  color:#fff;
 }
 .logo-name em{color:var(--green);font-style:normal}
 .logo-sub{
-  font-size:.5rem;font-weight:800;letter-spacing:2.2px;
+  font-size:.48rem;font-weight:800;letter-spacing:2.5px;
   color:var(--t3);text-transform:uppercase;
 }
 /* hamburger for mobile */
@@ -91,9 +93,9 @@ input,select,button{font-family:var(--fw)}
 
 /* ─────── 1XBET SIDEBAR ─────── */
 .sb-1xbet{
-  margin:6px 10px;padding:10px 12px;
-  background:linear-gradient(135deg,rgba(15,40,90,.5),rgba(10,25,60,.6));
-  border:1px solid rgba(26,107,199,.28);border-radius:10px;
+  margin:6px 10px;padding:11px 13px;
+  background:linear-gradient(135deg,rgba(12,35,80,.65),rgba(8,22,55,.75));
+  border:1px solid rgba(56,130,220,.3);border-radius:10px;
   cursor:pointer;flex-shrink:0;display:block;transition:all .18s;
 }
 .sb-1xbet:hover{border-color:rgba(26,107,199,.55)}
@@ -117,7 +119,7 @@ input,select,button{font-family:var(--fw)}
 
 /* ─────── TOPBAR ─────── */
 #topbar{
-  height:52px;flex-shrink:0;background:var(--bg1);
+  height:54px;flex-shrink:0;background:var(--bg1);
   border-bottom:1px solid var(--bd);
   display:flex;align-items:center;gap:8px;
   padding:0 14px;
@@ -175,13 +177,13 @@ input,select,button{font-family:var(--fw)}
 .f-row::-webkit-scrollbar{height:0}
 .pill{
   display:inline-flex;align-items:center;gap:5px;
-  padding:5px 12px;border-radius:6px;flex-shrink:0;
+  padding:5px 13px;border-radius:7px;flex-shrink:0;
   background:var(--bg3);border:1px solid var(--bd2);
-  color:var(--t2);font-size:.73rem;font-weight:600;
+  color:var(--t2);font-size:.74rem;font-weight:700;
   cursor:pointer;transition:all .14s;white-space:nowrap;user-select:none;
 }
-.pill:hover{border-color:rgba(0,212,255,.3);color:var(--t1)}
-.pill.active{background:rgba(0,212,255,.09);border-color:rgba(0,212,255,.3);color:var(--cyan)}
+.pill:hover{border-color:rgba(56,189,248,.3);color:var(--t1)}
+.pill.active{background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.35);color:var(--cyan)}
 .pill select{
   background:transparent;border:none;color:inherit;
   font-size:.73rem;font-weight:600;outline:none;cursor:pointer;
@@ -272,11 +274,11 @@ input,select,button{font-family:var(--fw)}
 
 /* ─────── GENERIC SECTIONS ─────── */
 .pg-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:16px 18px 0}
-.pg-h1{font-family:var(--fd);font-size:1.25rem;font-weight:900;display:flex;align-items:center;gap:8px}
+.pg-h1{font-family:var(--fd);font-size:1.3rem;font-weight:900;display:flex;align-items:center;gap:8px}
 .pg-desc{font-size:.73rem;color:var(--t2);margin-top:3px}
 .row-btns{display:flex;gap:6px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:6px;font-size:.72rem;font-weight:800;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
-.btn-pr{background:linear-gradient(135deg,var(--cyan),#00b0d8);color:#000;box-shadow:0 3px 14px rgba(0,212,255,.2)}
+.btn-pr{background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#000;font-weight:800;box-shadow:0 3px 14px rgba(56,189,248,.25)}
 .btn-pr:hover{transform:translateY(-1px)}
 .btn-sec{background:var(--bg3);border:1px solid var(--bd2);color:var(--t2)}
 .btn-sec:hover{color:var(--t1)}
@@ -284,7 +286,7 @@ input,select,button{font-family:var(--fw)}
 /* STAT GRID */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;padding:12px 18px 0}
 .stat-c{background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;text-align:center}
-.stat-v{display:block;font-size:1.3rem;font-weight:900;color:var(--green);font-family:var(--mono);line-height:1}
+.stat-v{display:block;font-size:1.35rem;font-weight:900;color:var(--green);font-family:var(--mono);line-height:1}
 .stat-l{font-size:.56rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:3px;font-weight:800}
 
 /* TABLE BOX */
@@ -325,7 +327,7 @@ input,select,button{font-family:var(--fw)}
 .dc-b .d-ico{background:rgba(0,212,255,.1);color:var(--cyan)}
 .dc-p .d-ico{background:rgba(167,139,250,.1);color:var(--purple)}
 .dc-y .d-ico{background:rgba(255,214,0,.1);color:var(--yellow)}
-.dc-g{border-left:3px solid var(--green)}
+.dc-g{border-left:3px solid var(--green);border-top:1px solid rgba(74,222,128,.12)}
 .dc-b{border-left:3px solid var(--cyan)}
 .dc-p{border-left:3px solid var(--purple)}
 .dc-y{border-left:3px solid var(--yellow)}
@@ -350,12 +352,12 @@ input,select,button{font-family:var(--fw)}
 .models-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;padding:14px 18px 30px}
 .m-card{background:var(--bg3);border:1px solid var(--bd);border-radius:10px;padding:16px;position:relative;overflow:hidden}
 .m-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.m-cy::before{background:linear-gradient(90deg,var(--cyan),var(--green))}
-.m-pu::before{background:linear-gradient(90deg,var(--purple),var(--cyan))}
-.m-gr::before{background:linear-gradient(90deg,var(--green),var(--yellow))}
-.m-or::before{background:linear-gradient(90deg,var(--orange),var(--red))}
-.m-ye::before{background:linear-gradient(90deg,var(--yellow),var(--orange))}
-.m-te::before{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.m-cy::before{background:linear-gradient(90deg,#38bdf8,#4ade80)}
+.m-pu::before{background:linear-gradient(90deg,#a78bfa,#38bdf8)}
+.m-gr::before{background:linear-gradient(90deg,#4ade80,#fbbf24)}
+.m-or::before{background:linear-gradient(90deg,#fb923c,#f87171)}
+.m-ye::before{background:linear-gradient(90deg,#fbbf24,#fb923c)}
+.m-te::before{background:linear-gradient(90deg,#4ade80,#38bdf8)}
 .m-title{font-family:var(--fd);font-size:.86rem;font-weight:800;display:flex;align-items:center;gap:6px;margin-bottom:2px}
 .m-sub{font-size:.67rem;color:var(--t2);margin-bottom:12px}
 .m-f{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
@@ -413,53 +415,128 @@ input,select,button{font-family:var(--fw)}
 .fg select,.fg input{background:var(--bg2);border:1px solid var(--bd);color:var(--t1);padding:6px 9px;border-radius:5px;font-size:.75rem;min-width:110px;outline:none;transition:border-color .14s}
 .fg input:focus,.fg select:focus{border-color:rgba(0,212,255,.35)}
 
-/* PRICING */
-.price-pg{padding:30px 18px;max-width:1000px;margin:0 auto}
-.price-hdr{text-align:center;margin-bottom:30px}
-.price-hdr h1{font-family:var(--fd);font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:6px}
-.price-hdr h1 span{color:var(--cyan)}
-.price-hdr p{color:var(--t2);font-size:.82rem}
-.pay-row{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:12px;flex-wrap:wrap}
-.pay-chip{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--bd);border-radius:7px;padding:7px 12px}
-.pay-chip span{font-size:.73rem;font-weight:800}
-.per-tog{display:inline-flex;background:var(--bg3);border:1px solid var(--bd);border-radius:20px;padding:3px;margin-top:12px}
-.per-btn{background:none;border:none;color:var(--t2);padding:6px 16px;border-radius:16px;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .17s;display:flex;align-items:center;gap:5px}
-.per-btn.active{background:var(--cyan);color:#000}
-.save-lbl{background:rgba(26,244,160,.12);color:var(--green);font-size:.6rem;font-weight:900;padding:2px 7px;border-radius:20px}
-.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:14px}
-.plan{background:var(--bg3);border:2px solid var(--bd);border-radius:13px;padding:24px;position:relative;overflow:hidden;transition:all .2s}
-.plan::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--bd)}
-.plan.pop{border-color:rgba(0,212,255,.32)}
-.plan.pop::before{background:linear-gradient(90deg,var(--cyan),var(--green))}
-.plan-badge{position:absolute;top:13px;right:13px;font-size:.58rem;font-weight:900;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;background:linear-gradient(135deg,var(--cyan),var(--green));color:#000}
-.plan-name{font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--t2);margin-bottom:4px;font-family:var(--fd)}
-.plan-price{font-family:var(--fd);font-size:2.4rem;font-weight:900;color:var(--t1);letter-spacing:-2px;line-height:1}
-.plan-old{font-size:.8rem;color:var(--t3);text-decoration:line-through;margin-right:4px}
-.plan-per{font-size:.72rem;color:var(--t3);margin-bottom:13px}
-.plan-bks{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:13px}
-.plan-bk{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.46rem;font-weight:900;color:#fff}
-.plan-feats{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
-.plan-feats li{display:flex;align-items:center;gap:7px;font-size:.74rem;color:var(--t2)}
-.plan-feats li i.fa-check{color:var(--green);font-size:.65rem}
-.plan-feats li i.fa-times{color:var(--t4);font-size:.65rem}
-.plan-feats li.bold-l{color:var(--t1);font-weight:700}
-.plan-btns{display:flex;flex-direction:column;gap:6px}
-.plan-btn-row{display:flex;gap:6px}
-.plan-btn{
-  width:100%;padding:10px;border-radius:7px;font-size:.77rem;font-weight:900;
-  cursor:pointer;transition:all .17s;border:none;
-  display:flex;align-items:center;justify-content:center;gap:6px;
+/* PRICING — OddsJam style */
+.price-pg{min-height:100vh}
+.price-hero{
+  background:linear-gradient(160deg,#071828 0%,#0a2040 40%,#0c2a50 70%,#071828 100%);
+  padding:60px 24px 50px;text-align:center;
+  border-bottom:1px solid var(--bd);position:relative;overflow:hidden;
 }
-.plan-btn-row .plan-btn{flex:1}
-.pb-free{background:var(--bg4);color:var(--t1);border:1px solid var(--bd2)}
-.pb-mp{background:linear-gradient(135deg,#1da462,#158a50);color:#fff;box-shadow:0 3px 13px rgba(29,164,98,.28)}
-.pb-em{background:linear-gradient(135deg,#e63946,#c1121f);color:#fff;box-shadow:0 3px 13px rgba(230,57,70,.26)}
-.plan-btn:hover{transform:translateY(-2px);opacity:.92}
-.faq-wrap{margin-top:30px;padding:20px;background:var(--bg3);border:1px solid var(--bd);border-radius:11px}
-.faq-h{font-family:var(--fd);font-size:.95rem;font-weight:800;margin-bottom:13px;display:flex;align-items:center;gap:7px}
-.faq-i{border-bottom:1px solid var(--bd);padding:12px 0}
-.faq-q{cursor:pointer;font-weight:700;font-size:.81rem;display:flex;justify-content:space-between;align-items:center;color:var(--t1)}
-.faq-a{display:none;color:var(--t2);font-size:.76rem;margin-top:7px;line-height:1.6}
+.price-hero::before{
+  content:'';position:absolute;top:-40%;left:20%;width:60%;height:80%;
+  background:radial-gradient(ellipse,rgba(56,189,248,.09) 0%,transparent 70%);
+  pointer-events:none;
+}
+.price-hero::after{
+  content:'';position:absolute;bottom:-20%;right:10%;width:50%;height:60%;
+  background:radial-gradient(ellipse,rgba(74,222,128,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ph-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);
+  color:var(--cyan);padding:5px 14px;border-radius:20px;
+  font-size:.72rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+  margin-bottom:18px;
+}
+.ph-h1{
+  font-family:var(--fd);font-size:clamp(2rem,5vw,3rem);font-weight:900;
+  color:#fff;letter-spacing:-1.5px;line-height:1.1;margin-bottom:10px;
+}
+.ph-h1 span{
+  background:linear-gradient(135deg,var(--green),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.ph-sub{font-size:.9rem;color:var(--t2);margin-bottom:24px;max-width:540px;margin-left:auto;margin-right:auto;line-height:1.6}
+.pay-meth{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:26px;flex-wrap:wrap}
+.pm-chip{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  color:var(--t1);padding:6px 13px;border-radius:8px;font-size:.73rem;font-weight:700;
+}
+.per-switch{
+  display:inline-flex;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);border-radius:50px;padding:4px;gap:2px;
+  position:relative;
+}
+.psw{
+  background:none;border:none;color:var(--t2);padding:8px 22px;
+  border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;
+  transition:all .2s;position:relative;z-index:1;
+}
+.psw.active{background:#fff;color:#000;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.psw.active + .psw-save{opacity:1}
+.psw-save{
+  position:absolute;top:-10px;right:8px;
+  background:var(--green);color:#000;font-size:.55rem;font-weight:900;
+  padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;
+  pointer-events:none;
+}
+/* Plans grid */
+.plans-section{padding:40px 24px 60px;background:var(--bg0);max-width:1100px;margin:0 auto}
+.plans-oj{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.plan-oj{
+  background:var(--bg1);border:1px solid var(--bd2);
+  border-radius:16px;padding:28px 26px;position:relative;overflow:hidden;
+  transition:all .22s;display:flex;flex-direction:column;
+}
+.plan-oj:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.5);border-color:rgba(56,189,248,.25)}
+.plan-oj.pop{border-color:rgba(56,189,248,.4);background:linear-gradient(160deg,#0e2540,#122d4a)}
+.plan-oj.pop::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--green))}
+.po-badge{
+  position:absolute;top:18px;right:18px;
+  font-size:.6rem;font-weight:900;padding:4px 10px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.5px;
+  background:linear-gradient(135deg,var(--cyan),var(--green));color:#000;
+  box-shadow:0 3px 10px rgba(56,189,248,.3);
+}
+.po-badge.disc{background:linear-gradient(135deg,var(--yellow),var(--orange));color:#000}
+.po-name{font-size:.72rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.po-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:2px}
+.po-price{font-family:var(--fd);font-size:2.8rem;font-weight:900;color:var(--t1);letter-spacing:-2px;line-height:1}
+.po-price-free{font-family:var(--fd);font-size:2.4rem;font-weight:900;color:var(--t1);letter-spacing:-1px}
+.po-old{font-size:1rem;color:var(--t3);text-decoration:line-through;font-family:var(--mono)}
+.po-per{font-size:.75rem;color:var(--t3);margin-bottom:16px}
+/* Bookmaker icons */
+.po-books{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:16px}
+.po-bk{
+  width:26px;height:26px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.48rem;font-weight:900;color:#fff;
+  box-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+.po-desc{font-size:.8rem;color:var(--t2);line-height:1.55;margin-bottom:18px;flex:1}
+/* CTA buttons */
+.po-cta{width:100%;padding:13px;border-radius:9px;font-size:.84rem;font-weight:900;cursor:pointer;border:none;margin-bottom:10px;transition:all .2s;letter-spacing:.2px}
+.po-cta-free{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--t1)}
+.po-cta-free:hover{background:rgba(255,255,255,.1);transform:translateY(-1px)}
+.po-cta-mp{
+  background:linear-gradient(135deg,#1db967,#149e52);color:#fff;
+  box-shadow:0 4px 16px rgba(29,185,103,.3);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.po-cta-em{
+  background:linear-gradient(135deg,#e63946,#c1121f);color:#fff;
+  box-shadow:0 4px 16px rgba(230,57,70,.25);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.po-cta-mp:hover,.po-cta-em:hover{transform:translateY(-2px);opacity:.92}
+.po-btns{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.po-btns-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+/* Features */
+.po-feats{list-style:none;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--bd);padding-top:16px}
+.po-feats li{display:flex;align-items:flex-start;gap:9px;font-size:.77rem;color:var(--t2);line-height:1.4}
+.po-feats li.ok::before{content:'✓';color:var(--green);font-weight:900;font-size:.78rem;flex-shrink:0;margin-top:1px}
+.po-feats li.no{color:var(--t4)}
+.po-feats li.no::before{content:'✕';color:var(--t4);font-weight:900;font-size:.78rem;flex-shrink:0;margin-top:1px}
+.po-feats li.bold-f{color:var(--t1);font-weight:700}
+/* FAQ */
+.faq-section{padding:0 24px 60px;max-width:760px;margin:0 auto}
+.faq-section h3{font-family:var(--fd);font-size:1.4rem;font-weight:900;text-align:center;color:var(--t1);margin-bottom:24px}
+.faq-item{border-bottom:1px solid var(--bd);padding:16px 0}
+.faq-q{cursor:pointer;font-weight:700;font-size:.84rem;display:flex;justify-content:space-between;align-items:center;color:var(--t1);gap:12px}
+.faq-q i{color:var(--t3);font-size:.68rem;transition:transform .2s;flex-shrink:0}
+.faq-a{display:none;color:var(--t2);font-size:.8rem;margin-top:10px;line-height:1.65;padding-right:20px}
 
 /* MISC */
 .odd-g{color:var(--green);font-weight:800;font-family:var(--mono)}
@@ -914,28 +991,33 @@ input,select,button{font-family:var(--fw)}
     <!-- PRICING -->
     <div id="pg-pricing" class="page">
       <div class="price-pg">
-        <div class="price-hdr">
-          <h1>Escolhe o teu <span>Plano</span></h1>
-          <p>Começa grátis. Faz upgrade para desbloquear todas as ferramentas profissionais.</p>
-          <div class="pay-row">
-            <div class="pay-chip"><i class="fas fa-mobile-alt" style="color:#1da462;font-size:1rem"></i><span>M-Pesa</span></div>
-            <div class="pay-chip"><i class="fas fa-mobile-alt" style="color:#e63946;font-size:1rem"></i><span>e-Mola</span></div>
-            <div class="pay-chip"><i class="fab fa-whatsapp" style="color:#25d366;font-size:1rem"></i><span>WhatsApp</span></div>
+        <!-- HERO -->
+        <div class="price-hero">
+          <div class="ph-tag"><i class="fas fa-bolt"></i>Ferramentas de Aposta Profissional</div>
+          <h1 class="ph-h1">Acelera os teus lucros.<br><span>Começa hoje mesmo.</span></h1>
+          <p class="ph-sub">Acesso às melhores odds, +EV betting, arbitragem e modelos estatísticos — tudo numa plataforma.</p>
+          <div class="pay-meth">
+            <div class="pm-chip"><i class="fas fa-mobile-alt" style="color:#1db967"></i>M-Pesa</div>
+            <div class="pm-chip"><i class="fas fa-mobile-alt" style="color:#e63946"></i>e-Mola</div>
+            <div class="pm-chip"><i class="fab fa-whatsapp" style="color:#25d366"></i>WhatsApp</div>
           </div>
-          <div style="margin-top:14px">
-            <div class="per-tog">
-              <button class="per-btn active" id="per-m" onclick="setPeriod('m')">Mensal</button>
-              <button class="per-btn" id="per-a" onclick="setPeriod('a')">Anual <span class="save-lbl">Poupa 30%</span></button>
-            </div>
+          <div class="per-switch">
+            <button class="psw active" id="per-m" onclick="setPeriod('m')">Mensal</button>
+            <button class="psw" id="per-a" onclick="setPeriod('a')">Anual</button>
+            <span class="psw-save">Poupa 30%</span>
           </div>
         </div>
-        <div class="plans" id="plans-grid"></div>
-        <div class="faq-wrap">
-          <div class="faq-h"><i class="fas fa-question-circle" style="color:var(--cyan)"></i>Perguntas Frequentes</div>
+        <!-- PLANS -->
+        <div class="plans-section">
+          <div class="plans-oj" id="plans-grid"></div>
+        </div>
+        <!-- FAQ -->
+        <div class="faq-section">
+          <h3>Perguntas Frequentes</h3>
           <div id="faq-list"></div>
         </div>
       </div>
-    </div>
+    </div><!-- /pg-pricing -->
 
     <!-- MIDDLES / LOW HOLD -->
     <div id="pg-middles" class="page"><div class="coming"><i class="fas fa-rocket"></i><h2>Middles — Em Breve</h2></div></div>
@@ -1955,47 +2037,54 @@ function setPeriod(p){
 
 function renderPricing(){
   const pg=$('plans-grid'); if(!pg) return;
+  const perDay=p=>{
+    const m=G.period==='m'?p.mzn_m:p.mzn_a;
+    if(!m) return null;
+    return (m*12/(G.period==='m'?30:365)).toFixed(0);
+  };
   pg.innerHTML=PLANS.map(p=>{
     const mzn=G.period==='m'?p.mzn_m:p.mzn_a;
     const mznOld=G.period==='a'&&mzn>0?p.mzn_m:null;
-    const per=mzn===0?'Para sempre grátis':'por mês'+(G.period==='a'?' (faturado anualmente)':'');
-    const bksHtml=p.books.slice(0,8).map(b=>`<div class="plan-bk" style="background:${bkClr(b)}" title="${b}">${b.slice(0,3).toUpperCase()}</div>`).join('')+(p.books.length>8?`<span style="font-size:.58rem;color:var(--t2);align-self:center">+${p.books.length-8}</span>`:'');
-    const featsHtml=p.feats.map(f=>`<li class="${f.b?'bold-l':''}"><i class="fas ${f.ok?'fa-check':'fa-times'}"></i>${f.t}</li>`).join('');
-    return `<div class="plan${p.badge?' pop':''}">
-      ${p.badge?`<div class="plan-badge">${p.badge}</div>`:''}
-      <div class="plan-name">${p.name.toUpperCase()} <span style="color:var(--t3);font-weight:400;text-transform:none;font-size:.62rem">PLAN</span></div>
-      <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:2px">
-        ${mznOld?`<span class="plan-old">MT${mznOld}</span>`:''}
-        <span class="plan-price">${mzn===0?'Grátis':'MT '+mzn}</span>
-      </div>
-      <div class="plan-per">${per}</div>
-      <div class="plan-bks">${bksHtml}</div>
-      <ul class="plan-feats">${featsHtml}</ul>
-      <div class="plan-btns">
+    const pd=perDay(p);
+    const per=mzn===0?'Para sempre gratuito':`MT ${pd}/dia, faturado ${G.period==='m'?'mensalmente':'anualmente'}`;
+    const bksHtml=p.books.map(b=>`<div class="po-bk" style="background:${bkClr(b)}" title="${b}">${b.slice(0,3).toUpperCase()}</div>`).join('')+(p.books.length>8?`<span style="font-size:.62rem;color:var(--t2);font-weight:700;align-self:center">+${p.books.length-8}</span>`:'');
+    const featsHtml=p.feats.map(f=>`<li class="${f.ok?'ok':'no'}${f.b?' bold-f':''}">${f.t}</li>`).join('');
+    const desc=p.id==='free'?'Experimenta as ferramentas básicas. Sportsbook com delay e calculadoras para começar.':p.id==='basic'?'Lucra mais apostando onde os profissionais apostam. Odds em tempo real de 15+ casas EU.':'Acesso completo a 50+ casas globais, todos os mercados e API para apostadores de elite.';
+    const discBadge=G.period==='a'&&mzn>0?`<div class="po-badge disc" style="top:${p.badge?'52px':'18px'}">-30%</div>`:'';
+    return `<div class="plan-oj${p.badge?' pop':''}">
+      ${p.badge?`<div class="po-badge">${p.badge}</div>`:''}${discBadge}
+      <div class="po-name">${p.name.toUpperCase()}</div>
+      ${mzn===0
+        ?`<div class="po-price-free">Gratuito</div><div class="po-per">Para sempre</div>`
+        :`<div class="po-price-row">${mznOld?`<span class="po-old">MT${mznOld}</span>`:''}<span class="po-price">MT ${mzn}</span></div><div class="po-per">${per}</div>`
+      }
+      <div class="po-books">${bksHtml}</div>
+      <div class="po-desc">${desc}</div>
+      <div class="po-btns">
         ${mzn===0
-          ?`<button class="plan-btn pb-free" onclick="toast('Plano Free activado!','s')">Começar Grátis</button>`
-          :`<div class="plan-btn-row">
-              <button class="plan-btn pb-mp" onclick="payModal('${p.id}','mpesa',${mzn})"><i class="fas fa-mobile-alt"></i>M-Pesa</button>
-              <button class="plan-btn pb-em" onclick="payModal('${p.id}','emola',${mzn})"><i class="fas fa-mobile-alt"></i>e-Mola</button>
+          ?`<button class="po-cta po-cta-free" onclick="toast('Plano Free activado! ✅','s')"><i class="fas fa-rocket"></i> Começar Grátis</button>`
+          :`<div class="po-btns-row">
+              <button class="po-cta po-cta-mp" onclick="payModal('${p.id}','mpesa',${mzn})"><i class="fas fa-mobile-alt"></i>M-Pesa</button>
+              <button class="po-cta po-cta-em" onclick="payModal('${p.id}','emola',${mzn})"><i class="fas fa-mobile-alt"></i>e-Mola</button>
             </div>`
         }
       </div>
+      <ul class="po-feats">${featsHtml}</ul>
     </div>`;
   }).join('');
-
   const fl=$('faq-list'); if(!fl) return;
   fl.innerHTML=FAQS.map((f,i)=>`
-    <div class="faq-i">
-      <div class="faq-q" onclick="faqToggle(${i})">${f.q}<i class="fas fa-chevron-down" id="fi-${i}" style="font-size:.65rem;color:var(--t3);transition:transform .2s"></i></div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="faqToggle(${i})">${f.q}<i class="fas fa-chevron-down" id="fi-${i}"></i></div>
       <div class="faq-a" id="fa-${i}">${f.a}</div>
     </div>`).join('');
 }
 
 function faqToggle(i){
-  const a=$('fa-'+i), ic=$('fi-'+i);
+  const a=$('fa-'+i),ic=$('fi-'+i);
   const open=a.style.display==='block';
   a.style.display=open?'none':'block';
-  ic.style.transform=open?'':'rotate(180deg)';
+  if(ic) ic.style.transform=open?'':'rotate(180deg)';
 }
 
 function payModal(planId,method,mzn){
