@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BetPro — Odds Comparison & +EV Finder</title>
+<title>Manuel Dança Premium Sports Picks — Odds Comparison & +EV Finder</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -38,8 +38,8 @@ a{text-decoration:none;color:inherit}
    ============================================ */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-width);background:var(--bg-secondary);border-right:1px solid var(--border-color);display:flex;flex-direction:column;z-index:1000;transition:var(--transition);overflow-y:auto;overflow-x:hidden}
 .sidebar-header{padding:20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);min-height:65px}
-.logo{display:flex;align-items:center;gap:10px;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,var(--accent-green),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.logo i{font-size:1.8rem;-webkit-text-fill-color:var(--accent-green)}
+.logo{display:flex;align-items:center;gap:10px;font-size:1rem;font-weight:800;background:linear-gradient(135deg,var(--accent-green),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.logo i{font-size:1.8rem;-webkit-text-fill-color:var(--accent-green);flex-shrink:0}
 .sidebar-toggle{background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:1.2rem;padding:5px;border-radius:var(--radius-sm);transition:var(--transition)}
 .sidebar-toggle:hover{color:var(--text-primary);background:var(--bg-hover)}
 .sidebar-menu{flex:1;padding:10px 0}
@@ -58,6 +58,13 @@ a{text-decoration:none;color:inherit}
 .api-status i{font-size:.5rem;color:var(--accent-red)}
 .api-status.connected i{color:var(--accent-green)}
 .api-usage{color:var(--text-muted)}
+.contact-section{margin-top:10px;padding-top:10px;border-top:1px solid var(--border-color)}
+.contact-title{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:8px;display:block}
+.contact-link{display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:.75rem;padding:5px 0;transition:var(--transition);text-decoration:none}
+.contact-link:hover{color:var(--text-primary)}
+.contact-link .contact-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0}
+.contact-link .wa-icon{background:rgba(37,211,102,.15);color:#25d366}
+.contact-link .em-icon{background:rgba(59,130,246,.15);color:var(--accent-blue)}
 
 /* ============================================
    MAIN CONTENT
@@ -281,7 +288,7 @@ a{text-decoration:none;color:inherit}
 <!-- ==================== SIDEBAR ==================== -->
 <nav id="sidebar" class="sidebar">
     <div class="sidebar-header">
-        <div class="logo"><i class="fas fa-bolt"></i><span>BetPro</span></div>
+        <div class="logo"><i class="fas fa-bolt"></i><span>Manuel Dança Premium Sports Picks</span></div>
         <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     </div>
     <div class="sidebar-menu">
@@ -311,6 +318,21 @@ a{text-decoration:none;color:inherit}
     <div class="sidebar-footer">
         <div class="api-status" id="api-status"><i class="fas fa-circle"></i><span>API: Conectando...</span></div>
         <div class="api-usage" id="api-usage"><span>Requests: --/500</span></div>
+        <div class="contact-section">
+            <span class="contact-title"><i class="fas fa-headset"></i> Apoio ao Cliente</span>
+            <a href="https://wa.me/258840330540" target="_blank" class="contact-link">
+                <span class="contact-icon wa-icon"><i class="fab fa-whatsapp"></i></span>
+                <span>(+258) 840 330 540</span>
+            </a>
+            <a href="https://wa.me/258877480775" target="_blank" class="contact-link">
+                <span class="contact-icon wa-icon"><i class="fab fa-whatsapp"></i></span>
+                <span>(+258) 877 480 775</span>
+            </a>
+            <a href="mailto:dancamanuel@gmail.com" class="contact-link">
+                <span class="contact-icon em-icon"><i class="fas fa-envelope"></i></span>
+                <span>dancamanuel@gmail.com</span>
+            </a>
+        </div>
     </div>
 </nav>
 
@@ -541,7 +563,7 @@ async function fetchMultipleSports(keys){
             data.forEach(g=>{g.sportName=s.name;g.sportIcon=s.icon;g.sportKey=s.key});
             all.push(...data);
         }
-        await new Promise(r=>setTimeout(r,300)); // rate limit
+        await new Promise(r=>setTimeout(r,300));
     }
     return all;
 }
@@ -575,7 +597,6 @@ function closeModal(){document.getElementById('modal-overlay').classList.remove(
 // ============================================
 async function loadDashboard(){
     if(allData.length===0){
-        // Carregar 3 desportos para não gastar muitos requests
         const toFetch=SPORTS.filter(s=>['soccer_epl','soccer_spain_la_liga','basketball_nba','soccer_portugal_primeira_liga'].includes(s.key));
         allData=await fetchMultipleSports(toFetch.slice(0,3));
     }
@@ -585,13 +606,11 @@ async function loadDashboard(){
     const bms=new Set();allData.forEach(g=>g.bookmakers?.forEach(b=>bms.add(b.title)));
     document.getElementById('books-count').textContent=bms.size;
 
-    // +EV
     const evBets=findAllEV(allData,1);
     evBetsGlobal=evBets;
     document.getElementById('ev-count').textContent=evBets.length;
     renderEVRows('dash-ev-body',evBets.slice(0,5),true);
 
-    // Arbs
     const arbs=findAllArbs(allData,0);
     document.getElementById('arb-count').textContent=arbs.length;
     renderArbRows('dash-arb-body',arbs.slice(0,5),true);
@@ -778,7 +797,6 @@ function findAllArbs(data,minProfit){
             }
         }
     });
-    // Remove duplicates
     const seen=new Set(),unique=[];
     arbs.forEach(a=>{const k=a.game+a.o1+a.bm1+a.o2+a.bm2;if(!seen.has(k)){seen.add(k);unique.push(a)}});
     unique.sort((a,b)=>parseFloat(b.profit)-parseFloat(a.profit));
@@ -890,7 +908,7 @@ async function loadOddsScreen(){
 }
 
 // ============================================
-// LIVE SCORES (ESPN - free, no key)
+// LIVE SCORES
 // ============================================
 async function loadLive(){
     const c=document.getElementById('live-container');
@@ -972,7 +990,7 @@ function calcMargin(){
 // ============================================
 // BET TRACKER
 // ============================================
-let myBets=JSON.parse(localStorage.getItem('bp_bets')||'[]');
+let myBets=JSON.parse(localStorage.getItem('mdpsp_bets')||'[]');
 
 function addBet(){
     const g=document.getElementById('b-game').value,mk=document.getElementById('b-mkt').value;
@@ -980,17 +998,17 @@ function addBet(){
     const r=document.getElementById('b-result').value;
     if(!g||!o||!s){toast('Preenche todos os campos!','warning');return}
     myBets.unshift({id:Date.now(),date:new Date().toISOString(),game:g,market:mk,odds:o,stake:s,result:r,pl:r==='won'?(o-1)*s:r==='lost'?-s:0});
-    localStorage.setItem('bp_bets',JSON.stringify(myBets));
+    localStorage.setItem('mdpsp_bets',JSON.stringify(myBets));
     document.getElementById('b-game').value='';document.getElementById('b-mkt').value='';
     document.getElementById('b-odds').value='';document.getElementById('b-stake').value='';
     renderTracker();toast('Aposta adicionada!','success');
 }
 
-function delBet(id){myBets=myBets.filter(b=>b.id!==id);localStorage.setItem('bp_bets',JSON.stringify(myBets));renderTracker()}
+function delBet(id){myBets=myBets.filter(b=>b.id!==id);localStorage.setItem('mdpsp_bets',JSON.stringify(myBets));renderTracker()}
 
 function updBet(id,r){
     const b=myBets.find(x=>x.id===id);if(b){b.result=r;b.pl=r==='won'?(b.odds-1)*b.stake:r==='lost'?-b.stake:0;
-    localStorage.setItem('bp_bets',JSON.stringify(myBets));renderTracker()}
+    localStorage.setItem('mdpsp_bets',JSON.stringify(myBets));renderTracker()}
 }
 
 function renderTracker(){
@@ -1036,11 +1054,9 @@ function refreshData(){
 }
 
 function initSportsMenus(){
-    // Sidebar sports
     const sm=document.getElementById('sports-menu');
     sm.innerHTML=SPORTS.map(s=>`<a href="#" class="menu-item" onclick="loadSport('${s.key}',this)">${s.icon} <span>${s.name}</span></a>`).join('');
     
-    // Filters
     ['odds-sport-filter','ev-sport-filter','arb-sport-filter'].forEach(id=>{
         const el=document.getElementById(id);if(!el)return;
         const hasAll=id!=='odds-sport-filter';
@@ -1055,7 +1071,6 @@ function loadSport(key,el){
     loadOddsScreen();
 }
 
-// Timer
 setInterval(()=>{
     countdown--;
     const t=document.getElementById('refresh-timer');
@@ -1063,19 +1078,17 @@ setInterval(()=>{
     if(countdown<=0){countdown=60;refreshData()}
 },1000);
 
-// Keyboard
 document.addEventListener('keydown',e=>{
     if(e.key==='Escape')closeModal();
     if(e.key==='r'&&e.ctrlKey){e.preventDefault();refreshData()}
 });
 
-// ===== START =====
 document.addEventListener('DOMContentLoaded',()=>{
-    console.log('🚀 BetPro iniciando...');
+    console.log('🚀 Manuel Dança Premium Sports Picks iniciando...');
     initSportsMenus();
     renderTracker();
     loadDashboard();
-    toast('BetPro iniciado!','success');
+    toast('Manuel Dança Premium Sports Picks iniciado!','success');
 });
 </script>
 </body>
