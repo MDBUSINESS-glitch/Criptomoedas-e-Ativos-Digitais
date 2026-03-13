@@ -18,9 +18,9 @@
   --fw:'Inter',sans-serif;
   --fd:'Syne',sans-serif;
   --mono:'JetBrains Mono',monospace;
-  --sb:220px;
+  --sb:230px;
 }
-html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font-family:var(--fw);font-size:15px;line-height:1.5}
+html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font-family:var(--fw);font-size:16px;line-height:1.6}
 *{scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
@@ -55,7 +55,7 @@ input,select,button{font-family:var(--fw)}
 .logo-icon i{color:#fff;font-size:1.15rem}
 .logo-text{display:flex;flex-direction:column;gap:1px;min-width:0}
 .logo-name{
-  font-family:var(--fd);font-size:1rem;font-weight:900;
+  font-family:var(--fd);font-size:1.25rem;font-weight:900;
   letter-spacing:.5px;white-space:nowrap;line-height:1.1;
   color:#fff;
 }
@@ -111,7 +111,7 @@ input,select,button{font-family:var(--fw)}
 
 /* ═══ SIDEBAR FOOTER ═══ */
 .sb-foot{padding:8px 12px;border-top:1px solid var(--bd);flex-shrink:0}
-.api-bar{display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--bg2);border:1px solid var(--bd);border-radius:6px;margin-bottom:6px}
+.api-bar{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg2);border:1px solid var(--bd);border-radius:7px;margin-bottom:7px;cursor:pointer}
 .api-dot{width:6px;height:6px;border-radius:50%;background:var(--t4);flex-shrink:0;transition:all .3s}
 .api-dot.ok{background:var(--green);box-shadow:0 0 7px var(--green)}
 .api-dot.err{background:var(--red)}
@@ -122,7 +122,7 @@ input,select,button{font-family:var(--fw)}
 
 /* ═══ TOPBAR ═══ */
 #topbar{
-  height:54px;flex-shrink:0;
+  height:58px;flex-shrink:0;
   background:var(--bg1);border-bottom:1px solid var(--bd);
   display:flex;align-items:center;gap:8px;padding:0 14px;
 }
@@ -153,7 +153,7 @@ input,select,button{font-family:var(--fw)}
   display:flex;align-items:center;gap:6px;
   background:#3fb950;color:#fff;
   padding:7px 16px;border-radius:8px;border:none;
-  font-size:.8rem;font-weight:700;cursor:pointer;
+  font-size:.88rem;font-weight:700;cursor:pointer;
   white-space:nowrap;flex-shrink:0;
   box-shadow:0 0 16px rgba(63,185,80,.3);
   transition:all .2s;font-family:var(--fw);
@@ -330,7 +330,7 @@ input,select,button{font-family:var(--fw)}
 .dc-b{border-left:3px solid var(--cyan)}
 .dc-p{border-left:3px solid var(--purple)}
 .dc-y{border-left:3px solid var(--yellow)}
-.dv{font-size:1.6rem;font-weight:900;letter-spacing:-1px;font-family:var(--mono);line-height:1}
+.dv{font-size:1.8rem;font-weight:900;letter-spacing:-1px;font-family:var(--mono);line-height:1}
 .dl{font-size:.65rem;color:var(--t2);margin-top:2px;font-weight:600}
 .qa-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:9px;margin-bottom:16px}
 .qa{background:var(--bg2);border:1px solid var(--bd);border-radius:9px;padding:15px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
@@ -423,18 +423,18 @@ input,select,button{font-family:var(--fw)}
   pointer-events:none;
 }
 .ph1{
-  font-family:var(--fd);font-size:clamp(2.2rem,5vw,3.4rem);
+  font-family:var(--fd);font-size:clamp(2.5rem,5vw,3.8rem);
   font-weight:900;color:#fff;letter-spacing:-2px;line-height:1.1;margin-bottom:10px;
   position:relative;
 }
 .ph2{
-  font-family:var(--fd);font-size:clamp(1.8rem,4vw,2.8rem);
+  font-family:var(--fd);font-size:clamp(2rem,4vw,3rem);
   font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:18px;
   background:linear-gradient(135deg,var(--green),var(--cyan));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   position:relative;
 }
-.ph-sub{font-size:1rem;color:var(--t2);margin-bottom:28px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6;position:relative}
+.ph-sub{font-size:1.05rem;color:var(--t2);margin-bottom:28px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6;position:relative}
 .ph-free{
   display:inline-flex;align-items:center;gap:7px;
   font-size:.9rem;color:var(--t2);margin-bottom:28px;position:relative;
@@ -467,7 +467,7 @@ input,select,button{font-family:var(--fw)}
 }
 .plan-c{
   background:var(--bg1);border:1px solid var(--bd);
-  border-radius:16px;padding:30px 28px;
+  border-radius:16px;padding:34px 30px;
   display:flex;flex-direction:column;
   transition:all .22s;position:relative;overflow:hidden;
 }
@@ -491,8 +491,8 @@ input,select,button{font-family:var(--fw)}
 .p-name{font-size:.72rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:14px}
 /* Price */
 .p-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:3px}
-.p-price{font-family:var(--fd);font-size:3rem;font-weight:900;color:#fff;letter-spacing:-2.5px;line-height:1}
-.p-price-free{font-family:var(--fd);font-size:2.6rem;font-weight:900;color:#fff;letter-spacing:-1.5px}
+.p-price{font-family:var(--fd);font-size:3.2rem;font-weight:900;color:#fff;letter-spacing:-2.5px;line-height:1}
+.p-price-free{font-family:var(--fd);font-size:2.8rem;font-weight:900;color:#fff;letter-spacing:-1.5px}
 .p-price-mo{font-size:1rem;font-weight:500;color:var(--t2);margin-left:2px}
 .p-old{font-size:1.1rem;color:var(--t3);text-decoration:line-through;font-weight:500}
 .p-per{font-size:.8rem;color:var(--t3);margin-bottom:18px}
@@ -641,7 +641,7 @@ input,select,button{font-family:var(--fw)}
   </a>
 
   <div class="sb-foot">
-    <div class="api-bar">
+    <div class="api-bar" onclick="checkAPIStatus()" title="Clica para testar">
       <div class="api-dot" id="api-dot"></div>
       <span class="api-lbl" id="api-lbl">API…</span>
       <span class="api-rem" id="api-rem">—</span>
@@ -649,6 +649,7 @@ input,select,button{font-family:var(--fw)}
     <a href="https://wa.me/258840330540" target="_blank" class="lnk"><i class="fab fa-whatsapp" style="color:#25d366;width:12px"></i>(+258) 840 330 540</a>
     <a href="https://wa.me/258877480775" target="_blank" class="lnk"><i class="fab fa-whatsapp" style="color:#25d366;width:12px"></i>(+258) 877 480 775</a>
     <a href="mailto:info@manueldanca.com" class="lnk"><i class="fas fa-envelope" style="color:var(--cyan);width:12px"></i>info@manueldanca.com</a>
+    <button onclick="checkAPIStatus()" style="background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.2);color:var(--cyan);padding:5px 10px;border-radius:5px;font-size:0.75rem;font-weight:700;cursor:pointer;width:100%;margin-top:4px;font-family:var(--fw)"><i class="fas fa-satellite-dish"></i> Testar API</button>
   </div>
 </nav>
 
@@ -1025,6 +1026,7 @@ function go(pid){
     else if(pid==='historical'){renderHist();updateHistStats();}
     else if(pid==='pricing')renderPricing();
     else if(pid==='models')initModels();
+    else if(pid==='sportsbook'&&!G.sbData.length){setTimeout(()=>{const s=$('sb-sport');if(s&&!s.value){s.value='soccer_epl';G.sbSport='soccer_epl';sbLoad();}},100);}
   }catch(e){console.error('go:',e);}
 }
 function initNav(){$$('.nav-a[data-pg]').forEach(a=>a.addEventListener('click',()=>go(a.dataset.pg)));}
@@ -1032,17 +1034,59 @@ function initNav(){$$('.nav-a[data-pg]').forEach(a=>a.addEventListener('click',(
 // ── API ──
 async function apiOdds(sport,mkt='h2h'){
   const reg=$('sb-reg')?.value||'eu,uk';
-  const url=`${ODDS_URL}/sports/${sport}/odds/?apiKey=${ODDS_KEY}&regions=${reg}&markets=${mkt}&oddsFormat=decimal`;
+  const endpoint=`sports/${sport}/odds/?apiKey=${ODDS_KEY}&regions=${reg}&markets=${mkt}&oddsFormat=decimal`;
+  // Try direct first, fallback to CORS proxy
+  const urls=[
+    `${ODDS_URL}/${endpoint}`,
+    `https://corsproxy.io/?${encodeURIComponent(ODDS_URL+'/'+endpoint)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(ODDS_URL+'/'+endpoint)}`
+  ];
+  for(const url of urls){
+    try{
+      const controller=new AbortController();
+      const tid=setTimeout(()=>controller.abort(),9000);
+      const r=await fetch(url,{signal:controller.signal});
+      clearTimeout(tid);
+      if(r.status===401){setApi('err','Key Inválida');toast('❌ API Key inválida — substitui no código','e');return null;}
+      if(r.status===422){toast(sport+' — sem dados disponíveis','w');return[];}
+      if(r.status===429){setApi('err','Limite atingido');toast('⚠️ Limite de requests atingido','w');return[];}
+      if(!r.ok)continue;
+      const data=await r.json();
+      const rem=r.headers.get('x-requests-remaining');
+      const used=r.headers.get('x-requests-used');
+      const remN=parseInt(rem||'500');
+      setApi('ok',`API Online`);
+      $('api-rem').textContent=rem?`${used||'?'} usados · ${rem} restantes`:'Online';
+      $('api-rem').style.color=remN<50?'var(--red)':remN<150?'var(--yellow)':'var(--t2)';
+      return data;
+    }catch(e){if(e.name==='AbortError'){toast('API timeout — a tentar proxy…','w');}continue;}
+  }
+  setApi('err','Sem ligação');
+  toast('❌ API inacessível — verifica ligação','e');
+  return null;
+}
+async function checkAPIStatus(){
+  setApi('','A verificar…');
+  $('api-lbl').textContent='A verificar…';
+  const url=`${ODDS_URL}/sports/?apiKey=${ODDS_KEY}`;
   try{
     const r=await fetch(url);
-    if(r.status===401){setApi('err','Key inválida');toast('❌ Chave API inválida!','e');return null;}
-    if(r.status===422){toast(sport+' indisponível','w');return[];}
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const rem=r.headers.get('x-requests-remaining');
-    const used=r.headers.get('x-requests-used');
-    if(rem){setApi('ok','API Online');$('api-rem').textContent=(used||'?')+'/'+(((+used)||0)+((+rem)||0));}
-    return await r.json();
-  }catch(e){setApi('err','Offline');toast('API: '+e.message,'e');return null;}
+    if(r.status===401){setApi('err','Key Inválida');$('api-lbl').textContent='Key Inválida';return;}
+    if(r.ok){
+      const rem=r.headers.get('x-requests-remaining');
+      const used=r.headers.get('x-requests-used');
+      setApi('ok','API Online');
+      $('api-lbl').textContent='API Online';
+      $('api-rem').textContent=rem?`${used||'?'} usados · ${rem} restantes`:'';
+      toast('✅ API activa! Requests: '+rem+' restantes','s');
+    }
+  }catch(e){
+    // Try proxy
+    try{
+      const r2=await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+      if(r2.ok){setApi('ok','Online (proxy)');$('api-lbl').textContent='Online (proxy)';toast('✅ API via proxy','s');}
+    }catch(e2){setApi('err','Sem ligação');$('api-lbl').textContent='Sem ligação';}
+  }
 }
 function setApi(s,l){$('api-dot').className='api-dot '+s;$('api-lbl').textContent=l;}
 async function fetchMany(keys){const all=[];for(const s of keys){const d=await apiOdds(s.k,'h2h');if(d&&d.length){d.forEach(g=>{g._sn=s.n;g._si=s.i;g._sk=s.k;});all.push(...d);}await sleep(280);}return all;}
@@ -1354,6 +1398,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const sel=$('sb-sport');if(sel)sel.value='soccer_epl';G.sbSport='soccer_epl';
   $('gsearch')?.addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();if(q.length>=2&&G.ev.length){const hits=G.ev.filter(b=>b.game.toLowerCase().includes(q));if(hits.length)toast(`${hits.length} resultado(s) para "${q}"…`,'i');}});
   initModels();
+  checkAPIStatus();
   toast('Manuel Dança Premium Sports Picks 🏆','s');
 });
 </script>
