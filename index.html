@@ -42,26 +42,26 @@ input,select,button{font-family:var(--fw)}
 /* ═══ LOGO — matches Image 1 exactly ═══ */
 .logo-wrap{
   display:flex;align-items:center;gap:10px;
-  padding:12px 14px;
+  padding:10px 14px;
   border-bottom:1px solid var(--bd);flex-shrink:0;
-  min-height:58px;
+  min-height:52px;
 }
 .logo-icon{
-  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  width:36px;height:36px;border-radius:9px;flex-shrink:0;
   background:linear-gradient(145deg,#12c96e,#0da55b,#088545);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 3px 16px rgba(18,201,110,.4);
+  box-shadow:0 3px 14px rgba(18,201,110,.38);
 }
-.logo-icon i{color:#fff;font-size:1.15rem}
+.logo-icon i{color:#fff;font-size:1rem}
 .logo-text{display:flex;flex-direction:column;gap:1px;min-width:0}
 .logo-name{
-  font-family:var(--fd);font-size:1.25rem;font-weight:900;
-  letter-spacing:.5px;white-space:nowrap;line-height:1.1;
+  font-family:var(--fd);font-size:0.88rem;font-weight:900;
+  letter-spacing:.8px;white-space:nowrap;line-height:1.1;
   color:#fff;
 }
 .logo-name em{color:#3fb950;font-style:normal}
 .logo-sub{
-  font-size:.5rem;font-weight:700;letter-spacing:1.8px;
+  font-size:.48rem;font-weight:700;letter-spacing:1.6px;
   color:var(--t3);text-transform:uppercase;line-height:1;
 }
 #mob-tog{display:none;background:none;border:none;color:var(--t2);font-size:1rem;cursor:pointer;padding:4px;margin-left:auto}
@@ -986,7 +986,7 @@ const FAQS=[
   {q:'Qual a diferença entre Básico e Premium?',a:'Básico: 15+ casas EU, 250 MT/mês. Premium: 50+ casas globais, todos os mercados, API access, 500 MT/mês.'},
 ];
 const BKC={pinnacle:'#c62828',bet365:'#027b5b',betfair:'#e6a800','1xbet':'#1a5685',unibet:'#147b45',williamhill:'#15355a',betano:'#d32f2f',bwin:'#1a3365','888sport':'#e65100',betclic:'#c62828',smarkets:'#7b1fa2',ladbrokes:'#004c97'};
-const G={fmt:'am',page:'pricing',mkt:'h2h',period:'m',allData:[],ev:[],evTab:'pre',sbData:[],sbBMs:[],sbSport:'',histData:[],user:null,db:null,cd:60};
+const G={fmt:'am',page:'pricing',_sbLoading:false,mkt:'h2h',period:'m',allData:[],ev:[],evTab:'pre',sbData:[],sbBMs:[],sbSport:'',histData:[],user:null,db:null,cd:60};
 
 // ── UTILS ──
 const $=id=>document.getElementById(id);
@@ -1026,7 +1026,7 @@ function go(pid){
     else if(pid==='historical'){renderHist();updateHistStats();}
     else if(pid==='pricing')renderPricing();
     else if(pid==='models')initModels();
-    else if(pid==='sportsbook'&&!G.sbData.length){setTimeout(()=>{const s=$('sb-sport');if(s&&!s.value){s.value='soccer_epl';G.sbSport='soccer_epl';sbLoad();}},100);}
+    else if(pid==='sportsbook'){const s=$('sb-sport');if(s&&!s.value)s.value='soccer_epl';}
   }catch(e){console.error('go:',e);}
 }
 function initNav(){$$('.nav-a[data-pg]').forEach(a=>a.addEventListener('click',()=>go(a.dataset.pg)));}
@@ -1070,40 +1070,44 @@ async function checkAPIStatus(){
   $('api-lbl').textContent='A verificar…';
   const url=`${ODDS_URL}/sports/?apiKey=${ODDS_KEY}`;
   try{
-    const r=await fetch(url);
-    if(r.status===401){setApi('err','Key Inválida');$('api-lbl').textContent='Key Inválida';return;}
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),6000);
+    const r=await fetch(url,{signal:ctrl.signal});
+    clearTimeout(tid);
+    if(r.status===401){setApi('err','Key Inválida');$('api-lbl').textContent='Key Inválida';toast('❌ API Key inválida','e');return;}
     if(r.ok){
       const rem=r.headers.get('x-requests-remaining');
       const used=r.headers.get('x-requests-used');
       setApi('ok','API Online');
       $('api-lbl').textContent='API Online';
       $('api-rem').textContent=rem?`${used||'?'} usados · ${rem} restantes`:'';
-      toast('✅ API activa! Requests: '+rem+' restantes','s');
+      if(rem)toast('✅ API activa · '+rem+' requests restantes','s');
+      return;
     }
-  }catch(e){
-    // Try proxy
-    try{
-      const r2=await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
-      if(r2.ok){setApi('ok','Online (proxy)');$('api-lbl').textContent='Online (proxy)';toast('✅ API via proxy','s');}
-    }catch(e2){setApi('err','Sem ligação');$('api-lbl').textContent='Sem ligação';}
-  }
+  }catch(e){}
+  // fallback silent — just mark offline
+  setApi('err','Sem ligação');
+  $('api-lbl').textContent='Sem ligação';
 }
 function setApi(s,l){$('api-dot').className='api-dot '+s;$('api-lbl').textContent=l;}
 async function fetchMany(keys){const all=[];for(const s of keys){const d=await apiOdds(s.k,'h2h');if(d&&d.length){d.forEach(g=>{g._sn=s.n;g._si=s.i;g._sk=s.k;});all.push(...d);}await sleep(280);}return all;}
 
 // ── SPORTSBOOK ──
 async function sbLoad(){
+  if(G._sbLoading)return; // prevent double calls
   const sport=$('sb-sport')?.value;G.sbSport=sport;
-  if(!sport){$('sb-wrap').innerHTML='<div class="empty" style="padding:70px">Seleciona um desporto</div>';return;}
-  $('sb-wrap').innerHTML='<div class="empty" style="padding:60px"><div class="spin"></div>A carregar odds…</div>';
+  if(!sport){const w=$('sb-wrap');if(w)w.innerHTML='<div class="empty" style="padding:70px">Seleciona um desporto</div>';return;}
+  G._sbLoading=true;
+  const w=$('sb-wrap');if(w)w.innerHTML='<div class="empty" style="padding:60px"><div class="spin"></div>A carregar odds…</div>';
   const data=await apiOdds(sport,G.mkt);
-  if(!data||!data.length){$('sb-wrap').innerHTML='<div class="empty" style="padding:60px">Sem jogos disponíveis</div>';return;}
+  if(!data||!data.length){G._sbLoading=false;const ww=$('sb-wrap');if(ww)ww.innerHTML='<div class="empty" style="padding:60px">Sem jogos disponíveis</div>';return;}
   const bmSet=new Set();data.forEach(g=>g.bookmakers?.forEach(b=>bmSet.add(b.title)));
   const bmList=[...bmSet].sort();G.sbData=data;G.sbBMs=bmList;
   const bkSel=$('sb-bk');bkSel.innerHTML='<option value="">Sportsbooks</option>'+bmList.map(b=>`<option value="${b}">${b}</option>`).join('');
   const sp=SPORTS.find(s=>s.k===sport);
   data.forEach(g=>{g._sn=sp?.n||sport;g._si=sp?.i||'⚽';g._sk=sport;});
   G.allData=[...G.allData.filter(g=>g._sk!==sport),...data];
+  G._sbLoading=false;
   sbRender();toast(`${data.length} jogos · ${bmList.length} casas`,'s');
 }
 function sbMkt(v,el){
@@ -1398,8 +1402,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const sel=$('sb-sport');if(sel)sel.value='soccer_epl';G.sbSport='soccer_epl';
   $('gsearch')?.addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();if(q.length>=2&&G.ev.length){const hits=G.ev.filter(b=>b.game.toLowerCase().includes(q));if(hits.length)toast(`${hits.length} resultado(s) para "${q}"…`,'i');}});
   initModels();
-  checkAPIStatus();
   toast('Manuel Dança Premium Sports Picks 🏆','s');
+  setTimeout(checkAPIStatus, 1500);
 });
 </script>
 </body>
