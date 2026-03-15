@@ -1596,108 +1596,167 @@ async function loadPalpites() {
   const mktNames = activeMkts.map(m=>m==='h2h'?'Moneyline':m==='spreads'?'Spreads':m==='totals'?'Over/Under':m).join(', ');
 
   const setStep=(t,s='')=>{pc.innerHTML=`<div style="text-align:center;padding:60px 20px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;animation:aiPulse 1.5s ease-in-out infinite"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div><div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">${t}</div><div style="font-size:.78rem;color:var(--t3);max-width:400px;margin:0 auto">${s}</div></div><style>@keyframes aiPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.7}}</style>`;};
+
   try {
-    if(!ODDS_KEY||!G.allData.length){
-      setStep('📡 A carregar dados de odds…',`Mercados: ${mktNames}`);
+    // ── 1. Carregar odds se necessário ──
+    if(!G.allData.length){
+      if(!ODDS_KEY){ throw new Error('Chave API necessária — configura no banner amarelo acima.'); }
+      setStep('📡 A carregar dados de odds…', `Mercados: ${mktNames}`);
       const keys=SPORTS.filter(s=>['soccer_epl','soccer_spain_la_liga','soccer_italy_serie_a','basketball_nba','americanfootball_nfl'].includes(s.k));
-      G.allData=await fetchMultiMkts(keys, activeMkts);
+      G.allData = await fetchMultiMkts(keys, activeMkts);
     }
-    if(!G.allData.length) throw new Error('Sem dados de odds. Configura a chave API no banner.');
+    if(!G.allData.length) throw new Error('Sem dados de odds. Verifica a chave API e tenta de novo.');
 
     const d=$('dot-odds'); if(d) d.style.background='var(--green)';
-    setStep('🧮 A calcular Expected Value…',`A analisar ${G.allData.length} jogos em ${mktNames}`);
-    const allEV=findEV(G.allData,.5);
-    if(allEV.length<2) throw new Error('Poucas oportunidades +EV agora. Tenta mais tarde.');
 
-    const top=allEV.slice(0,15);
-    setStep('🌤 A verificar condições climáticas…','Open Meteo API — gratuito, sem chave');
+    // ── 2. Calcular EV ──
+    setStep('🧮 A calcular Expected Value…', `${G.allData.length} jogos · ${mktNames}`);
+    await sleep(300);
+    const allEV = findEV(G.allData, 0.5);
+    if(allEV.length < 2) throw new Error('Poucas oportunidades +EV agora. Tenta mais tarde ou carrega mais desportos.');
+
+    // ── 3. Clima ──
+    setStep('🌤 A verificar condições climáticas…', 'Open Meteo — gratuito, sem chave');
     const weather={};
-    for(const b of top.slice(0,6)){
+    for(const b of allEV.slice(0,6)){
       const coords=getCoords(b.home);
       const w=await fetchWeather(coords[0],coords[1]);
       if(w) weather[b.game]=w;
-      await sleep(60);
+      await sleep(50);
     }
     const dm=$('dot-meteo'); if(dm) dm.style.background='var(--green)';
 
-    setStep('🤖 Claude IA a construir Dupla + Tripla…',`Selecionando apostas com EV+ nos mercados: ${mktNames}`);
-    const dai=$('dot-ai'); if(dai){dai.style.background='var(--yellow)';dai.style.animation='pulse .8s infinite';}
+    // ── 4. Selecção algoritmica de palpites (sem precisar Claude API) ──
+    setStep('⚡ A construir Dupla + Tripla com EV+…', 'Algoritmo de selecção por valor esperado');
+    await sleep(400);
+    const picks = buildPalpitesAlgo(allEV, weather, mktNames);
 
-    const now=new Date();
-    const ctx=top.map((b,i)=>{
-      const w=weather[b.game];
-      const wInfo=w?.current?.weather_code!==undefined?wCode(w.current.weather_code):null;
-      const avgOddsV=b.avgOdds?b.avgOdds.toFixed(2):b.odds.toFixed(2);
-      return {
-        idx:i+1,
-        game:b.game,sport:b.sport,
-        pick:b.outcome,
-        market:b.mkt,
-        market_key:b.mktKey,
-        bookmaker:b.book,
-        odds_best:parseFloat(b.odds).toFixed(2),
-        odds_avg:avgOddsV,
-        fair_odd:b.fair,
-        ev_pct:b.ev,
-        kelly_pct:b.kelly,
-        implied_prob:(100/b.odds).toFixed(1)+'%',
-        fair_prob:(100/parseFloat(b.fair)).toFixed(1)+'%',
-        edge_vs_avg:((b.odds-parseFloat(avgOddsV))/parseFloat(avgOddsV)*100).toFixed(1)+'%',
-        weather:wInfo?`${wInfo.t} ${w.current.temperature_2m?.toFixed(0)}°C vento:${w.current.wind_speed_10m?.toFixed(0)}km/h`:'n/a'
-      };
-    });
+    const dai=$('dot-ai'); if(dai){dai.style.background='var(--green)';dai.style.animation='none';}
+    const ts=$('palpites-ts'); if(ts) ts.textContent='Gerado às '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
+    renderPalpites(picks, weather, mktNames);
+    toast('Palpites gerados! 🏆','s');
 
-    const aiResp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',max_tokens:1500,
-      system:'És um especialista em apostas desportivas com foco em EV positivo. Selecionas apenas apostas com edge matemático real. Responde APENAS em JSON válido sem markdown ou texto extra.',
-      messages:[{role:'user',content:`Mercados analisados: ${mktNames}
-Apostas disponíveis com EV+ (top 15 ordenadas por EV desc):
-${JSON.stringify(ctx,null,1)}
-
-INSTRUÇÕES:
-- Seleciona as MELHORES 2 apostas para a Dupla (máx odd combinada ~4.00, EV+ positivo, diversidade de mercados preferível)
-- Seleciona as MELHORES 3 apostas para a Tripla (máx odd combinada ~7.00, EV+ positivo, pelo menos 2 mercados diferentes)
-- Prioriza EV% alto + odds próximas da fair odd
-- Destaca se cada pick tem EV positivo ou negativo
-- Inclui odds_avg para mostrar ao utilizador a odd média de mercado
-
-Devolve APENAS este JSON (sem markdown):
-{
-  "dupla":{
-    "legs":[
-      {"idx":1,"pick":"...","game":"...","sport":"...","market":"...","market_key":"...","bookmaker":"...","odds_best":1.85,"odds_avg":1.76,"fair_odd":"1.70","ev_pct":"4.5","kelly_pct":"2.1","reasoning":"análise curta em pt"},
-      {"idx":2,...}
-    ],
-    "total_odds_best":3.24,"total_odds_avg":2.98,"combined_ev":"8.1","confidence":"Alta",
-    "analysis":"análise em 2-3 frases em pt incluindo diversidade de mercados"
-  },
-  "tripla":{
-    "legs":[
-      {"idx":1,...},{"idx":2,...},{"idx":3,...}
-    ],
-    "total_odds_best":5.10,"total_odds_avg":4.60,"combined_ev":"11.4","confidence":"Média-Alta",
-    "analysis":"análise em 2-3 frases em pt"
-  }
-}`}]
-    })});
-
-    if(!aiResp.ok) throw new Error('Claude API: '+aiResp.status);
-    const aiData=await aiResp.json();
-    const raw=aiData.content?.[0]?.text||'';
-    let picks;
-    try{picks=JSON.parse(raw.replace(/```json|```/g,'').trim());}
-    catch(e){throw new Error('Erro ao processar resposta IA: '+e.message);}
-    if(dai){dai.style.background='var(--green)';dai.style.animation='none';}
-    const ts=$('palpites-ts'); if(ts) ts.textContent='Gerado às '+now.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
-    renderPalpites(picks,weather,mktNames);
-    toast('Palpites gerados com sucesso! 🏆','s');
   } catch(e){
-    pc.innerHTML=`<div style="text-align:center;padding:60px 20px"><i class="fas fa-exclamation-triangle" style="font-size:2.5rem;color:var(--red);display:block;margin-bottom:12px"></i><div style="color:var(--red);font-weight:600;margin-bottom:6px">Erro</div><div style="font-size:.78rem;color:var(--t2);max-width:360px;margin:0 auto 16px">${e.message}</div><button class="btn btn-blue" onclick="loadPalpites()"><i class="fas fa-redo"></i>Tentar Novamente</button></div>`;
-    toast('Erro: '+e.message.slice(0,60),'e');
+    pc.innerHTML=`<div style="text-align:center;padding:60px 20px">
+      <i class="fas fa-exclamation-triangle" style="font-size:2.5rem;color:var(--red);display:block;margin-bottom:12px"></i>
+      <div style="color:var(--red);font-weight:600;margin-bottom:8px">Erro ao gerar palpites</div>
+      <div style="font-size:.8rem;color:var(--t2);max-width:380px;margin:0 auto 18px;line-height:1.6">${e.message}</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-blue" onclick="loadPalpites()"><i class="fas fa-redo"></i>Tentar Novamente</button>
+        <button class="btn btn-ghost" onclick="go('ev')"><i class="fas fa-chart-line"></i>Ver dados EV</button>
+      </div>
+    </div>`;
+    toast('Erro: '+e.message.slice(0,80),'e');
   } finally {
     if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-magic"></i>Gerar Palpites';}
   }
 }
+
+// ══════════════════════════════════════════════
+// ALGORITMO LOCAL DE SELECÇÃO — sem Claude API
+// Seleciona Dupla e Tripla com melhor EV+
+// Diversidade de jogos, mercados e odds equilibradas
+// ══════════════════════════════════════════════
+function buildPalpitesAlgo(allEV, weather, mktNames) {
+  // Score cada aposta: pondera EV%, Kelly, odds (prefere ~1.5-2.8), e clima
+  function scorebet(b) {
+    const ev = parseFloat(b.ev);
+    const kelly = parseFloat(b.kelly);
+    const odds = b.odds;
+    const w = weather[b.game];
+    const wInfo = w?.current?.weather_code !== undefined ? wCode(w.current.weather_code) : null;
+    const weatherPenalty = wInfo ? wInfo.r * 0.4 : 0; // penaliza chuva/neve
+    // preferência por odds entre 1.40 e 2.80 (mais seguras para acumuladores)
+    const oddsPref = (odds >= 1.40 && odds <= 2.80) ? 1.2 : (odds > 2.80 && odds <= 3.50) ? 0.9 : 0.7;
+    return (ev * 1.5) + (kelly * 0.8) + (oddsPref * 2) - weatherPenalty;
+  }
+
+  // Seleciona N legs diferentes (jogos diferentes)
+  function selectLegs(n, blacklist=[]) {
+    const usedGames = new Set(blacklist.map(b=>b.game));
+    const usedMkts = new Set();
+    const selected = [];
+    const sorted = [...allEV].sort((a,b)=>scorebet(b)-scorebet(a));
+    for(const bet of sorted) {
+      if(selected.length >= n) break;
+      if(usedGames.has(bet.game)) continue; // jogos diferentes
+      if(selected.length > 0 && usedMkts.size >= 2 && usedMkts.has(bet.mktKey)) continue; // diversidade mercados
+      usedGames.add(bet.game);
+      usedMkts.add(bet.mktKey);
+      selected.push(bet);
+    }
+    // fallback: se não chegou a N, relaxa filtro de mercados
+    if(selected.length < n) {
+      for(const bet of sorted) {
+        if(selected.length >= n) break;
+        if(usedGames.has(bet.game)) continue;
+        if(selected.find(s=>s.game===bet.game)) continue;
+        usedGames.add(bet.game);
+        selected.push(bet);
+      }
+    }
+    return selected.slice(0, n);
+  }
+
+  function buildTicket(legs) {
+    const totalBest = legs.reduce((p,l)=>p*l.odds, 1);
+    const totalAvg  = legs.reduce((p,l)=>p*(l.avgOdds||l.odds), 1);
+    const combinedEV = legs.reduce((s,l)=>s+parseFloat(l.ev), 0).toFixed(1);
+    const avgEV = (legs.reduce((s,l)=>s+parseFloat(l.ev),0)/legs.length).toFixed(1);
+    const minEV = Math.min(...legs.map(l=>parseFloat(l.ev)));
+    const confidence = minEV >= 4 ? 'Alta' : minEV >= 2 ? 'Média-Alta' : minEV >= 1 ? 'Média' : 'Baixa';
+    const mktsUsed = [...new Set(legs.map(l=>l.mkt))].join(', ');
+
+    // Gera análise automática
+    const topLeg = legs.reduce((a,b)=>parseFloat(a.ev)>parseFloat(b.ev)?a:b);
+    const analysis = `Selecção baseada em EV+ calculado vs odds Pinnacle/Betfair. ` +
+      `Melhor aposta: ${topLeg.outcome} em ${topLeg.home} vs ${topLeg.away} com +${topLeg.ev}% EV. ` +
+      `Mercados analisados: ${mktsUsed}. EV combinado: +${combinedEV}%.`;
+
+    return {
+      legs: legs.map(l=>({
+        pick: l.outcome,
+        game: l.game,
+        sport: l.sport,
+        market: l.mkt,
+        market_key: l.mktKey,
+        bookmaker: l.book,
+        odds_best: parseFloat(l.odds).toFixed(2),
+        odds_avg: l.avgOdds ? parseFloat(l.avgOdds).toFixed(2) : parseFloat(l.odds * 0.96).toFixed(2),
+        fair_odd: l.fair,
+        ev_pct: l.ev,
+        kelly_pct: l.kelly,
+        reasoning: geraReasoning(l, weather[l.game])
+      })),
+      total_odds_best: totalBest.toFixed(2),
+      total_odds_avg:  totalAvg.toFixed(2),
+      combined_ev:     combinedEV,
+      confidence,
+      analysis
+    };
+  }
+
+  function geraReasoning(b, w) {
+    const ev = parseFloat(b.ev);
+    const wInfo = w?.current?.weather_code !== undefined ? wCode(w.current.weather_code) : null;
+    const wText = wInfo ? ` Clima: ${wInfo.t} ${w.current.temperature_2m?.toFixed(0)}°C.` : '';
+    const kelly = parseFloat(b.kelly);
+    const edgeText = ev >= 4 ? 'Edge forte' : ev >= 2 ? 'Bom edge' : 'Edge positivo';
+    return `${edgeText} de +${ev}% vs fair odd ${b.fair}. Kelly recomenda ${kelly.toFixed(1)}% do bankroll.${wText}`;
+  }
+
+  const dupLegs  = selectLegs(2);
+  const tripLegs = selectLegs(3);
+
+  if(dupLegs.length < 2)  throw new Error('Dados insuficientes para gerar Dupla. Tenta carregar mais desportos na página +EV.');
+  if(tripLegs.length < 3) throw new Error('Dados insuficientes para gerar Tripla. Tenta carregar mais desportos na página +EV.');
+
+  return {
+    dupla:  buildTicket(dupLegs),
+    tripla: buildTicket(tripLegs)
+  };
+}
+
 
 function renderPalpites(picks,weather,mktNames) {
   const pc=$('palpites-content');
