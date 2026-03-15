@@ -1843,6 +1843,23 @@ function buildPalpitesAlgo(allEV, weather, mktNames) {
 // ══════════════════════════════════════════════
 // RENDER PALPITES — Bilhete Combinado visual
 // ══════════════════════════════════════════════
+function fmtGameDate(gameTime) {
+  if (!gameTime) return '';
+  const dt = new Date(gameTime);
+  const now = new Date();
+  const isLive = dt < now;
+  const timeStr = dt.toLocaleTimeString('pt-PT', {hour:'2-digit', minute:'2-digit'});
+  if (isLive) {
+    return '<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(230,94,76,.12);border:1px solid rgba(230,94,76,.3);border-radius:4px;padding:1px 7px;font-size:.62rem;font-weight:700;color:var(--red)"><span style="width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 1s infinite;display:inline-block"></span>AO VIVO</span>';
+  }
+  const todayStr = now.toDateString();
+  const tmrw = new Date(now); tmrw.setDate(now.getDate() + 1);
+  const dayLabel = dt.toDateString() === todayStr ? 'Hoje'
+    : dt.toDateString() === tmrw.toDateString() ? 'Amanhã'
+    : dt.toLocaleDateString('pt-PT', {day:'2-digit', month:'2-digit'});
+  return '<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(0,168,232,.08);border:1px solid rgba(0,168,232,.2);border-radius:4px;padding:1px 8px;font-size:.63rem;font-weight:600;color:var(--blue)"><i class=\"fas fa-calendar-alt\" style=\"font-size:.55rem;opacity:.7\"></i>' + dayLabel + ' ' + timeStr + '</span>';
+}
+
 function renderPalpites(picks, weather, mktNames) {
   const pc = $('palpites-content');
 
@@ -1891,18 +1908,7 @@ function renderPalpites(picks, weather, mktNames) {
           <!-- Sport + Date + Weather -->
           <div class="leg-league" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
             <span>${leg.icon||'⚽'} ${leg.sport}</span>
-            ${leg.game_time ? (() => {
-              const dt = new Date(leg.game_time);
-              const now = new Date();
-              const isLive = dt < now;
-              const isToday = dt.toDateString() === now.toDateString();
-              const tmrw = new Date(now); tmrw.setDate(now.getDate()+1);
-              const isTmrw = dt.toDateString() === tmrw.toDateString();
-              const timeStr = dt.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
-              const dayStr = isLive ? '' : isToday ? 'Hoje' : isTmrw ? 'Amanhã' : dt.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'});
-              if (isLive) return \`<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(230,94,76,.12);border:1px solid rgba(230,94,76,.3);border-radius:4px;padding:1px 7px;font-size:.62rem;font-weight:700;color:var(--red)"><span style="width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 1s infinite;display:inline-block"></span>AO VIVO</span>\`;
-              return \`<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(0,168,232,.08);border:1px solid rgba(0,168,232,.2);border-radius:4px;padding:1px 8px;font-size:.63rem;font-weight:600;color:var(--blue)"><i class="fas fa-calendar-alt" style="font-size:.55rem;opacity:.7"></i>${dayStr} ${timeStr}</span>\`;
-            })() : ''}
+            ${fmtGameDate(leg.game_time)}
             ${wHtml}
           </div>
           <!-- Teams -->
