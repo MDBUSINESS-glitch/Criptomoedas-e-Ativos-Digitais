@@ -1806,6 +1806,7 @@ function buildPalpitesAlgo(allEV, weather, mktNames) {
         prob_real: l.prob.toFixed(1),
         reasoning: evText + wText,
         weather_info: wInfo ? `${wInfo.i}|${wInfo.t}|${w.current.temperature_2m?.toFixed(0)||'?'}` : null,
+        game_time: l.time || null,
       };
     });
 
@@ -1887,9 +1888,22 @@ function renderPalpites(picks, weather, mktNames) {
         <!-- Leg number badge -->
         <div style="position:absolute;top:-1px;left:-1px;width:22px;height:22px;border-radius:7px 0 7px 0;background:${isEvPos?'var(--green)':'var(--t4)'};display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#fff">${idx+1}</div>
         <div style="padding-left:10px">
-          <!-- Sport + Weather -->
-          <div class="leg-league" style="display:flex;align-items:center;gap:5px">
-            <span>${leg.icon||'⚽'} ${leg.sport}</span>${wHtml}
+          <!-- Sport + Date + Weather -->
+          <div class="leg-league" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span>${leg.icon||'⚽'} ${leg.sport}</span>
+            ${leg.game_time ? (() => {
+              const dt = new Date(leg.game_time);
+              const now = new Date();
+              const isLive = dt < now;
+              const isToday = dt.toDateString() === now.toDateString();
+              const tmrw = new Date(now); tmrw.setDate(now.getDate()+1);
+              const isTmrw = dt.toDateString() === tmrw.toDateString();
+              const timeStr = dt.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
+              const dayStr = isLive ? '' : isToday ? 'Hoje' : isTmrw ? 'Amanhã' : dt.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'});
+              if (isLive) return \`<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(230,94,76,.12);border:1px solid rgba(230,94,76,.3);border-radius:4px;padding:1px 7px;font-size:.62rem;font-weight:700;color:var(--red)"><span style="width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 1s infinite;display:inline-block"></span>AO VIVO</span>\`;
+              return \`<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(0,168,232,.08);border:1px solid rgba(0,168,232,.2);border-radius:4px;padding:1px 8px;font-size:.63rem;font-weight:600;color:var(--blue)"><i class="fas fa-calendar-alt" style="font-size:.55rem;opacity:.7"></i>${dayStr} ${timeStr}</span>\`;
+            })() : ''}
+            ${wHtml}
           </div>
           <!-- Teams -->
           <div class="leg-game">${leg.home} <span style="color:var(--t3);font-weight:400">vs</span> ${leg.away}</div>
