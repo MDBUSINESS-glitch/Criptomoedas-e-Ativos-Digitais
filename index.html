@@ -489,7 +489,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
     <div class="nav-item" id="nav-auth-btn"><i class="fas fa-sign-in-alt nav-icon"></i>Entrar</div>
   </div>
   <div class="sb-foot">
-    <div class="api-pill">
+    <div class="api-pill" onclick="testApiKey('901f7b8b61b01403304d0ba1a7d7f8ee')" title="Clica para testar a chave API" style="cursor:pointer">
       <div class="api-dot dot-wait" id="api-dot"></div>
       <span class="api-lbl" id="api-lbl">A ligar…</span>
       <span class="api-calls" id="api-calls"></span>
@@ -522,10 +522,12 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
   <!-- API KEY BANNER -->
   <div class="api-config-banner" id="api-banner">
     <i class="fas fa-key"></i>
-    <strong>Configura a tua chave API gratuita</strong>
-    <span style="color:var(--t2)">Regista-te em <a href="https://the-odds-api.com" target="_blank" style="color:var(--blue);font-weight:600">the-odds-api.com</a> (grátis) e cola a chave:</span>
-    <input class="api-cfg-input" id="odds-key-input" placeholder="Cole aqui a tua API key…" value="">
-    <button class="api-cfg-btn" onclick="saveApiKey()">Guardar</button>
+    <strong>Configura a tua chave API</strong>
+    <span style="color:var(--t2)">Cola a chave do <a href="https://the-odds-api.com" target="_blank" style="color:var(--blue);font-weight:600">the-odds-api.com</a>:</span>
+    <input class="api-cfg-input" id="odds-key-input" placeholder="Cola a chave aqui…" value="901f7b8b61b01403304d0ba1a7d7f8ee">
+    <button class="api-cfg-btn" onclick="testApiKey(document.getElementById('odds-key-input').value.trim())">
+      <i class="fas fa-plug"></i> Testar &amp; Guardar
+    </button>
     <button class="api-cfg-dismiss" onclick="dismissBanner()" title="Fechar"><i class="fas fa-times"></i></button>
   </div>
 
@@ -1014,8 +1016,7 @@ function setFmt(f,el) {
 function saveApiKey() {
   const k=$('odds-key-input')?.value?.trim();
   if (!k||k.length<10) { toast('Chave inválida','e'); return; }
-  ODDS_KEY=k; localStorage.setItem('md_odds_key',k);
-  dismissBanner(); toast('Chave API guardada! A carregar dados…','s'); loadEV(true);
+  testApiKey(k);
 }
 function dismissBanner() {
   const b=$('api-banner'); if(b) b.style.display='none';
@@ -1157,26 +1158,55 @@ async function apiOdds(sport, mkt='h2h') {
   if (!ODDS_KEY) { setApiStatus('err','Sem chave API'); return null; }
   const reg=$('sb-region')?.value||'eu,uk';
   const url=`${BASE_ODDS}/sports/${sport}/odds/?apiKey=${ODDS_KEY}&regions=${reg}&markets=${mkt}&oddsFormat=decimal`;
-  let r;
-  try { r=await fetch(url,{cache:'no-store'}); }
-  catch(e) {
-    try { r=await fetch(CORS_PROXY+encodeURIComponent(url),{cache:'no-store'}); }
-    catch(e2) { setApiStatus('err','Sem ligação'); return null; }
+
+  // Tentativa directa
+  try {
+    const r = await fetch(url, {cache:'no-store'});
+    if (r.status===401) { setApiStatus('err','Chave inválida'); toast('Chave inválida! Verifica em the-odds-api.com','e'); return null; }
+    if (r.status===422) return [];
+    if (r.status===429) { toast('Limite de requests atingido.','w'); return null; }
+    if (r.ok) {
+      const rem=r.headers.get('x-requests-remaining'), used=r.headers.get('x-requests-used');
+      if (rem) { setApiStatus('ok','Odds API ✓'); $('api-calls').textContent=(used||'?')+'/'+(((+used||0)+(+rem||0))); dismissBanner(); const d=$('dot-odds');if(d)d.style.background='var(--green)'; }
+      return await r.json();
+    }
+  } catch(e) { /* CORS — tenta proxy */ }
+
+  // Proxy allorigins (resposta encapsulada em {contents, status})
+  try {
+    const pr = await fetch(CORS_PROXY + encodeURIComponent(url), {cache:'no-store'});
+    if (!pr.ok) { setApiStatus('err','Proxy indisponível'); return null; }
+    const wrapper = await pr.json();
+    const httpCode = wrapper?.status?.http_code;
+    if (httpCode===401) { setApiStatus('err','Chave inválida'); toast('Chave inválida!','e'); return null; }
+    if (httpCode===422) return [];
+    if (httpCode===429) { toast('Limite atingido.','w'); return null; }
+    if (!wrapper?.contents) { setApiStatus('err','Resposta vazia'); return null; }
+    const data = JSON.parse(wrapper.contents);
+    if (Array.isArray(data)) { setApiStatus('ok','Odds API ✓'); dismissBanner(); const d=$('dot-odds');if(d)d.style.background='var(--green)'; }
+    return Array.isArray(data) ? data : null;
+  } catch(e2) { setApiStatus('err','Sem ligação'); return null; }
+}
+
+// ── VERIFICAR CHAVE ──
+async function testApiKey(key) {
+  if (!key || key.length < 10) { toast('Chave inválida (muito curta)','e'); return; }
+  toast('A verificar chave API…','i');
+  const url = `${BASE_ODDS}/sports/?apiKey=${key}`;
+  const applyKey = () => { ODDS_KEY=key; localStorage.setItem('md_odds_key',key); setApiStatus('ok','Odds API ✓'); dismissBanner(); setTimeout(()=>loadEV(true),600); };
+  try {
+    const r = await fetch(url, {cache:'no-store'});
+    if (r.status===401) { toast('❌ Chave inválida! Copia directamente do painel the-odds-api.com','e'); return; }
+    if (r.ok) { const data=await r.json(); applyKey(); toast('✅ Chave válida! '+data.length+' desportos disponíveis.','s'); return; }
+  } catch(e) {
+    try {
+      const pr = await fetch(CORS_PROXY+encodeURIComponent(url));
+      const w = await pr.json();
+      if (w?.status?.http_code===401) { toast('❌ Chave inválida!','e'); return; }
+      if (w?.contents) { applyKey(); toast('✅ Chave válida (proxy)!','s'); return; }
+    } catch(e2) {}
   }
-  if (r.status===401) { setApiStatus('err','Chave inválida'); toast('Chave API inválida!','e'); return null; }
-  if (r.status===422) { return []; }
-  if (r.status===429) { toast('Limite de requests. Aguarda 1 minuto.','w'); return null; }
-  if (!r.ok) { setApiStatus('err','Erro HTTP '+r.status); return null; }
-  const rem=r.headers.get('x-requests-remaining');
-  const used=r.headers.get('x-requests-used');
-  if (rem) {
-    const total=((+used||0)+(+rem||0));
-    setApiStatus('ok','Odds API ✓');
-    $('api-calls').textContent=(used||'?')+'/'+total;
-    dismissBanner();
-    const d=$('dot-odds'); if(d) d.style.background='var(--green)';
-  }
-  return await r.json();
+  toast('Não foi possível verificar. Verifica a ligação.','w');
 }
 
 function setApiStatus(s,lbl) {
@@ -1881,7 +1911,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   loadLive();
 
   if(ODDS_KEY&&ODDS_KEY.length>10) {
-    setTimeout(()=>loadEV(true),2000);
+    setTimeout(()=>testApiKey(ODDS_KEY),1500);
   } else {
     setApiStatus('err','Cola a chave API no banner ↑');
   }
