@@ -81,11 +81,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 .cd-wrap span{color:var(--green);font-weight:700;min-width:22px}
 
 /* API CONFIG BANNER */
-.api-config-banner{
-  display:flex;align-items:center;gap:10px;padding:8px 16px;
-  background:rgba(251,191,36,.05);border-bottom:2px solid rgba(251,191,36,.25);
-  font-size:.76rem;flex-wrap:wrap;
-}
+.api-config-banner{display:flex;align-items:center;gap:10px;padding:8px 16px;background:rgba(251,191,36,.05);border-bottom:2px solid rgba(251,191,36,.25);font-size:.76rem;flex-wrap:wrap;}
 .api-config-banner i{color:var(--yellow);font-size:.9rem;flex-shrink:0}
 .api-config-banner strong{color:var(--yellow)}
 .api-cfg-input{background:var(--bg-card2);border:1px solid rgba(251,191,36,.3);color:var(--t1);padding:4px 9px;border-radius:6px;font-size:.76rem;outline:none;width:280px;font-family:monospace}
@@ -124,6 +120,34 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 .mkt-pill{padding:5px 12px;border-radius:20px;background:transparent;border:1px solid var(--border);color:var(--t3);font-size:.78rem;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0}
 .mkt-pill.active{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.2);color:var(--t1)}
 .fp-r{margin-left:auto;display:flex;align-items:center;gap:5px;flex-shrink:0}
+
+/* ══════════════════════════════════
+   MARKET DROPDOWN — OddsJam style
+══════════════════════════════════ */
+.mkt-dropdown-wrap{position:relative;display:inline-block}
+.mkt-dropdown-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:var(--bg-card2);border:1px solid var(--border);color:var(--t2);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .14s;white-space:nowrap}
+.mkt-dropdown-btn:hover,.mkt-dropdown-btn.open{border-color:var(--blue-brd);color:var(--blue);background:var(--blue-dim)}
+.mkt-dropdown-btn i.caret{font-size:.6rem;transition:transform .2s}
+.mkt-dropdown-btn.open i.caret{transform:rotate(180deg)}
+.mkt-panel{position:absolute;top:calc(100% + 6px);left:0;z-index:500;background:#0e1820;border:1px solid var(--border);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8);width:540px;display:none;overflow:hidden}
+.mkt-panel.open{display:block;animation:panelIn .15s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.mkt-panel-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;border-bottom:1px solid var(--border)}
+.mkt-panel-hdr span{font-size:.72rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
+.mkt-panel-close{background:none;border:none;color:var(--t3);cursor:pointer;font-size:.8rem;padding:2px}
+.mkt-panel-body{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:0 20px;max-height:380px;overflow-y:auto}
+.mkt-category{margin-bottom:12px}
+.mkt-cat-title{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.05)}
+.mkt-option{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:6px;font-size:.78rem;color:var(--t2);cursor:pointer;transition:all .1s;user-select:none}
+.mkt-option:hover{background:rgba(255,255,255,.04);color:var(--t1)}
+.mkt-option.selected{color:var(--blue)}
+.mkt-option .mck{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--t4);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s;font-size:.6rem}
+.mkt-option.selected .mck{background:var(--blue);border-color:var(--blue);color:#fff}
+.mkt-panel-footer{padding:8px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(10,15,20,.8)}
+.mkt-sel-count{font-size:.72rem;color:var(--t3)}
+.mkt-sel-count span{color:var(--blue);font-weight:700}
+.mkt-apply-btn{background:var(--blue);color:#fff;border:none;padding:6px 16px;border-radius:6px;font-size:.76rem;font-weight:700;cursor:pointer;transition:all .14s}
+.mkt-apply-btn:hover{background:var(--blue2)}
 
 /* SPORTSBOOK TABLE */
 .sb-outer{overflow-x:auto;padding-bottom:40px}
@@ -223,8 +247,15 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 .lv-info{font-size:.63rem;color:var(--t3);text-align:center;margin-top:5px}
 .lv-empty{grid-column:1/-1;text-align:center;padding:60px;color:var(--t3);font-size:.84rem}
 
-/* PALPITES */
+/* ══════════════════════════════════
+   PALPITES — enhanced
+══════════════════════════════════ */
 .palpites-wrap{padding:14px}
+.pal-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(10,15,20,.6)}
+.pal-status-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex:1}
+.pal-dot-item{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--t2)}
+
+/* Ticket card */
 .ticket-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden}
 .ticket-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg-card2)}
 .ticket-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
@@ -232,19 +263,46 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 .tb-tripla{background:rgba(245,158,11,.12);color:var(--gold);border:1px solid rgba(245,158,11,.3)}
 .ticket-odd-big{font-size:1.8rem;font-weight:800;color:var(--green);letter-spacing:-1px;line-height:1}
 .ticket-odd-lbl{font-size:.62rem;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;text-align:right}
+
+/* Odds summary bar inside ticket header */
+.ticket-odds-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tob-item{display:flex;flex-direction:column;align-items:center}
+.tob-val{font-size:.88rem;font-weight:700;line-height:1}
+.tob-lbl{font-size:.56rem;color:var(--t3);text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+
 .ticket-legs{padding:12px 16px;display:flex;flex-direction:column;gap:10px}
-.leg-item{background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+
+/* LEG ITEM — enhanced with EV+ glow */
+.leg-item{background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;transition:border-color .2s}
+.leg-item.ev-pos{border-color:rgba(124,194,69,.35);box-shadow:0 0 0 1px rgba(124,194,69,.1),inset 0 0 20px rgba(124,194,69,.03)}
+.leg-item.ev-high{border-color:rgba(124,194,69,.6);box-shadow:0 0 12px rgba(124,194,69,.15),inset 0 0 30px rgba(124,194,69,.05)}
+.leg-ev-strip{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.leg-item-inner{position:relative;overflow:visible}
 .leg-league{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--t3);margin-bottom:3px}
 .leg-game{font-size:.86rem;font-weight:700;color:var(--t1);margin-bottom:4px}
 .leg-pick-lbl{font-size:.82rem;font-weight:700;color:var(--green)}
 .leg-mkt{font-size:.7rem;color:var(--t3);background:rgba(255,255,255,.04);border:1px solid var(--border);padding:2px 7px;border-radius:4px;display:inline-block;margin-top:4px}
 .leg-meta{display:flex;gap:8px;margin-top:5px;flex-wrap:wrap}
 .leg-tag{font-size:.64rem;color:var(--t3);display:flex;align-items:center;gap:3px}
+.leg-odd-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .leg-odd{font-size:1.3rem;font-weight:800;color:var(--t1);letter-spacing:-.5px}
-.leg-ev-badge{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(124,194,69,.1);color:var(--green);border:1px solid rgba(124,194,69,.2);text-align:center}
-.leg-reasoning{margin-top:6px;font-size:.71rem;color:var(--t3);font-style:italic;line-height:1.5}
-.prob-bg{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-top:6px}
+.leg-avg-odd{font-size:.7rem;color:var(--t3);display:flex;align-items:center;gap:3px}
+.leg-avg-odd span{color:var(--t2);font-weight:600}
+
+/* EV Badge — sizes by value */
+.ev-badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:5px;font-weight:700;font-size:.72rem;letter-spacing:.2px}
+.ev-badge.ev-low{background:rgba(124,194,69,.08);color:var(--green);border:1px solid rgba(124,194,69,.2)}
+.ev-badge.ev-mid{background:rgba(124,194,69,.14);color:#8dd648;border:1px solid rgba(124,194,69,.35)}
+.ev-badge.ev-high{background:rgba(124,194,69,.22);color:#a0e060;border:1px solid rgba(124,194,69,.5);text-shadow:0 0 8px rgba(124,194,69,.4)}
+.ev-badge.ev-neg{background:rgba(230,94,76,.08);color:var(--red);border:1px solid rgba(230,94,76,.2)}
+.kelly-badge{padding:2px 7px;border-radius:4px;font-size:.65rem;font-weight:700;background:rgba(0,168,232,.1);color:var(--blue);border:1px solid rgba(0,168,232,.2)}
+
+/* Prob bar */
+.prob-bg{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-top:6px}
 .prob-fill{height:100%;border-radius:2px;transition:width .4s ease}
+.leg-reasoning{margin-top:7px;font-size:.71rem;color:var(--t3);font-style:italic;line-height:1.55;padding-top:7px;border-top:1px solid rgba(255,255,255,.04)}
+
+/* AI analysis box */
 .ai-analysis{background:linear-gradient(135deg,rgba(124,58,237,.06),rgba(37,99,235,.06));border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:12px 14px;margin:0 16px 14px}
 .ai-analysis-hdr{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;color:#c4b5fd;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
 .ai-analysis-txt{font-size:.8rem;color:var(--t2);line-height:1.65}
@@ -254,6 +312,16 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 .ts-val{font-size:.86rem;font-weight:700;color:var(--t1)}
 .ts-lbl{font-size:.58rem;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
 .ticket-actions{display:flex;gap:6px}
+
+/* EV+ banner inside ticket */
+.ev-banner{display:flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(124,194,69,.06);border-bottom:1px solid rgba(124,194,69,.15);font-size:.73rem;color:var(--green)}
+.ev-banner i{flex-shrink:0}
+.ev-banner strong{font-weight:700}
+
+/* Market chips row */
+.mkt-chips{display:flex;gap:5px;flex-wrap:wrap;padding:8px 16px 0}
+.mkt-chip{padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600;background:var(--bg-card2);border:1px solid var(--border);color:var(--t3);cursor:pointer;transition:all .12s}
+.mkt-chip.active{background:rgba(0,168,232,.1);border-color:var(--blue-brd);color:var(--blue)}
 
 /* MODELS */
 .models-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px;padding:14px}
@@ -382,6 +450,8 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
   #sidebar.open{transform:none;box-shadow:12px 0 40px rgba(0,0,0,.8)}
   .mob-toggle{display:block}
   .top-search{display:none}
+  .mkt-panel{width:320px}
+  .mkt-panel-body{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -589,26 +659,80 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
       <div class="live-grid" id="live-grid"><div class="lv-empty"><div class="spin"></div></div></div>
     </div>
 
-    <!-- PALPITES -->
+    <!-- ══════════════════════════════════
+         PALPITES — Enhanced v6
+    ══════════════════════════════════ -->
     <div id="pg-palpites" class="page">
       <div class="pg-header">
-        <div><div class="pg-title" style="background:linear-gradient(135deg,#c4b5fd,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent"><i class="fas fa-magic" style="-webkit-text-fill-color:#c4b5fd"></i>Palpites de Hoje</div><div class="pg-desc">IA analisa odds + clima para gerar Dupla e Tripla com EV positivo</div></div>
+        <div>
+          <div class="pg-title" style="background:linear-gradient(135deg,#c4b5fd,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+            <i class="fas fa-magic" style="-webkit-text-fill-color:#c4b5fd"></i>Palpites de Hoje
+          </div>
+          <div class="pg-desc">IA analisa odds + EV + clima → seleciona Dupla e Tripla com +EV em todos os mercados</div>
+        </div>
         <div class="btn-row">
           <button class="btn btn-ghost" onclick="go('ev')"><i class="fas fa-chart-line"></i>Ver EV</button>
           <button class="btn btn-ai" id="btn-gen-palpites" onclick="loadPalpites()"><i class="fas fa-magic"></i>Gerar Palpites</button>
         </div>
       </div>
-      <div style="padding:7px 16px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;background:rgba(10,15,20,.6)">
-        <div style="display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--t2)"><div class="dot8" id="dot-odds" style="background:var(--t4)"></div>Odds API</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--t2)"><div class="dot8" id="dot-meteo" style="background:var(--t4)"></div>Open Meteo</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--t2)"><div class="dot8" id="dot-ai" style="background:var(--t4)"></div>Claude AI</div>
-        <div style="margin-left:auto;font-size:.68rem;color:var(--t3)" id="palpites-ts"></div>
+
+      <!-- ── Market Selector Bar ── -->
+      <div style="padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(10,15,20,.8)">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:.68rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;flex-shrink:0">MERCADOS</span>
+          <!-- Main market quick pills -->
+          <div id="quick-mkt-pills" style="display:flex;gap:5px;flex-wrap:wrap;flex:1">
+            <button class="mkt-chip active" data-mkt="h2h" onclick="toggleMktChip(this)">Moneyline</button>
+            <button class="mkt-chip active" data-mkt="spreads" onclick="toggleMktChip(this)">Spreads</button>
+            <button class="mkt-chip active" data-mkt="totals" onclick="toggleMktChip(this)">Totals</button>
+            <button class="mkt-chip" data-mkt="h2h_lay" onclick="toggleMktChip(this)">Lay</button>
+            <button class="mkt-chip" data-mkt="h2h_3way" onclick="toggleMktChip(this)">1X2</button>
+          </div>
+          <!-- Advanced market dropdown -->
+          <div class="mkt-dropdown-wrap" id="adv-mkt-wrap">
+            <button class="mkt-dropdown-btn" id="adv-mkt-btn" onclick="toggleMktPanel()">
+              <i class="fas fa-layer-group" style="font-size:.72rem"></i>
+              Todos os Mercados
+              <span id="adv-mkt-count" style="background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-brd);padding:1px 6px;border-radius:10px;font-size:.62rem;font-weight:700">0</span>
+              <i class="fas fa-chevron-down caret"></i>
+            </button>
+            <div class="mkt-panel" id="adv-mkt-panel">
+              <div class="mkt-panel-hdr">
+                <span>Selecionar Mercados para Análise IA</span>
+                <button class="mkt-panel-close" onclick="closeMktPanel()"><i class="fas fa-times"></i></button>
+              </div>
+              <div class="mkt-panel-body" id="mkt-panel-body">
+                <!-- Rendered by JS -->
+              </div>
+              <div class="mkt-panel-footer">
+                <div class="mkt-sel-count">Selecionados: <span id="mkt-sel-n">0</span></div>
+                <div style="display:flex;gap:6px">
+                  <button onclick="mktSelectAll()" style="background:none;border:1px solid var(--border);color:var(--t3);padding:5px 10px;border-radius:5px;font-size:.72rem;cursor:pointer">Todos</button>
+                  <button onclick="mktClearAll()" style="background:none;border:1px solid var(--border);color:var(--t3);padding:5px 10px;border-radius:5px;font-size:.72rem;cursor:pointer">Limpar</button>
+                  <button class="mkt-apply-btn" onclick="applyMkts()"><i class="fas fa-check"></i> Aplicar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- Status dots row -->
+      <div class="pal-toolbar">
+        <div class="pal-status-row">
+          <div class="pal-dot-item"><div class="dot8" id="dot-odds" style="background:var(--t4)"></div>Odds API</div>
+          <div class="pal-dot-item"><div class="dot8" id="dot-meteo" style="background:var(--t4)"></div>Open Meteo</div>
+          <div class="pal-dot-item"><div class="dot8" id="dot-ai" style="background:var(--t4)"></div>Claude AI</div>
+          <div style="margin-left:auto;font-size:.68rem;color:var(--t3)" id="palpites-ts"></div>
+        </div>
+      </div>
+
       <div id="palpites-content">
         <div style="text-align:center;padding:70px 20px">
           <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div>
           <div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">Pronto para gerar palpites</div>
-          <div style="font-size:.78rem;color:var(--t3);max-width:360px;margin:0 auto;line-height:1.6">A IA analisa odds ao vivo, EV calculado e clima nos estádios para seleccionar a melhor Dupla e Tripla do dia.</div>
+          <div style="font-size:.78rem;color:var(--t3);max-width:380px;margin:0 auto 16px;line-height:1.6">Seleciona os mercados acima e clica em <strong style="color:#c4b5fd">Gerar Palpites</strong>. A IA analisa odds ao vivo, EV calculado e clima nos estádios.</div>
+          <button class="btn btn-ai" onclick="loadPalpites()" style="margin:0 auto"><i class="fas fa-magic"></i>Gerar Palpites Agora</button>
         </div>
       </div>
     </div>
@@ -680,6 +804,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 </main>
 </div>
 
+<!-- AUTH MODAL -->
 <div class="auth-ov" id="auth-ov" onclick="if(event.target===this)closeAuth()">
   <div class="auth-box">
     <div class="auth-top"><div style="width:38px;height:38px;border-radius:9px;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:.88rem;font-weight:800;color:#0a0a0a">MD</div><div class="auth-brand">Manuel <em>Dança</em></div><div class="auth-tag">Premium Sports Picks</div></div>
@@ -697,21 +822,16 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 <script>
 'use strict';
 /* ═══════════════════════════════════════════════════════
-   MANUEL DANÇA v5 — ENGINE COMPLETO
+   MANUEL DANÇA v6 — ENGINE COMPLETO
+   Mercados completos OddsJam-style + EV+ destacado
    APIs: The Odds API · ESPN · Open Meteo · Claude AI
-   Fix: CORS proxy, chave configurável, dados ESPN reais
 ═══════════════════════════════════════════════════════ */
 
 // ── CONFIG ──
-// Chave The Odds API: regista-te em https://the-odds-api.com (grátis — 500 req/mês)
-// Cola a tua chave no banner amarelo no topo, ou directamente aqui:
 let ODDS_KEY = localStorage.getItem('md_odds_key') || '';
 const BASE_ODDS = 'https://api.the-odds-api.com/v4';
-// CORS proxy para contornar bloqueios de browser quando o ficheiro é aberto localmente
-// Usamos o allorigins como fallback automático
 const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
-// ESPN scoreboards (sem chave, CORS-friendly)
 const ESPN_ENDPOINTS = {
   'epl':    { url:'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard',    label:'⚽ Premier League', sport:'soccer' },
   'laliga': { url:'https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard',    label:'⚽ La Liga', sport:'soccer' },
@@ -743,6 +863,76 @@ const SPORTS = [
   {k:'tennis_atp_french_open',   n:'Tennis ATP',       i:'🎾',c:'Tennis'},
 ];
 
+// ══════════════════════════════════════════════
+// MARKET DEFINITIONS — OddsJam-style categories
+// ══════════════════════════════════════════════
+const MKT_CATEGORIES = [
+  {
+    id:'main', title:'Main Markets', icon:'fa-futbol',
+    mkts:[
+      {k:'h2h',       n:'Moneyline',          def:true},
+      {k:'h2h_3way',  n:'1X2 (3-Way)',        def:false},
+      {k:'spreads',   n:'Spread / Handicap',  def:true},
+      {k:'totals',    n:'Over/Under',         def:true},
+      {k:'h2h_lay',   n:'Lay (Exchange)',     def:false},
+    ]
+  },
+  {
+    id:'halves', title:'Mercados de Parciais', icon:'fa-clock',
+    mkts:[
+      {k:'h2h',        n:'1ª Parte — 1X2',     def:false, label:'h2h_1h'},
+      {k:'totals',     n:'1ª Parte O/U',        def:false, label:'totals_1h'},
+      {k:'spreads',    n:'1ª Parte Handicap',   def:false, label:'spreads_1h'},
+      {k:'h2h',        n:'2ª Parte — 1X2',     def:false, label:'h2h_2h'},
+      {k:'totals',     n:'2ª Parte O/U',        def:false, label:'totals_2h'},
+    ]
+  },
+  {
+    id:'quarters', title:'Quartos / Períodos', icon:'fa-list-ol',
+    mkts:[
+      {k:'h2h',    n:'1º Quarto ML',    def:false, label:'h2h_q1'},
+      {k:'totals', n:'1º Quarto O/U',   def:false, label:'totals_q1'},
+      {k:'h2h',    n:'2º Quarto ML',    def:false, label:'h2h_q2'},
+      {k:'totals', n:'2º Quarto O/U',   def:false, label:'totals_q2'},
+      {k:'h2h',    n:'3º Quarto ML',    def:false, label:'h2h_q3'},
+      {k:'h2h',    n:'4º Quarto ML',    def:false, label:'h2h_q4'},
+    ]
+  },
+  {
+    id:'player', title:'Props de Jogador', icon:'fa-user',
+    mkts:[
+      {k:'player_points',      n:'Pontos (NBA)',     def:false},
+      {k:'player_rebounds',    n:'Ressaltos (NBA)',  def:false},
+      {k:'player_assists',     n:'Assistências',    def:false},
+      {k:'player_pass_tds',    n:'TDs Passe (NFL)',  def:false},
+      {k:'player_rush_yds',    n:'Jardas Corrida',  def:false},
+      {k:'player_anytime_td',  n:'Marcar Golo',     def:false},
+    ]
+  },
+  {
+    id:'team', title:'Props de Equipa', icon:'fa-shield-alt',
+    mkts:[
+      {k:'team_totals',        n:'Total de Equipa',        def:false},
+      {k:'alternate_spreads',  n:'Spreads Alternativos',   def:false},
+      {k:'alternate_totals',   n:'Totals Alternativos',    def:false},
+      {k:'draw_no_bet',        n:'Draw No Bet',            def:false},
+      {k:'btts',               n:'Ambas Marcam (BTTS)',    def:false},
+    ]
+  },
+  {
+    id:'specials', title:'Especiais', icon:'fa-star',
+    mkts:[
+      {k:'outrights',          n:'Outrights / Liga',     def:false},
+      {k:'h2h_lay',            n:'Lay (Betfair)',         def:false},
+      {k:'method_of_victory',  n:'Método de Vitória',    def:false},
+      {k:'period_winner',      n:'Vencedor de Período',  def:false},
+    ]
+  },
+];
+
+// State for selected markets
+let G_selectedMkts = new Set(['h2h','spreads','totals']);
+
 const PLANS = [
   {id:'free',nm:'Free',m:0,a:0,desc:'Sportsbook com delay, calculadoras e live scores. Sem custo.',books:['bet365','pinnacle','unibet'],feats:[{t:'Live Scores ESPN',ok:1},{t:'Calculadoras completas',ok:1},{t:'+EV (5/dia)',ok:1},{t:'Palpites IA',ok:0,b:0},{t:'Arbitragem',ok:0},{t:'Alertas WhatsApp 24/7',ok:0}]},
   {id:'sharp',nm:'Sharp Money',m:300,a:255,badge:'Popular',desc:'15+ casas EU, +EV completo, arbitragem e palpites IA diários.',books:['bet365','pinnacle','unibet','bwin','betano','1xbet','williamhill','betclic'],feats:[{t:'15+ casas EU ao vivo',ok:1,b:1},{t:'+EV + Arbitragem',ok:1,b:1},{t:'Palpites IA diários',ok:1,b:1},{t:'Alertas WhatsApp 24/7',ok:1},{t:'Kelly + Poisson + ELO',ok:1},{t:'API access',ok:0}]},
@@ -751,10 +941,11 @@ const PLANS = [
 
 const FAQS = [
   {q:'Como obtenho uma chave API gratuita?',a:'Regista-te em the-odds-api.com — o plano gratuito dá 500 requests/mês. Cola a chave no banner amarelo que aparece no topo da página.'},
-  {q:'Por que não aparecem dados de odds?',a:'Precisas de uma chave válida da The Odds API. O plano free tem 500 requests/mês, suficiente para uso normal. Regista-te em the-odds-api.com.'},
-  {q:'Os live scores funcionam sem chave API?',a:'Sim! Os live scores usam a ESPN API que é completamente gratuita e sem chave. Clica em "Live Scores" no menu.'},
+  {q:'Por que não aparecem dados de odds?',a:'Precisas de uma chave válida da The Odds API. O plano free tem 500 requests/mês, suficiente para uso normal.'},
+  {q:'Os live scores funcionam sem chave API?',a:'Sim! Os live scores usam a ESPN API que é completamente gratuita e sem chave.'},
   {q:'Como pago via M-Pesa?',a:'Marca *150*1# ou abre a app M-Pesa, envias para 840 330 540, e mandas o comprovativo pelo WhatsApp para activação imediata.'},
   {q:'O que é Positive EV?',a:'EV positivo significa que a odd oferecida está acima da probabilidade real calculada a partir de casas como Pinnacle e Betfair — lucrativo a longo prazo.'},
+  {q:'Que mercados a IA analisa?',a:'A IA analisa todos os mercados que selecionares no painel de Mercados — Moneyline, Spreads, Totals, parciais, quarters, props de jogador e muito mais.'},
 ];
 
 const BK_CLR = {
@@ -811,7 +1002,7 @@ function toast(msg, type='i') {
 }
 function openModal(t,h) { $('m-ttl').textContent=t; $('m-bdy').innerHTML=h; $('modal-ov').classList.add('on'); }
 function closeModal() { $('modal-ov').classList.remove('on'); }
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeModal();closeAuth();} });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeModal();closeAuth();closeMktPanel();} });
 
 function setFmt(f,el) {
   G.fmt=f; $$('.fmt-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active');
@@ -819,14 +1010,12 @@ function setFmt(f,el) {
   if(G.ev.length) evRender(G.ev);
 }
 
-// ── API KEY CONFIG ──
+// ── API KEY ──
 function saveApiKey() {
   const k=$('odds-key-input')?.value?.trim();
-  if (!k||k.length<10) { toast('Chave inválida — deve ter pelo menos 10 caracteres','e'); return; }
+  if (!k||k.length<10) { toast('Chave inválida','e'); return; }
   ODDS_KEY=k; localStorage.setItem('md_odds_key',k);
-  dismissBanner();
-  toast('Chave API guardada! A carregar dados…','s');
-  loadEV(true);
+  dismissBanner(); toast('Chave API guardada! A carregar dados…','s'); loadEV(true);
 }
 function dismissBanner() {
   const b=$('api-banner'); if(b) b.style.display='none';
@@ -839,6 +1028,99 @@ function checkBanner() {
   else { const inp=$('odds-key-input'); if(inp&&ODDS_KEY) inp.value=ODDS_KEY; }
 }
 
+// ── MARKET PANEL (OddsJam-style) ──
+function buildMktPanel() {
+  const body=$('mkt-panel-body'); if(!body) return;
+  body.innerHTML = MKT_CATEGORIES.map(cat=>`
+    <div class="mkt-category">
+      <div class="mkt-cat-title"><i class="fas ${cat.icon}" style="margin-right:5px;opacity:.6"></i>${cat.title}</div>
+      ${cat.mkts.map(m=>{
+        const id = m.label || m.k;
+        const sel = G_selectedMkts.has(id) || G_selectedMkts.has(m.k);
+        return `<div class="mkt-option${sel?' selected':''}" data-mkt="${id}" onclick="togglePanelMkt(this,'${id}')">
+          <div class="mck">${sel?'<i class="fas fa-check"></i>':''}</div>
+          <span>${m.n}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  `).join('');
+  updateMktCount();
+}
+
+function togglePanelMkt(el, key) {
+  const sel = el.classList.contains('selected');
+  if (sel) {
+    el.classList.remove('selected');
+    el.querySelector('.mck').innerHTML='';
+    G_selectedMkts.delete(key);
+  } else {
+    el.classList.add('selected');
+    el.querySelector('.mck').innerHTML='<i class="fas fa-check"></i>';
+    G_selectedMkts.add(key);
+  }
+  updateMktCount();
+}
+
+function mktSelectAll() {
+  $$('#mkt-panel-body .mkt-option').forEach(el=>{
+    el.classList.add('selected');
+    el.querySelector('.mck').innerHTML='<i class="fas fa-check"></i>';
+    G_selectedMkts.add(el.dataset.mkt);
+  });
+  updateMktCount();
+}
+
+function mktClearAll() {
+  $$('#mkt-panel-body .mkt-option').forEach(el=>{
+    el.classList.remove('selected');
+    el.querySelector('.mck').innerHTML='';
+  });
+  G_selectedMkts.clear();
+  updateMktCount();
+}
+
+function updateMktCount() {
+  const n = G_selectedMkts.size;
+  const el=$('mkt-sel-n'); if(el) el.textContent=n;
+  const cnt=$('adv-mkt-count'); if(cnt) cnt.textContent=n;
+}
+
+function toggleMktPanel() {
+  const btn=$('adv-mkt-btn'), panel=$('adv-mkt-panel');
+  const open=panel.classList.contains('open');
+  panel.classList.toggle('open',!open);
+  btn.classList.toggle('open',!open);
+  if(!open) buildMktPanel();
+}
+
+function closeMktPanel() {
+  $('adv-mkt-panel')?.classList.remove('open');
+  $('adv-mkt-btn')?.classList.remove('open');
+}
+
+function applyMkts() {
+  closeMktPanel();
+  // Sync quick pills
+  $$('#quick-mkt-pills .mkt-chip').forEach(ch=>{
+    ch.classList.toggle('active', G_selectedMkts.has(ch.dataset.mkt));
+  });
+  const count=[...G_selectedMkts].length;
+  toast(`${count} mercado(s) selecionado(s). Clica "Gerar Palpites".`,'s');
+}
+
+function toggleMktChip(el) {
+  const k = el.dataset.mkt;
+  const active = el.classList.toggle('active');
+  if (active) G_selectedMkts.add(k); else G_selectedMkts.delete(k);
+  updateMktCount();
+}
+
+// Close panel on outside click
+document.addEventListener('click', e=>{
+  const wrap=$('adv-mkt-wrap');
+  if(wrap && !wrap.contains(e.target)) closeMktPanel();
+});
+
 // ── NAVIGATION ──
 function go(pid) {
   $$('.page').forEach(p=>p.classList.remove('active'));
@@ -849,7 +1131,6 @@ function go(pid) {
   $('sidebar').classList.remove('open');
   try {
     if(pid==='ev')        loadEV();
-    else if(pid==='sportsbook') { /* user selects sport */ }
     else if(pid==='live') loadLive();
     else if(pid==='arbitrage') loadArb();
     else if(pid==='dashboard') loadDash();
@@ -872,33 +1153,26 @@ function toggleSub(lid,cid) {
 }
 
 // ── THE ODDS API ──
-// Tenta directo primeiro; se falhar por CORS, usa proxy
 async function apiOdds(sport, mkt='h2h') {
-  if (!ODDS_KEY) { setApiStatus('err','Sem chave API — configura no banner ↑'); return null; }
+  if (!ODDS_KEY) { setApiStatus('err','Sem chave API'); return null; }
   const reg=$('sb-region')?.value||'eu,uk';
   const url=`${BASE_ODDS}/sports/${sport}/odds/?apiKey=${ODDS_KEY}&regions=${reg}&markets=${mkt}&oddsFormat=decimal`;
-
-  // Tenta directo
   let r;
   try { r=await fetch(url,{cache:'no-store'}); }
   catch(e) {
-    // CORS ou rede — tenta com proxy
     try { r=await fetch(CORS_PROXY+encodeURIComponent(url),{cache:'no-store'}); }
     catch(e2) { setApiStatus('err','Sem ligação'); return null; }
   }
-
-  if (r.status===401) { setApiStatus('err','Chave inválida'); toast('Chave API inválida! Verifica em the-odds-api.com','e'); return null; }
+  if (r.status===401) { setApiStatus('err','Chave inválida'); toast('Chave API inválida!','e'); return null; }
   if (r.status===422) { return []; }
-  if (r.status===429) { toast('Limite de requests atingido. Aguarda 1 minuto.','w'); return null; }
+  if (r.status===429) { toast('Limite de requests. Aguarda 1 minuto.','w'); return null; }
   if (!r.ok) { setApiStatus('err','Erro HTTP '+r.status); return null; }
-
   const rem=r.headers.get('x-requests-remaining');
   const used=r.headers.get('x-requests-used');
   if (rem) {
     const total=((+used||0)+(+rem||0));
     setApiStatus('ok','Odds API ✓');
     $('api-calls').textContent=(used||'?')+'/'+total;
-    // dismiss banner se tiver chave válida
     dismissBanner();
     const d=$('dot-odds'); if(d) d.style.background='var(--green)';
   }
@@ -921,7 +1195,19 @@ async function fetchMulti(sportKeys) {
   return all;
 }
 
-// ── OPEN METEO — grátis, sem chave ──
+// Fetch data for multiple markets at once
+async function fetchMultiMkts(sportKeys, markets) {
+  const all=[];
+  const mktsStr = [...new Set(markets.filter(m=>['h2h','spreads','totals','h2h_lay'].includes(m)))].join(',') || 'h2h,spreads,totals';
+  for (const s of sportKeys) {
+    const d=await apiOdds(s.k, mktsStr);
+    if (d&&d.length) { d.forEach(g=>{g._sn=s.n;g._si=s.i;g._sk=s.k;}); all.push(...d); }
+    await sleep(400);
+  }
+  return all;
+}
+
+// ── OPEN METEO ──
 async function fetchWeather(lat,lon) {
   try {
     const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation,wind_speed_10m,weather_code&forecast_days=1`;
@@ -939,11 +1225,11 @@ function wCode(c) { if(c<=1) return{i:'fa-sun',t:'Sol',r:0}; if(c<=3) return{i:'
 async function sbLoad() {
   const sport=$('sb-sport')?.value; G.sbSport=sport;
   if(!sport){$('sb-wrap').innerHTML='<div class="empty" style="padding:80px">Seleciona um desporto para ver odds em tempo real</div>';return;}
-  $('sb-wrap').innerHTML=`<div class="empty" style="padding:70px"><div class="spin"></div><div style="margin-top:8px;color:var(--t3)">A carregar odds de ${SPORTS.find(s=>s.k===sport)?.n||sport}…</div></div>`;
-  if (!ODDS_KEY) { $('sb-wrap').innerHTML=`<div class="empty" style="padding:60px"><i class="fas fa-key" style="font-size:2rem;color:var(--yellow);display:block;margin-bottom:12px"></i><div style="color:var(--yellow);font-weight:600;margin-bottom:6px">Chave API necessária</div><div>Regista-te gratuitamente em <a href="https://the-odds-api.com" target="_blank" style="color:var(--blue)">the-odds-api.com</a> e cola a tua chave no banner amarelo no topo.</div></div>`; return; }
+  $('sb-wrap').innerHTML=`<div class="empty" style="padding:70px"><div class="spin"></div><div style="margin-top:8px;color:var(--t3)">A carregar odds…</div></div>`;
+  if (!ODDS_KEY) { $('sb-wrap').innerHTML=`<div class="empty" style="padding:60px"><i class="fas fa-key" style="font-size:2rem;color:var(--yellow);display:block;margin-bottom:12px"></i><div style="color:var(--yellow);font-weight:600">Chave API necessária</div></div>`; return; }
   const data=await apiOdds(sport,G.mkt);
-  if(!data){$('sb-wrap').innerHTML='<div class="empty" style="padding:60px;color:var(--red)"><i class="fas fa-exclamation-triangle" style="font-size:2rem;display:block;margin-bottom:10px"></i>Erro ao carregar. Verifica a chave API e a ligação.</div>';return;}
-  if(!data.length){$('sb-wrap').innerHTML='<div class="empty" style="padding:60px">Sem jogos disponíveis agora para este desporto/região.</div>';return;}
+  if(!data){$('sb-wrap').innerHTML='<div class="empty" style="padding:60px;color:var(--red)">Erro ao carregar.</div>';return;}
+  if(!data.length){$('sb-wrap').innerHTML='<div class="empty" style="padding:60px">Sem jogos disponíveis agora.</div>';return;}
   const bmSet=new Set(); data.forEach(g=>g.bookmakers?.forEach(b=>bmSet.add(b.title)));
   G.sbData=data; G.sbBMs=[...bmSet].sort();
   const bs=$('sb-bk-filter'); bs.innerHTML='<option value="">Todas as Casas</option>'+G.sbBMs.map(b=>`<option>${b}</option>`).join('');
@@ -957,7 +1243,6 @@ async function sbLoad() {
 function sbMkt(v,el) {
   G.mkt=v; $$('.mkt-pill').forEach(p=>p.classList.remove('active'));
   const mp=$('mk-'+v); if(mp) mp.classList.add('active');
-  const ms=$('sb-mkt'); if(ms) ms.value=v;
   if(G.sbSport) sbLoad(); else toast('Seleciona um desporto primeiro','w');
 }
 
@@ -1012,7 +1297,7 @@ function fairOdd(game,mktKey,outName) {
   return ref*1.04;
 }
 
-// ── POSITIVE EV ──
+// ── EV ──
 function findEV(data,minEV=1) {
   const res=[];
   data.forEach(game=>{
@@ -1024,11 +1309,16 @@ function findEV(data,minEV=1) {
           if(!fair||out.price<=fair) return;
           const ev=calcEV(out.price,fair);
           if(ev<minEV) return;
+          // compute average price across all books for this outcome
+          let avgPrices=[];
+          game.bookmakers?.forEach(b2=>{const m2=b2.markets?.find(mk=>mk.key===mkt.key);const o2=m2?.outcomes?.find(oc=>oc.name===out.name);if(o2) avgPrices.push(o2.price);});
+          const avgPrice=avgPrices.length?avgPrices.reduce((a,b)=>a+b)/avgPrices.length:out.price;
           res.push({sport:game._sn||'',icon:game._si||'⚽',sk:game._sk||'',
             home:game.home_team,away:game.away_team,game:`${game.home_team} vs ${game.away_team}`,
-            mkt:mkt.key==='h2h'?'Moneyline':mkt.key==='spreads'?'Spread':'O/U',
+            mkt:mkt.key==='h2h'?'Moneyline':mkt.key==='spreads'?'Spread':mkt.key==='totals'?'O/U':mkt.key,
             mktKey:mkt.key,outcome:out.name,point:out.point??null,
             book:bm.title,bkey:bm.key,odds:out.price,
+            avgOdds:avgPrice,
             fair:fair.toFixed(2),ev:ev.toFixed(2),kelly:calcKelly(out.price,fair).toFixed(2),
             time:game.commence_time,_game:game});
         });
@@ -1056,13 +1346,13 @@ function getCounter(b) {
 async function loadEV(force=false) {
   if(!force && G.ev.length) { evRender(G.ev); return; }
   if(!ODDS_KEY) {
-    $('ev-body').innerHTML=`<tr><td colspan="9" class="empty"><i class="fas fa-key" style="font-size:2rem;color:var(--yellow);display:block;margin-bottom:12px"></i><div style="color:var(--yellow);font-weight:600;margin-bottom:6px">Chave API necessária</div><div style="max-width:360px;margin:0 auto">Regista-te gratuitamente em <a href="https://the-odds-api.com" target="_blank" style="color:var(--blue)">the-odds-api.com</a> para obter 500 requests/mês grátis. Cola a chave no banner amarelo acima.</div></td></tr>`;
+    $('ev-body').innerHTML=`<tr><td colspan="9" class="empty"><i class="fas fa-key" style="font-size:2rem;color:var(--yellow);display:block;margin-bottom:12px"></i><div style="color:var(--yellow);font-weight:600;margin-bottom:6px">Chave API necessária</div></td></tr>`;
     return;
   }
-  $('ev-body').innerHTML='<tr><td colspan="9" class="empty"><div class="spin"></div><div style="margin-top:8px;color:var(--t3)">A carregar odds de mercado…</div></td></tr>';
+  $('ev-body').innerHTML='<tr><td colspan="9" class="empty"><div class="spin"></div><div style="margin-top:8px;color:var(--t3)">A carregar odds…</div></td></tr>';
   const keys=SPORTS.filter(s=>['soccer_epl','soccer_spain_la_liga','soccer_italy_serie_a','basketball_nba','americanfootball_nfl'].includes(s.k));
   G.allData=await fetchMulti(keys);
-  if(!G.allData.length){$('ev-body').innerHTML='<tr><td colspan="9" class="empty">Sem dados disponíveis. Verifica a chave API e a ligação à internet.</td></tr>';return;}
+  if(!G.allData.length){$('ev-body').innerHTML='<tr><td colspan="9" class="empty">Sem dados. Verifica a chave API.</td></tr>';return;}
   const minEV=parseFloat($('ev-min')?.value||'1');
   const sp=$('ev-sport')?.value||'all';
   const mk=$('ev-mkt-f')?.value||'all';
@@ -1075,7 +1365,6 @@ async function loadEV(force=false) {
   if(bets.length){const avg=bets.reduce((s,b)=>s+parseFloat(b.ev),0)/bets.length;$('ev-avg-v').textContent=avg.toFixed(1)+'%';$('ev-best-v').textContent='+'+bets[0].ev+'%';$('ev-nsports').textContent=[...new Set(bets.map(b=>b.sport))].length;}
   const now=new Date();
   evRender(G.evTab==='live'?bets.filter(b=>new Date(b.time)<now):bets.filter(b=>new Date(b.time)>=now));
-  // update dashboard
   $('d-gm-c').textContent=G.allData.length;
   const bms=new Set(); G.allData.forEach(g=>g.bookmakers?.forEach(b=>bms.add(b.title)));
   $('d-bk-c').textContent=bms.size;
@@ -1126,7 +1415,7 @@ function evDetail(i) {
       <div style="padding:14px;background:var(--bg-card2);border:1px solid var(--blue-brd);border-radius:8px;text-align:center"><div style="font-size:.58rem;color:var(--t3);margin-bottom:4px;text-transform:uppercase">Kelly %</div><div style="font-size:2rem;font-weight:800;color:var(--blue)">${b.kelly}%</div></div>
     </div>
     <table style="width:100%;font-size:.8rem;border-collapse:collapse">
-      ${[['Aposta',`<strong>${b.outcome}</strong>`],['Casa',b.book],['Odd',b.odds.toFixed(2)+' ('+d2am(b.odds)+')'],['No-Vig',b.fair+' ('+d2am(parseFloat(b.fair))+')'],['Stake Rec.','MZN '+Math.max(100,Math.round(parseFloat(b.kelly)*2)*100)],...(ctr?[['Contra-Aposta',ctr.outcome+' @ '+d2am(ctr.odds)+' ('+ctr.book+')']]:[])].map(([l,v])=>`<tr style="border-bottom:1px solid rgba(255,255,255,.025)"><td style="padding:6px 0;color:var(--t3)">${l}</td><td style="padding:6px 0;text-align:right;color:var(--t1)">${v}</td></tr>`).join('')}
+      ${[['Aposta',`<strong>${b.outcome}</strong>`],['Casa',b.book],['Odd',b.odds.toFixed(2)+' ('+d2am(b.odds)+')'],['Odd Média',b.avgOdds?(b.avgOdds.toFixed(2)+' ('+d2am(b.avgOdds)+')'):'—'],['No-Vig',b.fair+' ('+d2am(parseFloat(b.fair))+')'],['Stake Rec.','MZN '+Math.max(100,Math.round(parseFloat(b.kelly)*2)*100)],...(ctr?[['Contra-Aposta',ctr.outcome+' @ '+d2am(ctr.odds)+' ('+ctr.book+')']]:[])].map(([l,v])=>`<tr style="border-bottom:1px solid rgba(255,255,255,.025)"><td style="padding:6px 0;color:var(--t3)">${l}</td><td style="padding:6px 0;text-align:right;color:var(--t1)">${v}</td></tr>`).join('')}
     </table>
     <a href="https://wa.me/258840330540?text=+EV: ${encodeURIComponent(b.game+' | '+b.outcome+' '+d2am(b.odds)+' EV: +'+b.ev+'%')}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#1da462,#138a4e);color:#fff;padding:10px;border-radius:7px;font-size:.78rem;font-weight:700;text-decoration:none"><i class="fab fa-whatsapp" style="font-size:1rem"></i>Partilhar WA</a>
   </div>`);
@@ -1184,61 +1473,52 @@ async function loadDash() {
   renderDashArb(findArbs(G.allData,0));
 }
 function renderDashEV(bets) {
-  $('d-ev-body').innerHTML=bets.slice(0,6).map(b=>`<tr onclick="evDetail(${b._i})" style="cursor:pointer"><td><span class="sp-tag">${b.icon} ${b.sport}</span></td><td><strong style="font-size:.8rem;color:var(--t1)">${b.home}</strong><div style="font-size:.67rem;color:var(--t3)">vs ${b.away}</div></td><td style="color:var(--t1)">${b.outcome}</td><td><span style="display:flex;align-items:center;gap:5px"><span class="dot8" style="background:${bkClr(b.book)}"></span>${b.book}</span></td><td class="g-txt">${fmtOdd(b.odds)}</td><td style="color:var(--t2)">${fmtOdd(parseFloat(b.fair))}</td><td style="color:var(--green);font-weight:700">+${b.ev}%</td><td style="font-size:.7rem;color:var(--t3)">${fmtTime(b.time)}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">Sem dados. Configura a chave API no banner acima.</td></tr>';
+  $('d-ev-body').innerHTML=bets.slice(0,6).map(b=>`<tr onclick="evDetail(${b._i})" style="cursor:pointer"><td><span class="sp-tag">${b.icon} ${b.sport}</span></td><td><strong style="font-size:.8rem;color:var(--t1)">${b.home}</strong><div style="font-size:.67rem;color:var(--t3)">vs ${b.away}</div></td><td style="color:var(--t1)">${b.outcome}</td><td><span style="display:flex;align-items:center;gap:5px"><span class="dot8" style="background:${bkClr(b.book)}"></span>${b.book}</span></td><td class="g-txt">${fmtOdd(b.odds)}</td><td style="color:var(--t2)">${fmtOdd(parseFloat(b.fair))}</td><td style="color:var(--green);font-weight:700">+${b.ev}%</td><td style="font-size:.7rem;color:var(--t3)">${fmtTime(b.time)}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">Sem dados. Configura a chave API.</td></tr>';
 }
 function renderDashArb(arbs) {
   $('d-arb-c').textContent=arbs.length;
-  $('d-arb-body').innerHTML=arbs.slice(0,5).map(a=>`<tr><td><span class="sp-tag">${a.icon} ${a.sport}</span></td><td><strong style="font-size:.8rem;color:var(--t1)">${a.home}</strong><div style="font-size:.67rem;color:var(--t3)">vs ${a.away}</div></td><td><span class="dot8" style="background:${bkClr(a.bm1)}"></span> ${a.bm1}</td><td class="g-txt">${fmtOdd(a.odd1)}</td><td><span class="dot8" style="background:${bkClr(a.bm2)}"></span> ${a.bm2}</td><td class="g-txt">${fmtOdd(a.odd2)}</td><td style="color:var(--green);font-weight:700">+${a.pct}%</td><td style="font-size:.7rem;color:var(--t3)">${fmtTime(a.time)}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">Sem arbitragens</td></tr>';
+  $('d-arb-body').innerHTML=arbs.slice(0,5).map(a=>`<tr><td><span class="sp-tag">${a.icon} ${a.sport}</span></td><td><strong style="font-size:.8rem;color:var(--t1)">${a.home}</strong><div style="font-size:.67rem;color:var(--t3)">vs ${a.away}</div></td><td><span class="dot8" style="background:${bkClr(a.bm1)}"></span> ${a.bm1}</td><td class="g-txt">${fmtOdd(a.odd1)}</td><td><span class="dot8" style="background:${bkClr(a.bm2)}"></span> ${a.bm2}</td><td class="g-txt">${fmtOdd(a.odd2)}</td><td style="color:var(--green);font-weight:700">+${a.pct}%</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Sem arbitragens</td></tr>';
 }
 
-// ── LIVE SCORES — ESPN API, sem chave ──
+// ── LIVE SCORES ──
 let G_liveData=[];
 async function loadLive() {
   const grid=$('live-grid');
   grid.innerHTML='<div class="lv-empty"><div class="spin"></div><div style="margin-top:8px;color:var(--t3)">A carregar resultados ESPN…</div></div>';
   const cards=[];
-  let loaded=0,failed=0;
+  let loaded=0;
   const entries=Object.entries(ESPN_ENDPOINTS);
   await Promise.allSettled(entries.map(async([key,src])=>{
     try {
       const r=await fetch(src.url,{cache:'no-store',signal:AbortSignal.timeout(8000)});
       if(!r.ok) throw new Error(r.status);
       const data=await r.json();
-      const evs=data.events||[];
       loaded++;
-      evs.forEach(ev=>{
+      (data.events||[]).forEach(ev=>{
         const comp=ev.competitions?.[0]; if(!comp) return;
         const home=comp.competitors?.find(t=>t.homeAway==='home');
         const away=comp.competitors?.find(t=>t.homeAway==='away');
-        const isLive=ev.status?.type?.state==='in';
-        const isFinal=ev.status?.type?.state==='post';
         cards.push({
           key,label:src.label,sport:src.sport,
           homeName:home?.team?.displayName||'Casa',
           awayName:away?.team?.displayName||'Fora',
           homeScore:home?.score??null,awayScore:away?.score??null,
-          isLive,isFinal,
+          isLive:ev.status?.type?.state==='in',
+          isFinal:ev.status?.type?.state==='post',
           clock:ev.status?.displayClock||'',
           detail:ev.status?.type?.detail||'',
           period:ev.status?.period||null,
           startTime:ev.date,
         });
       });
-    } catch(e) { failed++; }
+    } catch(e) {}
   }));
   G_liveData=cards;
   renderLive();
-  if(loaded===0) grid.innerHTML='<div class="lv-empty"><i class="fas fa-wifi" style="font-size:2.5rem;opacity:.3;display:block;margin-bottom:10px"></i>Não foi possível conectar à ESPN API.<br><small style="font-size:.74rem">Verifica a tua ligação à internet.</small></div>';
+  if(loaded===0) grid.innerHTML='<div class="lv-empty">Não foi possível conectar à ESPN API.</div>';
   else toast(`Live Scores: ${cards.length} jogos de ${loaded} ligas`,'s');
 }
-
-function filterLive(sport,el) {
-  G.liveFilter=sport;
-  $$('#live-sport-tabs button').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  renderLive();
-}
-
+function filterLive(sport,el) { G.liveFilter=sport; $$('#live-sport-tabs button').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderLive(); }
 function renderLive() {
   const grid=$('live-grid');
   let data=G_liveData;
@@ -1249,55 +1529,126 @@ function renderLive() {
     const hScore=c.homeScore!==null?c.homeScore:'—';
     const aScore=c.awayScore!==null?c.awayScore:'—';
     const statusBadge=isLive?`<span class="lv-live-tag"><span class="ldot"></span>LIVE</span>`:`<span class="lv-ft" style="${isFinal?'color:var(--t2)':''}">${isFinal?'FT':c.detail||new Date(c.startTime).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}</span>`;
-    const scoreStyle=isLive?'color:var(--t1);text-shadow:0 0 12px rgba(124,194,69,.4)':'color:var(--t1)';
     return `<div class="lv-card">
       <div class="lv-top"><span class="lv-lg">${c.label}</span>${statusBadge}</div>
-      <div class="lv-team"><span class="lv-tn">${c.homeName}</span><span class="lv-sc" style="${scoreStyle}">${hScore}</span></div>
+      <div class="lv-team"><span class="lv-tn">${c.homeName}</span><span class="lv-sc">${hScore}</span></div>
       <div style="margin:2px 0"></div>
-      <div class="lv-team"><span class="lv-tn">${c.awayName}</span><span class="lv-sc" style="${scoreStyle}">${aScore}</span></div>
+      <div class="lv-team"><span class="lv-tn">${c.awayName}</span><span class="lv-sc">${aScore}</span></div>
       ${isLive&&c.clock?`<div class="lv-info">${c.clock}${c.period?' · P'+c.period:''}</div>`:''}
     </div>`;
   }).join('');
 }
 
-// ── PALPITES HOJE ──
+// ══════════════════════════════════════════════
+// PALPITES — ENHANCED v6
+// Multi-market support + EV+ highlighting + avg odds
+// ══════════════════════════════════════════════
+function getActiveMkts() {
+  // Get the "base" API markets from selected ones (only ones the API supports)
+  const supported = ['h2h','spreads','totals','h2h_lay'];
+  const active = [...G_selectedMkts].filter(m=>supported.includes(m));
+  return active.length ? active : ['h2h','spreads','totals'];
+}
+
+function evBadgeClass(ev) {
+  const v=parseFloat(ev);
+  if(v<0) return 'ev-neg';
+  if(v>=5) return 'ev-high';
+  if(v>=2.5) return 'ev-mid';
+  return 'ev-low';
+}
+
 async function loadPalpites() {
   const btn=$('btn-gen-palpites');
   if(btn){btn.disabled=true;btn.innerHTML='<div class="spin" style="width:14px;height:14px;border-width:2px;margin:0"></div> A analisar…';}
   const pc=$('palpites-content');
-  const setStep=(t,s='')=>{pc.innerHTML=`<div style="text-align:center;padding:70px 20px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;animation:aiPulse 1.5s ease-in-out infinite"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div><div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">${t}</div><div style="font-size:.78rem;color:var(--t3);max-width:360px;margin:0 auto">${s}</div></div><style>@keyframes aiPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.7}}</style>`;};
+  const activeMkts = getActiveMkts();
+  const mktNames = activeMkts.map(m=>m==='h2h'?'Moneyline':m==='spreads'?'Spreads':m==='totals'?'Over/Under':m).join(', ');
+
+  const setStep=(t,s='')=>{pc.innerHTML=`<div style="text-align:center;padding:60px 20px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;animation:aiPulse 1.5s ease-in-out infinite"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div><div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">${t}</div><div style="font-size:.78rem;color:var(--t3);max-width:400px;margin:0 auto">${s}</div></div><style>@keyframes aiPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.7}}</style>`;};
   try {
     if(!ODDS_KEY||!G.allData.length){
-      setStep('A carregar dados de odds…','Premier League · La Liga · Serie A · NBA');
-      await loadEV(true);
+      setStep('📡 A carregar dados de odds…',`Mercados: ${mktNames}`);
+      const keys=SPORTS.filter(s=>['soccer_epl','soccer_spain_la_liga','soccer_italy_serie_a','basketball_nba','americanfootball_nfl'].includes(s.k));
+      G.allData=await fetchMultiMkts(keys, activeMkts);
     }
     if(!G.allData.length) throw new Error('Sem dados de odds. Configura a chave API no banner.');
 
-    const d=$('dot-odds'); if(d){d.style.background='var(--green)';}
-    setStep('🧮 A calcular Expected Value…',`Analisando ${G.allData.length} jogos de mercado`);
+    const d=$('dot-odds'); if(d) d.style.background='var(--green)';
+    setStep('🧮 A calcular Expected Value…',`A analisar ${G.allData.length} jogos em ${mktNames}`);
     const allEV=findEV(G.allData,.5);
     if(allEV.length<2) throw new Error('Poucas oportunidades +EV agora. Tenta mais tarde.');
 
-    const top=allEV.slice(0,12);
-    setStep('🌤 A verificar condições climáticas…','Open Meteo API — gratuito');
+    const top=allEV.slice(0,15);
+    setStep('🌤 A verificar condições climáticas…','Open Meteo API — gratuito, sem chave');
     const weather={};
-    for(const b of top.slice(0,5)){const coords=getCoords(b.home);const w=await fetchWeather(coords[0],coords[1]);if(w) weather[b.game]=w;await sleep(80);}
+    for(const b of top.slice(0,6)){
+      const coords=getCoords(b.home);
+      const w=await fetchWeather(coords[0],coords[1]);
+      if(w) weather[b.game]=w;
+      await sleep(60);
+    }
     const dm=$('dot-meteo'); if(dm) dm.style.background='var(--green)';
 
-    setStep('🤖 Claude IA a seleccionar as melhores apostas…','Analisando odds, EV e clima');
+    setStep('🤖 Claude IA a construir Dupla + Tripla…',`Selecionando apostas com EV+ nos mercados: ${mktNames}`);
     const dai=$('dot-ai'); if(dai){dai.style.background='var(--yellow)';dai.style.animation='pulse .8s infinite';}
 
     const now=new Date();
     const ctx=top.map((b,i)=>{
       const w=weather[b.game];
       const wInfo=w?.current?.weather_code!==undefined?wCode(w.current.weather_code):null;
-      return{idx:i+1,game:b.game,sport:b.sport,pick:b.outcome,market:b.mkt,bookmaker:b.book,odds_decimal:parseFloat(b.odds).toFixed(2),fair_odd:b.fair,ev_pct:b.ev,kelly_pct:b.kelly,implied_prob:(100/b.odds).toFixed(1)+'%',weather:wInfo?`${wInfo.t} ${w.current.temperature_2m?.toFixed(0)}°C vento:${w.current.wind_speed_10m?.toFixed(0)}km/h`:'n/a'};
+      const avgOddsV=b.avgOdds?b.avgOdds.toFixed(2):b.odds.toFixed(2);
+      return {
+        idx:i+1,
+        game:b.game,sport:b.sport,
+        pick:b.outcome,
+        market:b.mkt,
+        market_key:b.mktKey,
+        bookmaker:b.book,
+        odds_best:parseFloat(b.odds).toFixed(2),
+        odds_avg:avgOddsV,
+        fair_odd:b.fair,
+        ev_pct:b.ev,
+        kelly_pct:b.kelly,
+        implied_prob:(100/b.odds).toFixed(1)+'%',
+        fair_prob:(100/parseFloat(b.fair)).toFixed(1)+'%',
+        edge_vs_avg:((b.odds-parseFloat(avgOddsV))/parseFloat(avgOddsV)*100).toFixed(1)+'%',
+        weather:wInfo?`${wInfo.t} ${w.current.temperature_2m?.toFixed(0)}°C vento:${w.current.wind_speed_10m?.toFixed(0)}km/h`:'n/a'
+      };
     });
 
     const aiResp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',max_tokens:1200,
-      system:'Especialista em apostas desportivas. Analisa EV real e gera tickets de valor. Responde APENAS em JSON válido sem markdown.',
-      messages:[{role:'user',content:`Apostas disponíveis com EV positivo (top 12):\n${JSON.stringify(ctx,null,1)}\n\nSeleciona e devolve APENAS este JSON:\n{"dupla":{"legs":[{"idx":1,"pick":"...","game":"...","sport":"...","market":"...","bookmaker":"...","odds":1.85,"fair_odd":1.70,"ev_pct":"3.2","kelly":"2.1","reasoning":"explicação breve em pt"},{"idx":2,...}],"total_odds":3.24,"combined_ev":"6.1","confidence":"Alta","analysis":"análise em 2 frases"},"tripla":{"legs":[{"idx":1,...},{"idx":2,...},{"idx":3,...}],"total_odds":5.10,"combined_ev":"8.2","confidence":"Média-Alta","analysis":"análise em 2 frases"}}`}]
+      model:'claude-sonnet-4-20250514',max_tokens:1500,
+      system:'És um especialista em apostas desportivas com foco em EV positivo. Selecionas apenas apostas com edge matemático real. Responde APENAS em JSON válido sem markdown ou texto extra.',
+      messages:[{role:'user',content:`Mercados analisados: ${mktNames}
+Apostas disponíveis com EV+ (top 15 ordenadas por EV desc):
+${JSON.stringify(ctx,null,1)}
+
+INSTRUÇÕES:
+- Seleciona as MELHORES 2 apostas para a Dupla (máx odd combinada ~4.00, EV+ positivo, diversidade de mercados preferível)
+- Seleciona as MELHORES 3 apostas para a Tripla (máx odd combinada ~7.00, EV+ positivo, pelo menos 2 mercados diferentes)
+- Prioriza EV% alto + odds próximas da fair odd
+- Destaca se cada pick tem EV positivo ou negativo
+- Inclui odds_avg para mostrar ao utilizador a odd média de mercado
+
+Devolve APENAS este JSON (sem markdown):
+{
+  "dupla":{
+    "legs":[
+      {"idx":1,"pick":"...","game":"...","sport":"...","market":"...","market_key":"...","bookmaker":"...","odds_best":1.85,"odds_avg":1.76,"fair_odd":"1.70","ev_pct":"4.5","kelly_pct":"2.1","reasoning":"análise curta em pt"},
+      {"idx":2,...}
+    ],
+    "total_odds_best":3.24,"total_odds_avg":2.98,"combined_ev":"8.1","confidence":"Alta",
+    "analysis":"análise em 2-3 frases em pt incluindo diversidade de mercados"
+  },
+  "tripla":{
+    "legs":[
+      {"idx":1,...},{"idx":2,...},{"idx":3,...}
+    ],
+    "total_odds_best":5.10,"total_odds_avg":4.60,"combined_ev":"11.4","confidence":"Média-Alta",
+    "analysis":"análise em 2-3 frases em pt"
+  }
+}`}]
     })});
 
     if(!aiResp.ok) throw new Error('Claude API: '+aiResp.status);
@@ -1305,11 +1656,11 @@ async function loadPalpites() {
     const raw=aiData.content?.[0]?.text||'';
     let picks;
     try{picks=JSON.parse(raw.replace(/```json|```/g,'').trim());}
-    catch(e){throw new Error('Erro ao processar resposta IA');}
+    catch(e){throw new Error('Erro ao processar resposta IA: '+e.message);}
     if(dai){dai.style.background='var(--green)';dai.style.animation='none';}
     const ts=$('palpites-ts'); if(ts) ts.textContent='Gerado às '+now.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
-    renderPalpites(picks,weather);
-    toast('Palpites gerados! 🏆','s');
+    renderPalpites(picks,weather,mktNames);
+    toast('Palpites gerados com sucesso! 🏆','s');
   } catch(e){
     pc.innerHTML=`<div style="text-align:center;padding:60px 20px"><i class="fas fa-exclamation-triangle" style="font-size:2.5rem;color:var(--red);display:block;margin-bottom:12px"></i><div style="color:var(--red);font-weight:600;margin-bottom:6px">Erro</div><div style="font-size:.78rem;color:var(--t2);max-width:360px;margin:0 auto 16px">${e.message}</div><button class="btn btn-blue" onclick="loadPalpites()"><i class="fas fa-redo"></i>Tentar Novamente</button></div>`;
     toast('Erro: '+e.message.slice(0,60),'e');
@@ -1318,67 +1669,155 @@ async function loadPalpites() {
   }
 }
 
-function renderPalpites(picks,weather) {
+function renderPalpites(picks,weather,mktNames) {
   const pc=$('palpites-content');
+
   const renderTicket=(ticket,type)=>{
     const isDupla=type==='dupla';
     const typeCls=isDupla?'tb-dupla':'tb-tripla';
-    const totalOdds=parseFloat(ticket.total_odds)||ticket.legs.reduce((p,l)=>p*l.odds,1);
-    const lucro100=(100*totalOdds-100).toFixed(0),lucro500=(500*totalOdds-500).toFixed(0);
+    const totalBest=parseFloat(ticket.total_odds_best)||ticket.legs.reduce((p,l)=>p*(l.odds_best||l.odds||1),1);
+    const totalAvg=parseFloat(ticket.total_odds_avg)||totalBest*0.92;
+    const lucro100Best=(100*totalBest-100).toFixed(0);
+    const lucro100Avg=(100*totalAvg-100).toFixed(0);
+    const lucro500Best=(500*totalBest-500).toFixed(0);
+
+    // Count EV+ legs
+    const evPosLegs=ticket.legs.filter(l=>parseFloat(l.ev_pct)>0).length;
+    const allPos=evPosLegs===ticket.legs.length;
+
     const legsHtml=ticket.legs.map(leg=>{
-      const w=weather[leg.game];const wInfo=w?.current?.weather_code!==undefined?wCode(w.current.weather_code):null;
-      const ev=parseFloat(leg.ev_pct),prob=100/leg.odds,fairProb=100/parseFloat(leg.fair_odd||leg.odds);
-      return `<div class="leg-item">
+      const w=weather[leg.game];
+      const wInfo=w?.current?.weather_code!==undefined?wCode(w.current.weather_code):null;
+      const ev=parseFloat(leg.ev_pct);
+      const prob=100/(leg.odds_best||leg.odds||2);
+      const fairProb=100/parseFloat(leg.fair_odd||leg.odds_best||leg.odds||2);
+      const evClass=evBadgeClass(ev);
+      const isEvPos=ev>0;
+      const legCls=ev>=3?'ev-high':ev>0?'ev-pos':'';
+      const oddsAvg=leg.odds_avg||null;
+      const edgeVsAvg=oddsAvg?((( (leg.odds_best||leg.odds) - oddsAvg)/oddsAvg)*100).toFixed(1):null;
+
+      return `<div class="leg-item ${legCls}">
         <div>
-          <div class="leg-league">${leg.sport}${wInfo?` &nbsp;·&nbsp; <i class="fas ${wInfo.i}"></i> ${wInfo.t} ${w.current.temperature_2m?.toFixed(0)||''}°C`:''}</div>
-          <div class="leg-game">${leg.game}</div>
-          <div><span class="leg-pick-lbl">▶ ${leg.pick}</span></div>
-          <div class="leg-mkt">${leg.market}</div>
-          <div class="leg-meta">
-            <span class="leg-tag"><i class="fas fa-store"></i>${leg.bookmaker}</span>
-            <span class="leg-tag"><i class="fas fa-chart-line"></i>Fair: ${leg.fair_odd}</span>
+          <div class="leg-league">
+            ${leg.sport}
+            ${wInfo?`&nbsp;·&nbsp;<i class="fas ${wInfo.i}" style="color:${wInfo.r>=2?'var(--blue)':'var(--t3)'}"></i> ${wInfo.t} ${w.current.temperature_2m?.toFixed(0)||''}°C`:''}
           </div>
-          <div style="margin-top:5px">
-            <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--t3);margin-bottom:2px"><span>Prob real: ${fairProb.toFixed(0)}%</span><span>Mercado: ${prob.toFixed(0)}%</span></div>
-            <div class="prob-bg"><div class="prob-fill" style="width:${Math.min(100,fairProb).toFixed(0)}%;background:${ev>0?'var(--green)':'var(--red)'}"></div></div>
+          <div class="leg-game">${leg.game}</div>
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:3px">
+            <span class="leg-pick-lbl">▶ ${leg.pick}</span>
+            <span class="leg-mkt">${leg.market}</span>
+          </div>
+          <div class="leg-meta" style="margin-top:6px">
+            <span class="leg-tag"><i class="fas fa-store"></i> ${leg.bookmaker}</span>
+            <span class="leg-tag"><i class="fas fa-balance-scale"></i> Fair: ${leg.fair_odd}</span>
+            ${leg.kelly_pct?`<span class="leg-tag"><i class="fas fa-percentage"></i> Kelly ${leg.kelly_pct}%</span>`:''}
+          </div>
+          <!-- Probability bar -->
+          <div style="margin-top:8px">
+            <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--t3);margin-bottom:3px">
+              <span>Prob. real: <strong style="color:${isEvPos?'var(--green)':'var(--red)'}">${fairProb.toFixed(0)}%</strong></span>
+              <span>Impl. mercado: <strong>${prob.toFixed(0)}%</strong></span>
+            </div>
+            <div class="prob-bg">
+              <div class="prob-fill" style="width:${Math.min(100,fairProb).toFixed(0)}%;background:${isEvPos?'var(--green)':'var(--red)'}"></div>
+            </div>
           </div>
           <div class="leg-reasoning">${leg.reasoning||''}</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
-          <div class="leg-odd">${leg.odds?.toFixed(2)||'—'}</div>
-          <div class="leg-ev-badge">${ev>0?'+':''}${ev.toFixed(1)}% EV</div>
-          <div style="font-size:.62rem;color:var(--t3)">${leg.kelly}% Kelly</div>
+        <!-- Right column: odds + EV badge -->
+        <div class="leg-odd-wrap">
+          <div style="text-align:right">
+            <div style="font-size:.56rem;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">Melhor Odd</div>
+            <div class="leg-odd">${(leg.odds_best||leg.odds||'—')}</div>
+            ${oddsAvg?`<div class="leg-avg-odd"><i class="fas fa-chart-bar" style="opacity:.5"></i>Avg: <span>${parseFloat(oddsAvg).toFixed(2)}</span></div>
+            ${edgeVsAvg?`<div style="font-size:.6rem;color:${parseFloat(edgeVsAvg)>0?'var(--green)':'var(--red)'}">edge: ${parseFloat(edgeVsAvg)>0?'+':''}${edgeVsAvg}%</div>`:''}`:'' }
+          </div>
+          <span class="ev-badge ${evClass}">
+            <i class="fas ${isEvPos?'fa-arrow-up':'fa-arrow-down'}"></i>
+            ${isEvPos?'+':''}${ev.toFixed(1)}% EV
+          </span>
         </div>
       </div>`;
     }).join('');
+
     return `<div class="ticket-card">
+      <!-- EV+ banner if all legs are positive -->
+      ${allPos?`<div class="ev-banner"><i class="fas fa-bolt"></i><strong>Todas as selecções com EV+!</strong> — Edge matemático confirmado em todos os ${ticket.legs.length} mercados</div>`:''}
+
+      <!-- Ticket Header -->
       <div class="ticket-header">
-        <div style="display:flex;align-items:center;gap:8px"><span class="ticket-badge ${typeCls}"><i class="fas fa-ticket-alt"></i>${type.toUpperCase()}</span><span style="font-size:.76rem;color:var(--t2)">${ticket.legs.length} selecções</span></div>
-        <div><div class="ticket-odd-big">${totalOdds.toFixed(2)}</div><div class="ticket-odd-lbl">Odd Total</div></div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="ticket-badge ${typeCls}"><i class="fas fa-ticket-alt"></i>${type.toUpperCase()}</span>
+          <span style="font-size:.76rem;color:var(--t2)">${ticket.legs.length} selecções</span>
+          <span style="font-size:.72rem;color:var(--t3);display:flex;align-items:center;gap:4px">
+            <span class="dot8" style="background:${allPos?'var(--green)':'var(--yellow)'}"></span>
+            ${evPosLegs}/${ticket.legs.length} EV+
+          </span>
+          <!-- Market chips used -->
+          <div style="display:flex;gap:4px;flex-wrap:wrap">
+            ${[...new Set(ticket.legs.map(l=>l.market))].map(m=>`<span style="padding:2px 7px;border-radius:10px;font-size:.6rem;font-weight:600;background:rgba(0,168,232,.1);color:var(--blue);border:1px solid rgba(0,168,232,.2)">${m}</span>`).join('')}
+          </div>
+        </div>
+        <!-- Odds summary -->
+        <div class="ticket-odds-bar">
+          <div class="tob-item">
+            <div class="tob-val" style="color:var(--green)">${totalBest.toFixed(2)}</div>
+            <div class="tob-lbl">Melhor Odd</div>
+          </div>
+          <div style="width:1px;height:30px;background:var(--border)"></div>
+          <div class="tob-item">
+            <div class="tob-val" style="color:var(--t2)">${totalAvg.toFixed(2)}</div>
+            <div class="tob-lbl">Odd Média</div>
+          </div>
+          <div style="width:1px;height:30px;background:var(--border)"></div>
+          <div class="tob-item">
+            <div class="tob-val" style="color:var(--purple)">+${ticket.combined_ev||'—'}%</div>
+            <div class="tob-lbl">EV Comb.</div>
+          </div>
+        </div>
       </div>
+
+      <!-- Legs -->
       <div class="ticket-legs">${legsHtml}</div>
-      <div class="ai-analysis"><div class="ai-analysis-hdr"><i class="fas fa-robot"></i>Análise Claude AI</div><div class="ai-analysis-txt">${ticket.analysis||''}</div></div>
+
+      <!-- AI Analysis -->
+      <div class="ai-analysis">
+        <div class="ai-analysis-hdr"><i class="fas fa-robot"></i>Análise Claude AI — Mercados: ${mktNames}</div>
+        <div class="ai-analysis-txt">${ticket.analysis||''}</div>
+      </div>
+
+      <!-- Footer stats -->
       <div class="ticket-footer">
         <div class="ticket-stats">
-          <div class="ts-item"><div class="ts-val" style="color:var(--green)">${totalOdds.toFixed(2)}x</div><div class="ts-lbl">Odd Total</div></div>
-          <div class="ts-item"><div class="ts-val" style="color:var(--green)">+${ticket.combined_ev||'—'}%</div><div class="ts-lbl">EV Comb.</div></div>
-          <div class="ts-item"><div class="ts-val">MZN ${lucro100}</div><div class="ts-lbl">Lucro 100</div></div>
-          <div class="ts-item"><div class="ts-val">MZN ${lucro500}</div><div class="ts-lbl">Lucro 500</div></div>
+          <div class="ts-item"><div class="ts-val" style="color:var(--green)">MZN ${lucro100Best}</div><div class="ts-lbl">Lucro c/ MZN 100</div></div>
+          <div class="ts-item"><div class="ts-val" style="color:var(--t2)">MZN ${lucro100Avg}</div><div class="ts-lbl">Lucro (odd média)</div></div>
+          <div class="ts-item"><div class="ts-val">MZN ${lucro500Best}</div><div class="ts-lbl">Lucro c/ MZN 500</div></div>
           <div class="ts-item"><div class="ts-val" style="color:var(--blue)">${ticket.confidence||'—'}</div><div class="ts-lbl">Confiança</div></div>
         </div>
         <div class="ticket-actions">
-          <a href="https://wa.me/258840330540?text=${encodeURIComponent(type.toUpperCase()+': '+ticket.legs.map(l=>l.game+' — '+l.pick+' @ '+l.odds).join(' | ')+' | Odd: '+totalOdds.toFixed(2))}" target="_blank" class="btn btn-ghost" style="font-size:.74rem"><i class="fab fa-whatsapp" style="color:#25d366"></i>WA</a>
-          <button class="btn btn-blue" style="font-size:.74rem" onclick="addTicketToTracker('${type.toUpperCase()}',${JSON.stringify(ticket).replace(/'/g,'')})"><i class="fas fa-plus"></i>Tracker</button>
+          <a href="https://wa.me/258840330540?text=${encodeURIComponent(type.toUpperCase()+': '+ticket.legs.map(l=>l.game+' — '+l.pick+' @ '+(l.odds_best||l.odds)).join(' | ')+' | Odd: '+totalBest.toFixed(2)+' EV: +'+ticket.combined_ev+'%')}" target="_blank" class="btn btn-ghost" style="font-size:.74rem"><i class="fab fa-whatsapp" style="color:#25d366"></i>WA</a>
+          <button class="btn btn-blue" style="font-size:.74rem" onclick="addTicketToTracker('${type.toUpperCase()}',${JSON.stringify(ticket).replace(/'/g,"&#39;")})"><i class="fas fa-plus"></i>Tracker</button>
         </div>
       </div>
     </div>`;
   };
-  pc.innerHTML='<div class="palpites-wrap">'+(picks.dupla?renderTicket(picks.dupla,'dupla'):'')+(picks.tripla?renderTicket(picks.tripla,'tripla'):'')+'<div style="padding:12px 0 4px;font-size:.71rem;color:var(--t3);text-align:center;border-top:1px solid var(--border)"><i class="fas fa-info-circle" style="color:var(--yellow)"></i> Apostar com responsabilidade. EV positivo é uma vantagem matemática a longo prazo.</div></div>';
+
+  pc.innerHTML='<div class="palpites-wrap">'
+    +(picks.dupla?renderTicket(picks.dupla,'dupla'):'')
+    +(picks.tripla?renderTicket(picks.tripla,'tripla'):'')
+    +`<div style="padding:14px 0 4px;font-size:.71rem;color:var(--t3);text-align:center;border-top:1px solid var(--border)">
+        <i class="fas fa-info-circle" style="color:var(--yellow)"></i> 
+        Apostas geradas com base em EV positivo calculado. Apostar com responsabilidade. 
+        EV+ é uma vantagem matemática de longo prazo, não garantia de resultados imediatos.
+      </div>
+    </div>`;
 }
 
 function addTicketToTracker(type,ticket) {
   const bets=getBets();
-  ticket.legs.forEach(l=>{bets.unshift({id:Date.now()+Math.random(),date:new Date().toLocaleDateString('pt-PT'),game:l.game,mkt:type+' — '+l.market,odd:l.odds,fair:l.fair_odd,clv:l.ev_pct,stake:200,res:'p',pl:0});});
+  const legs=ticket.legs||[];
+  legs.forEach(l=>{bets.unshift({id:Date.now()+Math.random(),date:new Date().toLocaleDateString('pt-PT'),game:l.game,mkt:type+' — '+l.market,odd:l.odds_best||l.odds,fair:l.fair_odd,clv:l.ev_pct,stake:200,res:'p',pl:0});});
   saveBets(bets); toast(type+' adicionado ao Tracker!','s');
 }
 
@@ -1432,15 +1871,15 @@ setInterval(()=>{G.cd--;const el=$('cd-val');if(el) el.textContent=G.cd;if(G.cd<
 
 // ── BOOT ──
 document.addEventListener('DOMContentLoaded',()=>{
-  console.log('✅ Manuel Dança v5 — ESPN (sem chave) + The Odds API (chave configurável) + Open Meteo + Claude AI');
+  console.log('✅ Manuel Dança v6 — Market Panel + EV+ Highlighting + Avg Odds');
   initNav(); buildSportsNav(); renderTracker(); restoreSess(); renderPricing(); initModels();
   checkBanner();
+  // Init market count display
+  updateMktCount();
 
-  // Start on Live Scores — funciona SEM qualquer chave API
   go('live');
   loadLive();
 
-  // Se já tem chave, carrega EV automaticamente
   if(ODDS_KEY&&ODDS_KEY.length>10) {
     setTimeout(()=>loadEV(true),2000);
   } else {
@@ -1448,8 +1887,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 
   $('gsearch').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();if(!q||q.length<2) return;const hits=G.ev.filter(b=>b.game.toLowerCase().includes(q));if(hits.length) toast(`${hits.length} resultado(s) para "${q}"…`,'i');});
-  toast('Manuel Dança v5 carregado! Live Scores a funcionar. ✅','s');
-  setTimeout(()=>toast('Para odds em tempo real: regista-te em the-odds-api.com (grátis)','i'),2000);
+  toast('Manuel Dança v6 carregado! ✅','s');
+  setTimeout(()=>toast('Novo: Painel de mercados OddsJam-style + EV+ destacado! 🎯','i'),2000);
 });
 </script>
 </body>
