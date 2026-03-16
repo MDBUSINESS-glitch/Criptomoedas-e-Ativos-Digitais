@@ -849,20 +849,43 @@ const ESPN_ENDPOINTS = {
 };
 
 const SPORTS = [
-  {k:'soccer_epl',               n:'Premier League',   i:'⚽',c:'Soccer'},
-  {k:'soccer_spain_la_liga',     n:'La Liga',          i:'⚽',c:'Soccer'},
-  {k:'soccer_italy_serie_a',     n:'Serie A',          i:'⚽',c:'Soccer'},
-  {k:'soccer_germany_bundesliga',n:'Bundesliga',       i:'⚽',c:'Soccer'},
-  {k:'soccer_france_ligue_one',  n:'Ligue 1',          i:'⚽',c:'Soccer'},
-  {k:'soccer_uefa_champs_league',n:'Champions League', i:'⚽',c:'Soccer'},
-  {k:'soccer_portugal_primeira_liga',n:'Primeira Liga',i:'⚽',c:'Soccer'},
-  {k:'soccer_usa_mls',           n:'MLS',              i:'⚽',c:'Soccer'},
-  {k:'basketball_nba',           n:'NBA',              i:'🏀',c:'Basketball'},
-  {k:'americanfootball_nfl',     n:'NFL',              i:'🏈',c:'Football'},
-  {k:'icehockey_nhl',            n:'NHL',              i:'🏒',c:'Hockey'},
-  {k:'baseball_mlb',             n:'MLB',              i:'⚾',c:'Baseball'},
-  {k:'mma_mixed_martial_arts',   n:'UFC / MMA',        i:'🥊',c:'Combat'},
-  {k:'tennis_atp_french_open',   n:'Tennis ATP',       i:'🎾',c:'Tennis'},
+  // ── Futebol Top 5 ──
+  {k:'soccer_epl',                    n:'Premier League',    i:'⚽',c:'Soccer',tier:1},
+  {k:'soccer_spain_la_liga',          n:'La Liga',           i:'⚽',c:'Soccer',tier:1},
+  {k:'soccer_italy_serie_a',          n:'Serie A',           i:'⚽',c:'Soccer',tier:1},
+  {k:'soccer_germany_bundesliga',     n:'Bundesliga',        i:'⚽',c:'Soccer',tier:1},
+  {k:'soccer_france_ligue_one',       n:'Ligue 1',           i:'⚽',c:'Soccer',tier:1},
+  {k:'soccer_uefa_champs_league',     n:'Champions League',  i:'⚽',c:'Soccer',tier:1},
+  // ── Futebol Ligas Secundárias (mais valor!) ──
+  {k:'soccer_portugal_primeira_liga', n:'Primeira Liga',     i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_netherlands_eredivisie', n:'Eredivisie',        i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_belgium_first_div',      n:'Jupiler Pro League',i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_turkey_super_league',    n:'Süper Lig',         i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_greece_super_league',    n:'Super League Grécia',i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_scotland_premiership',   n:'Scottish Premier',  i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_austria_bundesliga',     n:'Bundesliga Áustria',i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_czech_republic_liga',    n:'Liga Checa',        i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_poland_ekstraklasa',     n:'Ekstraklasa',       i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_brazil_campeonato',      n:'Brasileirão',       i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_argentina_primera_division',n:'Primera División',i:'⚽',c:'Soccer',tier:2},
+  {k:'soccer_usa_mls',                n:'MLS',               i:'⚽',c:'Soccer',tier:2},
+  // ── Futebol Ligas Inferiores / Mais Valor ──
+  {k:'soccer_england_league1',        n:'ENG League One',    i:'⚽',c:'Soccer',tier:3},
+  {k:'soccer_england_league2',        n:'ENG League Two',    i:'⚽',c:'Soccer',tier:3},
+  {k:'soccer_england_efl_champ',      n:'ENG Championship',  i:'⚽',c:'Soccer',tier:3},
+  {k:'soccer_spain_segunda_division', n:'Segunda División',  i:'⚽',c:'Soccer',tier:3},
+  {k:'soccer_italy_serie_b',          n:'Serie B',           i:'⚽',c:'Soccer',tier:3},
+  {k:'soccer_germany_liga2',          n:'2. Bundesliga',     i:'⚽',c:'Soccer',tier:3},
+  {k:'soccer_france_ligue_two',       n:'Ligue 2',           i:'⚽',c:'Soccer',tier:3},
+  // ── Outros desportos ──
+  {k:'basketball_nba',                n:'NBA',               i:'🏀',c:'Basketball',tier:1},
+  {k:'basketball_euroleague',         n:'Euroliga',          i:'🏀',c:'Basketball',tier:2},
+  {k:'americanfootball_nfl',          n:'NFL',               i:'🏈',c:'Football',tier:1},
+  {k:'icehockey_nhl',                 n:'NHL',               i:'🏒',c:'Hockey',tier:1},
+  {k:'baseball_mlb',                  n:'MLB',               i:'⚾',c:'Baseball',tier:1},
+  {k:'mma_mixed_martial_arts',        n:'UFC / MMA',         i:'🥊',c:'Combat',tier:1},
+  {k:'tennis_atp_french_open',        n:'Tennis ATP',        i:'🎾',c:'Tennis',tier:1},
+  {k:'tennis_wta_french_open',        n:'Tennis WTA',        i:'🎾',c:'Tennis',tier:1},
 ];
 
 // ══════════════════════════════════════════════
@@ -1598,14 +1621,45 @@ async function loadPalpites() {
   const setStep=(t,s='')=>{pc.innerHTML=`<div style="text-align:center;padding:60px 20px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;animation:aiPulse 1.5s ease-in-out infinite"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div><div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">${t}</div><div style="font-size:.78rem;color:var(--t3);max-width:400px;margin:0 auto">${s}</div></div><style>@keyframes aiPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.7}}</style>`;};
 
   try {
-    // ── 1. Carregar odds se necessário ──
-    if(!G.allData.length){
-      if(!ODDS_KEY){ throw new Error('Chave API necessária — configura no banner amarelo acima.'); }
-      setStep('📡 A carregar dados de odds…', `Mercados: ${mktNames}`);
-      const keys=SPORTS.filter(s=>['soccer_epl','soccer_spain_la_liga','soccer_italy_serie_a','basketball_nba','americanfootball_nfl'].includes(s.k));
-      G.allData = await fetchMultiMkts(keys, activeMkts);
+    // ── 1. Carregar odds — ligas top + secundárias + terciárias ──
+    if(!ODDS_KEY){ throw new Error('Chave API necessária — configura no banner amarelo acima.'); }
+    setStep('📡 A carregar odds — ligas top + secundárias + terciárias…', 'Futebol · Basquete · Hóquei · MMA · Ténis');
+
+    // Carrega sempre fresh para palpites (para ter todos os mercados incluindo alternates/btts)
+    const PALPITES_MARKETS = 'h2h,spreads,totals,h2h_lay,btts,alternate_spreads,alternate_totals';
+    const PAL_SPORTS = [
+      // Top (sempre)
+      {k:'soccer_epl',n:'Premier League',i:'⚽',c:'Soccer'},
+      {k:'soccer_spain_la_liga',n:'La Liga',i:'⚽',c:'Soccer'},
+      {k:'soccer_italy_serie_a',n:'Serie A',i:'⚽',c:'Soccer'},
+      {k:'soccer_germany_bundesliga',n:'Bundesliga',i:'⚽',c:'Soccer'},
+      {k:'soccer_france_ligue_one',n:'Ligue 1',i:'⚽',c:'Soccer'},
+      {k:'soccer_uefa_champs_league',n:'Champions League',i:'⚽',c:'Soccer'},
+      // Secundárias
+      {k:'soccer_portugal_primeira_liga',n:'Primeira Liga',i:'⚽',c:'Soccer'},
+      {k:'soccer_netherlands_eredivisie',n:'Eredivisie',i:'⚽',c:'Soccer'},
+      {k:'soccer_belgium_first_div',n:'Jupiler Pro',i:'⚽',c:'Soccer'},
+      {k:'soccer_turkey_super_league',n:'Süper Lig',i:'⚽',c:'Soccer'},
+      {k:'soccer_england_efl_champ',n:'Championship',i:'⚽',c:'Soccer'},
+      {k:'soccer_spain_segunda_division',n:'Segunda',i:'⚽',c:'Soccer'},
+      {k:'soccer_germany_liga2',n:'2. Bundesliga',i:'⚽',c:'Soccer'},
+      {k:'soccer_italy_serie_b',n:'Serie B',i:'⚽',c:'Soccer'},
+      // Outros desportos
+      {k:'basketball_nba',n:'NBA',i:'🏀',c:'Basketball'},
+      {k:'basketball_euroleague',n:'Euroliga',i:'🏀',c:'Basketball'},
+      {k:'icehockey_nhl',n:'NHL',i:'🏒',c:'Hockey'},
+      {k:'baseball_mlb',n:'MLB',i:'⚾',c:'Baseball'},
+      {k:'mma_mixed_martial_arts',n:'UFC/MMA',i:'🥊',c:'Combat'},
+    ];
+    const pData = [];
+    for(const s of PAL_SPORTS){
+      const d = await apiOdds(s.k, PALPITES_MARKETS);
+      if(d && d.length){ d.forEach(g=>{g._sn=s.n;g._si=s.i;g._sk=s.k;}); pData.push(...d); }
+      await sleep(200);
     }
+    if(pData.length) G.allData = [...G.allData.filter(g=>!pData.find(p=>p.id===g.id)), ...pData];
     if(!G.allData.length) throw new Error('Sem dados de odds. Verifica a chave API e tenta de novo.');
+    toast(G.allData.length + ' jogos carregados de ' + PAL_SPORTS.length + ' ligas', 's');
 
     const d=$('dot-odds'); if(d) d.style.background='var(--green)';
 
@@ -1663,160 +1717,232 @@ async function loadPalpites() {
 // Diversidade de jogos, mercados e odds equilibradas
 // ══════════════════════════════════════════════
 function buildPalpitesAlgo(allEV, weather, mktNames) {
-  // ── ESTRATÉGIA: Bilhetes combinados com odds 1.50–1.90 (alta probabilidade) ──
-  // 1) Extrai TODAS as apostas do allData (não só EV+), qualquer mercado/desporto
-  // 2) Filtra odds entre 1.45 e 1.96
-  // 3) Ordena: primeiro EV+ (preferência), depois por probabilidade implícita (maior prob = mais seguro)
-  // 4) Seleciona jogos diferentes para cada leg
+  /* ═══════════════════════════════════════════════════════════
+     ESTRATÉGIA MELHORADA:
+     1. Para cada jogo com EV+, procura linhas alternativas mais seguras
+        ex: Over 219 @ 1.96 → Over 215.5 @ 1.58 (menor risco)
+     2. Inclui BTTS, alternate_totals, alternate_spreads
+     3. Ligas secundárias e terciárias têm mais valor
+     4. Filtra odds 1.45–1.97 (alta probabilidade para acumuladores)
+  ══════════════════════════════════════════════════════════════ */
 
-  // ── Recolhe TODAS as apostas de todos os dados disponíveis ──
-  const allBets = [];
   const sharp = ['pinnacle','betfair_ex_eu','betfair','smarkets','matchbook'];
+  const allBets = [];
+
+  // Tier bonus: ligas secundárias/terciárias têm mais valor de mercado
+  function getTierBonus(sport) {
+    const s = SPORTS.find(x => x.k === sport);
+    if (!s) return 0;
+    return s.tier === 3 ? 1.5 : s.tier === 2 ? 0.8 : 0;
+  }
+
+  // Friendly market names
+  function mktLabel(key, point) {
+    if (key === 'h2h' || key === 'h2h_3way') return 'Moneyline';
+    if (key === 'h2h_lay') return 'Lay';
+    if (key === 'btts') return 'BTTS';
+    if (key === 'spreads' || key === 'alternate_spreads') {
+      return point != null ? 'Handicap ' + (point > 0 ? '+' : '') + point : 'Handicap';
+    }
+    if (key === 'totals' || key === 'alternate_totals') {
+      return point != null ? ('Over/Under ' + Math.abs(point)) : 'Over/Under';
+    }
+    if (key.includes('player')) return 'Player Prop';
+    return key;
+  }
 
   G.allData.forEach(game => {
+    // ── Coleta todos os mercados do jogo ──
+    // Agrupa totals/alternate_totals por linha para comparar
+    const totalsByLine = {}; // line → {best_odd, book, ev, ...}
+
     game.bookmakers?.forEach(bm => {
       bm.markets?.forEach(mkt => {
         mkt.outcomes?.forEach(out => {
           const price = out.price;
-          if (!price || price < 1.45 || price > 1.97) return; // só odds 1.45–1.97
+          if (!price || price < 1.38 || price > 2.05) return;
 
-          // Calcular fair odd via devig
+          // Fair odd via devig
           const refBm = game.bookmakers.find(b => sharp.includes(b.key)) || game.bookmakers[0];
           const refMkt = refBm?.markets?.find(m => m.key === mkt.key);
           let fair = null;
           if (refMkt) {
-            const tp = refMkt.outcomes.reduce((s,o) => s + 1/o.price, 0);
-            const refO = refMkt.outcomes.find(o => o.name === out.name);
+            const tp = refMkt.outcomes.reduce((s, o) => s + 1/o.price, 0);
+            const refO = refMkt.outcomes.find(o => o.name === out.name && o.point === out.point);
             if (refO) fair = 1 / ((1/refO.price) / tp);
           }
-          if (!fair) fair = price * 1.03; // estimativa conservadora
+          if (!fair) fair = price * 1.025;
 
           const ev = calcEV(price, fair);
           const kelly = calcKelly(price, fair);
-          const prob = (1/fair) * 100; // probabilidade real estimada
+          const prob = (1/fair) * 100;
 
-          // Coleta avg price
+          // Avg price
           let prices = [];
           game.bookmakers.forEach(b2 => {
             const m2 = b2.markets?.find(mk => mk.key === mkt.key);
-            const o2 = m2?.outcomes?.find(oc => oc.name === out.name);
-            if (o2) prices.push(o2.price);
+            m2?.outcomes?.forEach(o2 => {
+              if (o2.name === out.name && o2.point === out.point) prices.push(o2.price);
+            });
           });
           const avgOdds = prices.length ? prices.reduce((a,b) => a+b) / prices.length : price;
-
-          // Nome de mercado legível
-          const mktName = mkt.key === 'h2h' ? 'Moneyline'
-            : mkt.key === 'h2h_3way' ? '1X2'
-            : mkt.key === 'totals' ? 'Over/Under'
-            : mkt.key === 'spreads' ? 'Handicap'
-            : mkt.key === 'btts' ? 'Ambas Marcam'
-            : mkt.key;
 
           let label = out.name;
           if (out.point != null) label += ' ' + (out.point > 0 ? '+' : '') + out.point;
 
-          allBets.push({
+          // For totals: track by line to find safer alternatives
+          const isTotals = mkt.key === 'totals' || mkt.key === 'alternate_totals';
+          const isOver = out.name?.toLowerCase().includes('over');
+
+          const bet = {
             game: `${game.home_team} vs ${game.away_team}`,
             home: game.home_team, away: game.away_team,
             sport: game._sn || '', icon: game._si || '⚽',
-            mkt: mktName, mktKey: mkt.key,
+            sportKey: game._sk || '',
+            mkt: mktLabel(mkt.key, out.point),
+            mktKey: mkt.key,
+            mktRaw: mkt.key,
             outcome: label,
-            book: bm.title, bkey: bm.key,
+            book: bm.title,
             odds: price, avgOdds, fair: fair.toFixed(2),
             ev: ev.toFixed(2), kelly: kelly.toFixed(2),
-            prob, // prob real %
+            prob,
             time: game.commence_time,
-          });
+            point: out.point ?? null,
+            isOver, isTotals,
+            isBTTS: mkt.key === 'btts',
+            isAlt: mkt.key.startsWith('alternate_'),
+            tierBonus: getTierBonus(game._sk),
+          };
+
+          // Track totals by line for alternate-line analysis
+          if (isTotals && isOver && out.point != null) {
+            const lineKey = game.id + '|' + out.point;
+            if (!totalsByLine[lineKey] || price > totalsByLine[lineKey].price) {
+              totalsByLine[lineKey] = { price, fair, ev, bet };
+            }
+          }
+
+          allBets.push(bet);
         });
       });
     });
+
+    // ── Encontra linhas alternativas seguras para totals ──
+    // Se temos Over 219 @ 1.96, procura Over 215.5 ou 214.5 @ ~1.58
+    const gameLines = Object.values(totalsByLine)
+      .filter(l => l.price >= 1.45 && l.price <= 2.05)
+      .sort((a, b) => b.bet.point - a.bet.point); // maior linha primeiro
+
+    if (gameLines.length >= 2) {
+      // Marca as linhas mais baixas como "linha alternativa segura"
+      gameLines.forEach((l, idx) => {
+        if (idx > 0) { // não é a linha mais alta
+          const hLine = gameLines[0];
+          if (l.bet.point < hLine.bet.point && l.bet.odds < 1.82) {
+            // Encontrou linha mais baixa e mais segura
+            const found = allBets.find(b =>
+              b.game === l.bet.game &&
+              b.point === l.bet.point &&
+              b.isOver
+            );
+            if (found) {
+              found.isAltSafeLine = true;
+              found.altLineNote = 'Linha mais segura vs ' + hLine.bet.mkt + ' @ ' + hLine.bet.odds;
+            }
+          }
+        }
+      });
+    }
   });
 
-  if (allBets.length === 0) throw new Error('Sem apostas no intervalo de odds 1.45–1.97. Carrega mais desportos na página +EV primeiro.');
+  if (allBets.length === 0) throw new Error('Sem apostas no intervalo de odds 1.45–2.05 nas ligas carregadas.');
 
-  // ── Score: prioriza EV+, depois prob alta, depois odds perto de 1.70 (ponto ideal) ──
+  // ── Score: EV+ > linhas alternativas seguras > prob alta > ligas secundárias ──
   function score(b) {
     const ev = parseFloat(b.ev);
     const prob = b.prob;
     const w = weather[b.game];
     const wInfo = w?.current?.weather_code !== undefined ? wCode(w.current.weather_code) : null;
-    const wPenalty = wInfo ? wInfo.r * 0.5 : 0;
-    const oddsDist = Math.abs(b.odds - 1.72); // ideal ~1.72
-    const evBonus = ev > 0 ? (ev * 2) : (ev * 0.5); // penaliza EV negativo levemente
-    return evBonus + (prob * 0.08) - (oddsDist * 1.5) - wPenalty;
+    const wPenalty = wInfo ? wInfo.r * 0.4 : 0;
+    const oddsDist = Math.abs(b.odds - 1.70); // ideal ~1.70
+    const evBonus = ev > 2 ? ev * 2.5 : ev > 0 ? ev * 1.5 : ev * 0.3;
+    const altBonus = b.isAltSafeLine ? 3 : 0; // bonus para linhas seguras
+    const bttsBonus = b.isBTTS && ev > 0 ? 1.5 : 0;
+    const tierBonus = b.tierBonus || 0;
+    return evBonus + (prob * 0.06) - (oddsDist * 1.2) + altBonus + bttsBonus + tierBonus - wPenalty;
   }
 
-  // ── Remove duplicados (mesmo jogo, pega a melhor odd) ──
-  const bestByGameMkt = new Map();
+  // ── Remove duplicados (mesmo jogo+mercado+linha, fica a melhor odd) ──
+  const bestMap = new Map();
   allBets.forEach(b => {
     const key = b.game + '|' + b.mktKey + '|' + b.outcome;
-    const existing = bestByGameMkt.get(key);
-    if (!existing || b.odds > existing.odds) bestByGameMkt.set(key, b);
+    const ex = bestMap.get(key);
+    if (!ex || b.odds > ex.odds) bestMap.set(key, b);
   });
-  const candidates = [...bestByGameMkt.values()].sort((a,b) => score(b) - score(a));
+  const candidates = [...bestMap.values()].sort((a, b) => score(b) - score(a));
 
-  // ── Seleciona N legs com jogos diferentes ──
+  // ── Seleciona N legs com jogos DIFERENTES e mercados diversificados ──
   function selectLegs(n) {
     const usedGames = new Set();
     const selected = [];
-    // Primeira passagem: jogos diferentes, diversidade de mercados
-    const usedMkts = new Set();
     for (const bet of candidates) {
       if (selected.length >= n) break;
       if (usedGames.has(bet.game)) continue;
       usedGames.add(bet.game);
-      usedMkts.add(bet.mktKey);
       selected.push(bet);
     }
     return selected;
   }
 
-  // ── Monta estrutura de ticket ──
+  // ── Monta ticket ──
   function buildTicket(legs, type) {
-    if (!legs || legs.length === 0) return null;
     const totalOdds = legs.reduce((p, l) => p * l.odds, 1);
     const totalAvg  = legs.reduce((p, l) => p * (l.avgOdds || l.odds), 1);
     const combinedProb = legs.reduce((p, l) => p * (l.prob / 100), 1) * 100;
     const evPos = legs.filter(l => parseFloat(l.ev) > 0).length;
-    const minEV = Math.min(...legs.map(l => parseFloat(l.ev)));
-    const avgEV = (legs.reduce((s,l) => s + parseFloat(l.ev), 0) / legs.length).toFixed(1);
-    const confidence = combinedProb >= 45 ? 'Alta' : combinedProb >= 32 ? 'Média-Alta' : combinedProb >= 22 ? 'Média' : 'Baixa';
+    const avgEV = (legs.reduce((s, l) => s + parseFloat(l.ev), 0) / legs.length).toFixed(1);
+    const confidence = combinedProb >= 50 ? 'Alta' : combinedProb >= 36 ? 'Média-Alta' : combinedProb >= 24 ? 'Média' : 'Baixa';
     const mktsUsed = [...new Set(legs.map(l => l.mkt))];
+    const leaguesUsed = [...new Set(legs.map(l => l.sport))];
 
-    const picks = legs.map(l => {
-      const w = weather[l.game];
-      const wInfo = w?.current?.weather_code !== undefined ? wCode(w.current.weather_code) : null;
-      const wText = wInfo && wInfo.r >= 2 ? ` ⚠️ ${wInfo.t} pode influenciar resultado.` : '';
-      const ev = parseFloat(l.ev);
-      const evText = ev > 2 ? `Edge matemático de +${l.ev}% — odds acima do justo.`
-        : ev > 0 ? `Leve vantagem de +${l.ev}% sobre o mercado.`
-        : `Aposta de alto valor por probabilidade (${l.prob.toFixed(0)}% estimado).`;
-      return {
-        pick: l.outcome,
-        game: l.game,
-        home: l.home, away: l.away,
-        sport: l.sport, icon: l.icon,
-        market: l.mkt, market_key: l.mktKey,
-        bookmaker: l.book,
-        odds_best: parseFloat(l.odds).toFixed(2),
-        odds_avg:  parseFloat(l.avgOdds || l.odds).toFixed(2),
-        fair_odd:  l.fair,
-        ev_pct:    l.ev,
-        kelly_pct: l.kelly,
-        prob_real: l.prob.toFixed(1),
-        reasoning: evText + wText,
-        weather_info: wInfo ? `${wInfo.i}|${wInfo.t}|${w.current.temperature_2m?.toFixed(0)||'?'}` : null,
-        game_time: l.time || null,
-      };
-    });
-
-    const analysis = `Bilhete ${type} com odds entre ${Math.min(...legs.map(l=>l.odds)).toFixed(2)} e ${Math.max(...legs.map(l=>l.odds)).toFixed(2)} — ` +
+    const analysis =
+      `Bilhete ${type}: ${leaguesUsed.join(', ')}. ` +
       `${evPos}/${legs.length} selecções com EV+. ` +
-      `Probabilidade estimada de acertar o combinado: ~${combinedProb.toFixed(0)}%. ` +
-      `Mercados: ${mktsUsed.join(', ')}.`;
+      `Prob. combinada estimada: ~${combinedProb.toFixed(0)}%. ` +
+      `Mercados: ${mktsUsed.join(' + ')}.`;
 
     return {
-      legs: picks,
+      legs: legs.map(l => {
+        const ev = parseFloat(l.ev);
+        const w = weather[l.game];
+        const wInfo = w?.current?.weather_code !== undefined ? wCode(w.current.weather_code) : null;
+        const wText = wInfo && wInfo.r >= 2 ? ' ⚠️ ' + wInfo.t + ' pode influenciar.' : '';
+        const altText = l.isAltSafeLine && l.altLineNote ? ' 🔽 ' + l.altLineNote + '.' : '';
+        const tierText = l.tierBonus > 0 ? ' 📊 Liga secundária — maior valor de mercado.' : '';
+        const evText = ev > 3 ? 'Edge forte de +' + l.ev + '% vs fair ' + l.fair + '.'
+          : ev > 0 ? 'Vantagem de +' + l.ev + '% sobre o mercado.'
+          : 'Aposta de alta probabilidade (' + l.prob.toFixed(0) + '% estimado).';
+        return {
+          pick: l.outcome,
+          game: l.game, home: l.home, away: l.away,
+          sport: l.sport, icon: l.icon,
+          market: l.mkt, market_key: l.mktKey,
+          bookmaker: l.book,
+          odds_best: parseFloat(l.odds).toFixed(2),
+          odds_avg:  parseFloat(l.avgOdds || l.odds).toFixed(2),
+          fair_odd:  l.fair,
+          ev_pct:    l.ev,
+          kelly_pct: l.kelly,
+          prob_real: l.prob.toFixed(1),
+          is_alt_line: !!l.isAltSafeLine,
+          is_btts: !!l.isBTTS,
+          tier_bonus: l.tierBonus > 0,
+          reasoning: evText + altText + tierText + wText,
+          weather_info: wInfo ? wInfo.i + '|' + wInfo.t + '|' + (w.current.temperature_2m?.toFixed(0)||'?') : null,
+          game_time: l.time || null,
+        };
+      }),
       total_odds_best: totalOdds.toFixed(2),
       total_odds_avg:  totalAvg.toFixed(2),
       combined_prob:   combinedProb.toFixed(1),
@@ -1830,13 +1956,12 @@ function buildPalpitesAlgo(allEV, weather, mktNames) {
   const dupLegs  = selectLegs(2);
   const tripLegs = selectLegs(3);
 
-  if (dupLegs.length < 2)  throw new Error(`Apenas ${dupLegs.length} jogo(s) com odds 1.45–1.97. Carrega mais desportos na secção +EV.`);
-  if (tripLegs.length < 3) throw new Error(`Apenas ${tripLegs.length} jogo(s) com odds 1.45–1.97. Carrega mais desportos na secção +EV.`);
+  if (dupLegs.length < 2)
+    throw new Error('Apenas ' + dupLegs.length + ' jogo(s) disponíveis. Verifica a chave API e tenta de novo.');
+  if (tripLegs.length < 3)
+    throw new Error('Apenas ' + tripLegs.length + ' jogo(s) disponíveis para Tripla. Carrega mais ligas.');
 
-  return {
-    dupla:  buildTicket(dupLegs, 'Dupla'),
-    tripla: buildTicket(tripLegs, 'Tripla'),
-  };
+  return { dupla: buildTicket(dupLegs, 'Dupla'), tripla: buildTicket(tripLegs, 'Tripla') };
 }
 
 
@@ -1919,6 +2044,9 @@ function renderPalpites(picks, weather, mktNames) {
               ▶ ${leg.pick}
             </span>
             <span class="leg-mkt">${leg.market}</span>
+            ${leg.is_alt_line ? '<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);border-radius:4px;padding:1px 7px;font-size:.6rem;font-weight:700;color:var(--yellow)"><i class=\"fas fa-shield-alt\"></i>LINHA SEGURA</span>' : ''}
+            ${leg.is_btts ? '<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);border-radius:4px;padding:1px 7px;font-size:.6rem;font-weight:700;color:var(--purple)"><i class=\"fas fa-futbol\"></i>BTTS</span>' : ''}
+            ${leg.tier_bonus ? '<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:4px;padding:1px 7px;font-size:.6rem;font-weight:700;color:var(--gold)">💎 +VALOR</span>' : ''}
           </div>
           <!-- Meta row -->
           <div class="leg-meta" style="margin-top:7px">
