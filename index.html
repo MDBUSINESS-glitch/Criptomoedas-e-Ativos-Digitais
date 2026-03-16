@@ -836,7 +836,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
               <button class="mkt-pill" id="chart-m" onclick="setChartPeriod('m',this)">Mensal</button>
             </div>
           </div>
-          <canvas id="tr-chart" height="110" style="width:100%"></canvas>
+          <canvas id="tr-chart" height="130" style="width:100%;display:block"></canvas>
           <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap">
             <div style="font-size:.68rem;color:var(--t3)">📈 Melhor dia: <strong id="tr-best-day" style="color:var(--green)">—</strong></div>
             <div style="font-size:.68rem;color:var(--t3)">📉 Pior dia: <strong id="tr-worst-day" style="color:var(--red)">—</strong></div>
@@ -855,7 +855,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
             <input type="number" id="b-fair" step="0.01" placeholder="Fair odd" style="max-width:90px">
             <input type="number" id="b-stake" step="1" placeholder="Stake MZN" style="max-width:110px">
             <select id="b-res" style="min-width:140px">
-              <option value="p">⏳ Pending</option>
+              <option value="p" selected>⏳ Pending</option>
               <option value="w">✅ Won</option>
               <option value="l">❌ Lost</option>
               <option value="v">↩️ Void</option>
@@ -1128,7 +1128,7 @@ function toast(msg, type='i') {
   $('tw').appendChild(el);
   setTimeout(()=>{el.style.cssText='opacity:0;transform:translateX(110%);transition:all .3s';setTimeout(()=>el.remove(),320);},3800);
 }
-function openModal(t,h) { $('m-ttl').textContent=t; $('m-bdy').innerHTML=h; $('modal-ov').classList.add('on'); }
+function openModal(t,h) { const ttl=$('m-ttl'); if(ttl){ttl.innerHTML='';if(typeof t==='string'&&t.startsWith('<')){ttl.innerHTML=t;}else{ttl.textContent=t;}} $('m-bdy').innerHTML=h; $('modal-ov').classList.add('on'); }
 function closeModal() { $('modal-ov').classList.remove('on'); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeModal();closeAuth();closeMktPanel();} });
 
@@ -2539,11 +2539,18 @@ function showPalTicketModal(ticket, type, legs) {
           padding:10px;border-radius:8px;font-size:.8rem;font-weight:700;text-decoration:none">
         <i class="fab fa-whatsapp" style="font-size:1rem"></i>Partilhar WA
       </a>
-      <button onclick="registerTicketToTracker()" style="flex:1;
-        background:var(--blue);color:#fff;border:none;padding:10px;border-radius:8px;
-        font-size:.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
-        <i class="fas fa-plus-circle"></i>Registar no Tracker
-      </button>
+      <div style="flex:1;display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;align-items:center;gap:6px;background:var(--bg-card2);border:1px solid var(--border);border-radius:7px;padding:5px 10px">
+          <span style="font-size:.72rem;color:var(--t3);white-space:nowrap">Stake MZN</span>
+          <input id="reg-stake-input" type="number" value="200" min="1" step="50"
+            style="background:none;border:none;color:var(--green);font-size:.9rem;font-weight:700;width:80px;outline:none;text-align:right">
+        </div>
+        <button onclick="registerTicketToTracker()" style="
+          background:var(--blue);color:#fff;border:none;padding:9px;border-radius:7px;
+          font-size:.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+          <i class="fas fa-plus-circle"></i>Add to Tracker
+        </button>
+      </div>
     </div>
     <div style="font-size:.68rem;color:var(--t3);text-align:center;margin-top:10px">
       <i class="fas fa-info-circle" style="color:var(--yellow)"></i>
@@ -2562,11 +2569,10 @@ function registerTicketToTracker() {
   const bets = getBets();
   const totalOdds = parseFloat(ticket.total_odds_best);
   const defaultStake = 200;
-  // Register as single combined bet
-  // Ask for stake amount
-  const stakeStr = prompt('Stake amount (MZN):', '200');
-  const stake = parseFloat(stakeStr);
-  if (isNaN(stake) || stake <= 0) { toast('Stake inválido','w'); return; }
+  // Get stake from input inside the modal (or default 200)
+  const stakeInputEl = document.getElementById('reg-stake-input');
+  const stakeStr = stakeInputEl ? stakeInputEl.value : '200';
+  const stake = parseFloat(stakeStr) || 200;
   bets.unshift({
     id: Date.now(),
     date: new Date().toLocaleDateString('pt-PT'),
@@ -2649,69 +2655,7 @@ function exportCSV() {
   const bets = getBets();
   if (!bets.length) { toast('Sem apostas para exportar','w'); return; }
   const rows = [['Data','Jogo','Mercado','Odd','Fair','CLV%','Stake','Resultado','P/L']];
-  bets.forEach(b => rows.push([b.date,b.game,b.mkt||'',b.odd,b.fair||'',b.clv||'',b.stake,b.res==='w'?'Ganhou':b.res==='l'?'Perdeu':'Pendente',b.pl||0]));
-  const csv = rows.map(r=>r.join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'manueldanca_bets_' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
-  toast('CSV exportado!','s');
-}
-
-let G_CHART_PERIOD = 'd';
-let G_CHART_INSTANCE = null;
-
-function setChartPeriod(p, el) {
-  G_CHART_PERIOD = p;
-  $$('#tr-chart').length||0;
-  $$('.mkt-pill').forEach(b=>{ if(['chart-d','chart-w','chart-m'].includes(b.id)) b.classList.remove('active'); });
-  if(el) el.classList.add('active');
-  renderTracker();
-}
-
-function renderTracker() {
-  const bets    = getBets();
-  const done    = bets.filter(b=>b.res!=='p');
-  const won     = done.filter(b=>b.res==='w');
-  // Exclude void from profit calc but keep in denominator for ROI
-  const profit  = done.reduce((s,b)=>s+(typeof b.pl==='number'?b.pl:0),0);
-  const stk     = done.filter(b=>b.res!=='v').reduce((s,b)=>s+parseFloat(b.stake||0),0);
-  const roi     = stk ? (profit/stk*100) : 0;
-  const balance = getBalance();
-  const capital = balance + profit;
-  const avgOdd  = done.length ? (done.reduce((s,b)=>s+b.odd,0)/done.length).toFixed(2) : null;
-
-  // Restore balance input
-  const bi = $('tr-balance');
-  if (bi && !bi.value && balance) bi.value = balance;
-
-  // KPI updates
-  const tp=$('tr-prof'); if(tp){tp.textContent='MZN '+profit.toFixed(0);tp.style.color=profit>=0?'var(--green)':'var(--red)';}
-  const tr=$('tr-roi'); if(tr){tr.textContent=roi.toFixed(1)+'%';tr.style.color=roi>=0?'var(--blue)':'var(--red)';}
-  const tt=$('tr-tot'); if(tt) tt.textContent=bets.length;
-  const settled=done.filter(b=>b.res!=='v');
-  const tw=$('tr-wr'); if(tw) tw.textContent=settled.length?(won.length/settled.length*100).toFixed(0)+'%':'0%';
-  const ts=$('tr-stk'); if(ts) ts.textContent='MZN '+stk.toFixed(0);
-  const ta=$('tr-avgodds'); if(ta) ta.textContent=avgOdd||'—';
-  const tc=$('tr-capital'); if(tc){tc.textContent='MZN '+capital.toFixed(0);tc.style.color=capital>=balance?'var(--green)':'var(--red)';}
-
-  // ── Build chart data ──
-  const grouped = {};
-  done.forEach(b => {
-    const dt = new Date(b.date.split('/').reverse().join('-') || Date.now());
-    let key;
-    if (G_CHART_PERIOD==='d') key = b.date;
-    else if (G_CHART_PERIOD==='w') {
-      const week = Math.floor((dt - new Date(dt.getFullYear(),0,1)) / 604800000);
-      key = dt.getFullYear() + '-W' + String(week).padStart(2,'0');
-    } else {
-      key = dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0');
-    }
-    grouped[key] = (grouped[key]||0) + b.pl;
-  });
-
-  const keys    = Object.keys(grouped).sort();
-  const profits = keys.map(k => grouped[k]);
+  bets.forEach(b => { const rl=resLabel(b.res); rows.push([b.date,b.game,b.mkt||'',b.odd,b.fair||'',b.clv||'',b.stake,rl.text,(parseFloat(b.pl)||0).toFixed(0)]); });;
   let cumulative = balance;
   const cumValues = profits.map(p => { cumulative += p; return cumulative; });
   const startVal  = balance || 0;
@@ -2737,62 +2681,119 @@ function renderTracker() {
   const pLbl = $('tr-period-label');
   if (pLbl) pLbl.textContent = G_CHART_PERIOD==='d'?'Diário':G_CHART_PERIOD==='w'?'Semanal':'Mensal';
 
-  // ── Draw Chart ──
-  const canvas = $('tr-chart');
-  if (canvas && cumValues.length >= 2) {
-    const ctx = canvas.getContext('2d');
-    const W = canvas.parentElement.clientWidth - 10;
-    canvas.width  = W > 0 ? W : 600;
-    canvas.height = 110;
-    const cw = canvas.width, ch = canvas.height;
-    const pad = { l:48, r:12, t:10, b:22 };
-    const dw = cw - pad.l - pad.r;
-    const dh = ch - pad.t - pad.b;
+  // ── Draw Chart (wrapped in try/catch — never blocks table render) ──
+  try { const canvas = $('tr-chart');
+    if (canvas && cumValues.length >= 2) {
+      const ctx = canvas.getContext('2d');
+      const W = canvas.parentElement.clientWidth - 4;
+      canvas.width  = W > 0 ? W : 700;
+      canvas.height = 130;
+      const cw = canvas.width, ch = canvas.height;
+      const pad = { l:60, r:16, t:14, b:26 };
+      const dw = cw - pad.l - pad.r;
+      const dh = ch - pad.t - pad.b;
+      ctx.clearRect(0, 0, cw, ch);
 
-    ctx.clearRect(0, 0, cw, ch);
+      const minV = Math.min(...cumValues), maxV = Math.max(...cumValues);
+      const range = (maxV - minV) || 1;
+      const toX = i => pad.l + (i / (cumValues.length - 1)) * dw;
+      const toY = v => pad.t + dh - ((v - minV) / range) * dh;
+      const isGain = cumValues[cumValues.length - 1] >= (balance || cumValues[0]);
 
-    const minV = Math.min(...cumValues), maxV = Math.max(...cumValues);
-    const range = maxV - minV || 1;
-    const toX = i => pad.l + (i / (cumValues.length-1)) * dw;
-    const toY = v => pad.t + dh - ((v - minV) / range) * dh;
+      // Grid lines + Y labels
+      const gridLines = 5;
+      for (let i = 0; i <= gridLines; i++) {
+        const v   = minV + ((maxV - minV) / gridLines) * (gridLines - i);
+        const y   = pad.t + (dh / gridLines) * i;
+        ctx.strokeStyle = 'rgba(255,255,255,.05)';
+        ctx.lineWidth   = 1;
+        ctx.setLineDash([3, 5]);
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + dw, y); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle   = 'rgba(150,170,185,.65)';
+        ctx.font        = '9px Inter,system-ui,sans-serif';
+        ctx.textAlign   = 'right';
+        ctx.fillText('MZN ' + Math.round(v).toLocaleString(), pad.l - 5, y + 3);
+      }
 
-    // Grid
-    ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1;
-    for (let i=0; i<=4; i++) {
-      const y = pad.t + (dh/4)*i;
-      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l+dw, y); ctx.stroke();
-      const val = maxV - ((maxV-minV)/4)*i;
-      ctx.fillStyle = 'rgba(150,170,185,.7)'; ctx.font = '9px Inter,sans-serif'; ctx.textAlign='right';
-      ctx.fillText('MZN'+Math.round(val), pad.l-4, y+3);
-    }
+      // Zero / baseline line
+      if (balance && balance > minV && balance < maxV) {
+        const zy = toY(balance);
+        ctx.strokeStyle = 'rgba(255,255,255,.18)';
+        ctx.lineWidth   = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath(); ctx.moveTo(pad.l, zy); ctx.lineTo(pad.l + dw, zy); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(150,170,185,.5)';
+        ctx.font = '8px Inter,sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('Base', pad.l + 3, zy - 3);
+      }
 
-    // Fill
-    const isGain = cumValues[cumValues.length-1] >= startVal;
-    const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t+dh);
-    grad.addColorStop(0, isGain ? 'rgba(124,194,69,.35)' : 'rgba(230,94,76,.35)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.beginPath();
-    cumValues.forEach((v,i) => i===0 ? ctx.moveTo(toX(i),toY(v)) : ctx.lineTo(toX(i),toY(v)));
-    ctx.lineTo(toX(cumValues.length-1), pad.t+dh);
-    ctx.lineTo(toX(0), pad.t+dh);
-    ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      // Fill gradient
+      const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + dh);
+      grad.addColorStop(0, isGain ? 'rgba(124,194,69,.4)' : 'rgba(230,94,76,.4)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.beginPath();
+      cumValues.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
+      ctx.lineTo(toX(cumValues.length - 1), pad.t + dh);
+      ctx.lineTo(toX(0), pad.t + dh);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
 
-    // Line
-    ctx.beginPath();
-    cumValues.forEach((v,i) => i===0 ? ctx.moveTo(toX(i),toY(v)) : ctx.lineTo(toX(i),toY(v)));
-    ctx.strokeStyle = isGain ? '#7cc245' : '#e65e4c';
-    ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
+      // Main line
+      ctx.beginPath();
+      cumValues.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
+      ctx.strokeStyle = isGain ? '#7cc245' : '#e65e4c';
+      ctx.lineWidth   = 2.5;
+      ctx.lineJoin    = 'round';
+      ctx.lineCap     = 'round';
+      ctx.stroke();
 
-    // Dots for last point
-    const lx = toX(cumValues.length-1), ly = toY(cumValues[cumValues.length-1]);
-    ctx.beginPath(); ctx.arc(lx,ly,4,0,Math.PI*2);
-    ctx.fillStyle = isGain ? '#7cc245' : '#e65e4c'; ctx.fill();
+      // Dots on each data point (small)
+      cumValues.forEach((v, i) => {
+        if (i === 0 || i === cumValues.length - 1) return;
+        const isHigh = v === Math.max(...cumValues);
+        const isLow  = v === Math.min(...cumValues);
+        if (!isHigh && !isLow) return;
+        ctx.beginPath();
+        ctx.arc(toX(i), toY(v), 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = isHigh ? '#7cc245' : '#e65e4c';
+        ctx.fill();
+        ctx.strokeStyle = '#0a0f14';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
 
-    // X labels (first, middle, last)
-    ctx.fillStyle='rgba(150,170,185,.7)'; ctx.font='9px Inter,sans-serif'; ctx.textAlign='center';
-    const lbl = [0, Math.floor((keys.length-1)/2), keys.length-1];
-    lbl.forEach(i => { if(keys[i]) ctx.fillText(keys[i].slice(-5), toX(i), ch-4); });
-  }
+      // Last point dot
+      const lx = toX(cumValues.length - 1), ly = toY(cumValues[cumValues.length - 1]);
+      ctx.beginPath();
+      ctx.arc(lx, ly, 5, 0, Math.PI * 2);
+      ctx.fillStyle   = isGain ? '#7cc245' : '#e65e4c';
+      ctx.strokeStyle = '#0a0f14';
+      ctx.lineWidth   = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      // Tooltip-style value at last point
+      const lastVal = cumValues[cumValues.length - 1];
+      const lblTxt  = 'MZN ' + Math.round(lastVal).toLocaleString();
+      ctx.font        = 'bold 9px Inter,sans-serif';
+      ctx.textAlign   = lx > cw * 0.75 ? 'right' : 'left';
+      ctx.fillStyle   = isGain ? '#7cc245' : '#e65e4c';
+      ctx.fillText(lblTxt, lx + (ctx.textAlign === 'right' ? -9 : 9), ly - 8);
+
+      // X axis labels
+      ctx.fillStyle   = 'rgba(150,170,185,.65)';
+      ctx.font        = '9px Inter,sans-serif';
+      ctx.textAlign   = 'center';
+      const show = keys.length <= 7 ? keys.map((_, i) => i)
+        : [0, Math.floor((keys.length - 1) / 3), Math.floor(2 * (keys.length - 1) / 3), keys.length - 1];
+      show.forEach(i => {
+        if (keys[i]) ctx.fillText(keys[i].length > 7 ? keys[i].slice(-5) : keys[i], toX(i), ch - 6);
+      });
+    }  } catch(chartErr) { console.warn('Chart error:', chartErr); }
 
   // ── Bets Table ──
   if (!bets.length) {
