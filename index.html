@@ -45,8 +45,15 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .sub-list{padding-left:8px;margin-top:2px;display:none}
 .sub-list.open{display:block}
-.sub-item{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;font-size:.78rem;color:var(--t3);cursor:pointer;transition:all .12s}
-.sub-item:hover{background:var(--bg-card2);color:var(--t2)}
+.sub-list{padding-left:6px;margin-top:2px;display:none}
+.sub-list.open{display:block}
+.sub-item{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;font-size:.78rem;color:var(--t2);cursor:pointer;transition:all .14s;position:relative}
+.sub-item:hover{background:var(--bg-card2);color:var(--t1);padding-left:11px}
+.sub-item .s-ico{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0}
+.sub-item .s-flag{font-size:.7rem;flex-shrink:0}
+.sub-item .s-tier{font-size:.52rem;font-weight:700;padding:1px 4px;border-radius:3px;margin-left:auto;opacity:.6;flex-shrink:0}
+.sub-cat-hdr{font-size:.54rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);padding:8px 8px 3px;display:flex;align-items:center;gap:5px}
+.sub-cat-hdr i{font-size:.6rem}
 .sb-foot{padding:10px 12px;border-top:1px solid var(--border);flex-shrink:0}
 .api-pill{display:flex;align-items:center;gap:7px;background:var(--bg-card2);border:1px solid var(--border);border-radius:6px;padding:6px 9px;margin-bottom:6px}
 .api-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
@@ -445,6 +452,20 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 .btn-reset-bal:hover{background:rgba(230,94,76,.2)}
 .share-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;background:var(--bg-card2);color:var(--t2);border:1px solid var(--border);transition:all .14s}
 .share-btn:hover{color:var(--t1)}
+
+/* ── Dashboard Pro Improvements ── */
+.oj-kpi-grid{border-radius:12px}
+.oj-kpi:hover{background:var(--bg-card2);transition:background .15s}
+.oj-kpi-val{font-feature-settings:"tnum"}
+.chart-legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.chart-legend-item{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--t3)}
+.chart-legend-line{width:18px;height:2.5px;border-radius:2px}
+.chart-legend-bar{width:10px;height:10px;border-radius:2px}
+/* sidebar sport categories */
+.sub-cat-hdr{user-select:none}
+.sub-item .s-ico{transition:transform .12s}
+.sub-item:hover .s-ico{transform:scale(1.15)}
+
 @media(max-width:700px){
   #sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%);z-index:500}
   #sidebar.open{transform:none;box-shadow:12px 0 40px rgba(0,0,0,.8)}
@@ -534,7 +555,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
     </div>
     <a href="https://wa.me/258840330540" target="_blank" class="wa-row"><i class="fab fa-whatsapp" style="color:#25d366;width:14px"></i>840 330 540 -- 24/7</a>
     <a href="https://wa.me/258877480775" target="_blank" class="wa-row"><i class="fab fa-whatsapp" style="color:#25d366;width:14px"></i>877 480 775 -- 24/7</a>
-    <a href="mailto:dancamanuel@gmail.com" class="wa-row"><i class="fas fa-envelope" style="color:var(--blue);width:14px"></i>dancamanuel@gmail.com</a>
+    <a href="/cdn-cgi/l/email-protection#5034313e33313d313e25353c10373d31393c7e333f3d" class="wa-row"><i class="fas fa-envelope" style="color:var(--blue);width:14px"></i><span class="__cf_email__" data-cfemail="aecacfc0cdcfc3cfc0dbcbc2eec9c3cfc7c280cdc1c3">[email&#160;protected]</span></a>
   </div>
 </nav>
 
@@ -795,7 +816,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
               </div>
             </div>
             <div class="oj-section-body">
-              <div style="height:200px;position:relative"><canvas id="oj-main-chart" style="width:100%;height:100%;display:block"></canvas></div>
+              <div style="height:240px;position:relative"><canvas id="oj-main-chart" style="width:100%;height:100%;display:block"></canvas></div>
               <div class="profit-stat-row" style="margin:16px -18px -16px">
                 <div class="psr-item"><div class="psr-lbl">Total Profit <i class="fas fa-question-circle" style="color:var(--t4);cursor:help"></i></div><div class="psr-val" id="psr-profit">MZN 0</div></div>
                 <div class="psr-item"><div class="psr-lbl">Total Wagered</div><div class="psr-val" id="psr-wagered">MZN 0</div></div>
@@ -1030,7 +1051,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 </div>
 <div class="tw" id="tw"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 /* ═══════════════════════════════════════════════════════
    MANUEL DANÇA v7 — ENGINE COMPLETO
@@ -1057,39 +1078,70 @@ const ESPN_ENDPOINTS = {
 };
 
 const SPORTS = [
-  {k:'soccer_epl',                    n:'Premier League',    i:'\u26BD',c:'Soccer',tier:1},
-  {k:'soccer_spain_la_liga',          n:'La Liga',           i:'\u26BD',c:'Soccer',tier:1},
-  {k:'soccer_italy_serie_a',          n:'Serie A',           i:'\u26BD',c:'Soccer',tier:1},
-  {k:'soccer_germany_bundesliga',     n:'Bundesliga',        i:'\u26BD',c:'Soccer',tier:1},
-  {k:'soccer_france_ligue_one',       n:'Ligue 1',           i:'\u26BD',c:'Soccer',tier:1},
-  {k:'soccer_uefa_champs_league',     n:'Champions League',  i:'\u26BD',c:'Soccer',tier:1},
-  {k:'soccer_portugal_primeira_liga', n:'Primeira Liga',     i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_netherlands_eredivisie', n:'Eredivisie',        i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_belgium_first_div',      n:'Jupiler Pro League',i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_turkey_super_league',    n:'Süper Lig',         i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_greece_super_league',    n:'Super League Grécia',i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_scotland_premiership',   n:'Scottish Premier',  i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_austria_bundesliga',     n:'Bundesliga Áustria',i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_czech_republic_liga',    n:'Liga Checa',        i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_poland_ekstraklasa',     n:'Ekstraklasa',       i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_brazil_campeonato',      n:'Brasileirão',       i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_argentina_primera_division',n:'Primera División',i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_usa_mls',                n:'MLS',               i:'\u26BD',c:'Soccer',tier:2},
-  {k:'soccer_england_league1',        n:'ENG League One',    i:'\u26BD',c:'Soccer',tier:3},
-  {k:'soccer_england_league2',        n:'ENG League Two',    i:'\u26BD',c:'Soccer',tier:3},
-  {k:'soccer_england_efl_champ',      n:'ENG Championship',  i:'\u26BD',c:'Soccer',tier:3},
-  {k:'soccer_spain_segunda_division', n:'Segunda División',  i:'\u26BD',c:'Soccer',tier:3},
-  {k:'soccer_italy_serie_b',          n:'Serie B',           i:'\u26BD',c:'Soccer',tier:3},
-  {k:'soccer_germany_liga2',          n:'2. Bundesliga',     i:'\u26BD',c:'Soccer',tier:3},
-  {k:'soccer_france_ligue_two',       n:'Ligue 2',           i:'\u26BD',c:'Soccer',tier:3},
-  {k:'basketball_nba',                n:'NBA',               i:'\u1F3C0',c:'Basketball',tier:1},
-  {k:'basketball_euroleague',         n:'Euroliga',          i:'\u1F3C0',c:'Basketball',tier:2},
-  {k:'americanfootball_nfl',          n:'NFL',               i:'\u1F3C8',c:'Football',tier:1},
-  {k:'icehockey_nhl',                 n:'NHL',               i:'\u1F3D2',c:'Hockey',tier:1},
-  {k:'baseball_mlb',                  n:'MLB',               i:'\u26BE',c:'Baseball',tier:1},
-  {k:'mma_mixed_martial_arts',        n:'UFC / MMA',         i:'\u1F94A',c:'Combat',tier:1},
-  {k:'tennis_atp_french_open',        n:'Tennis ATP',        i:'\u1F3BE',c:'Tennis',tier:1},
-  {k:'tennis_wta_french_open',        n:'Tennis WTA',        i:'\u1F3BE',c:'Tennis',tier:1},
+  // ── UEFA Champions League & Europa ──
+  {k:'soccer_uefa_champs_league',      n:'Champions League',     i:'fa-star',      c:'UEFA',    tier:1, color:'#fbbf24'},
+  {k:'soccer_uefa_europa_league',      n:'Europa League',        i:'fa-star-half', c:'UEFA',    tier:1, color:'#f97316'},
+  {k:'soccer_uefa_conference_league',  n:'Conference League',    i:'fa-award',     c:'UEFA',    tier:2, color:'#10b981'},
+  // ── Top 5 Ligas ──
+  {k:'soccer_epl',                     n:'Premier League',       i:'fa-shield',    c:'Soccer',  tier:1, color:'#7cc245', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+  {k:'soccer_spain_la_liga',           n:'La Liga',              i:'fa-shield',    c:'Soccer',  tier:1, color:'#e65e4c', flag:'🇪🇸'},
+  {k:'soccer_italy_serie_a',           n:'Serie A',              i:'fa-shield',    c:'Soccer',  tier:1, color:'#00a8e8', flag:'🇮🇹'},
+  {k:'soccer_germany_bundesliga',      n:'Bundesliga',           i:'fa-shield',    c:'Soccer',  tier:1, color:'#e65e4c', flag:'🇩🇪'},
+  {k:'soccer_france_ligue_one',        n:'Ligue 1',              i:'fa-shield',    c:'Soccer',  tier:1, color:'#a78bfa', flag:'🇫🇷'},
+  // ── Outras Ligas Europa ──
+  {k:'soccer_portugal_primeira_liga',  n:'Primeira Liga',        i:'fa-shield-alt',c:'Soccer',  tier:2, color:'#e65e4c', flag:'🇵🇹'},
+  {k:'soccer_netherlands_eredivisie',  n:'Eredivisie',           i:'fa-shield-alt',c:'Soccer',  tier:2, color:'#f97316', flag:'🇳🇱'},
+  {k:'soccer_belgium_first_div',       n:'Jupiler Pro League',   i:'fa-shield-alt',c:'Soccer',  tier:2, color:'#fbbf24', flag:'🇧🇪'},
+  {k:'soccer_turkey_super_league',     n:'Süper Lig',            i:'fa-shield-alt',c:'Soccer',  tier:2, color:'#e65e4c', flag:'🇹🇷'},
+  {k:'soccer_greece_super_league',     n:'Super League Grécia',  i:'fa-shield-alt',c:'Soccer',  tier:2, color:'#00a8e8', flag:'🇬🇷'},
+  {k:'soccer_scotland_premiership',    n:'Scottish Premier',     i:'fa-shield-alt',c:'Soccer',  tier:2, color:'#a78bfa', flag:'🏴󠁧󠁢󠁳󠁣󠁴󠁿'},
+  {k:'soccer_austria_bundesliga',      n:'Bundesliga Áustria',   i:'fa-shield-alt',c:'Soccer',  tier:3, color:'#e65e4c', flag:'🇦🇹'},
+  // ── Campeonatos Nacionais (2ª Div) ──
+  {k:'soccer_england_efl_champ',       n:'ENG Championship',     i:'fa-layer-group',c:'Soccer', tier:2, color:'#7cc245', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+  {k:'soccer_england_league1',         n:'ENG League One',       i:'fa-layer-group',c:'Soccer', tier:3, color:'#7cc245'},
+  {k:'soccer_england_league2',         n:'ENG League Two',       i:'fa-layer-group',c:'Soccer', tier:3, color:'#7cc245'},
+  {k:'soccer_spain_segunda_division',  n:'Segunda División',     i:'fa-layer-group',c:'Soccer', tier:3, color:'#e65e4c'},
+  {k:'soccer_italy_serie_b',           n:'Serie B',              i:'fa-layer-group',c:'Soccer', tier:3, color:'#00a8e8'},
+  {k:'soccer_germany_liga2',           n:'2. Bundesliga',        i:'fa-layer-group',c:'Soccer', tier:3, color:'#e65e4c'},
+  {k:'soccer_france_ligue_two',        n:'Ligue 2',              i:'fa-layer-group',c:'Soccer', tier:3, color:'#a78bfa'},
+  // ── América ──
+  {k:'soccer_brazil_campeonato',       n:'Brasileirão',          i:'fa-trophy',    c:'America', tier:2, color:'#f97316', flag:'🇧🇷'},
+  {k:'soccer_argentina_primera_division',n:'Primera División',   i:'fa-trophy',    c:'America', tier:2, color:'#00a8e8', flag:'🇦🇷'},
+  {k:'soccer_usa_mls',                 n:'MLS',                  i:'fa-trophy',    c:'America', tier:2, color:'#e65e4c', flag:'🇺🇸'},
+  {k:'soccer_chile_campeonato',        n:'Chilean Primera',      i:'fa-trophy',    c:'America', tier:3, color:'#e65e4c', flag:'🇨🇱'},
+  {k:'soccer_mexico_ligamx',           n:'Liga MX',              i:'fa-trophy',    c:'America', tier:2, color:'#7cc245', flag:'🇲🇽'},
+  // ── FIFA / Seleções ──
+  {k:'soccer_conmebol_copa_america',   n:'Copa América',         i:'fa-globe',     c:'FIFA',    tier:1, color:'#00a8e8'},
+  {k:'soccer_fifa_world_cup',          n:'FIFA World Cup',       i:'fa-globe',     c:'FIFA',    tier:1, color:'#fbbf24'},
+  {k:'soccer_uefa_euro_qualification', n:'Euro Qualification',   i:'fa-globe',     c:'FIFA',    tier:1, color:'#00a8e8'},
+  {k:'soccer_africa_cup_of_nations',   n:'AFCON',                i:'fa-globe',     c:'FIFA',    tier:1, color:'#f97316'},
+  // ── Futebol Feminino ──
+  {k:'soccer_wsl',                     n:'WSL (Women)',          i:'fa-venus',     c:'Womens',  tier:1, color:'#a78bfa'},
+  {k:'soccer_france_d1_feminines',     n:'D1 Féminine',          i:'fa-venus',     c:'Womens',  tier:1, color:'#a78bfa', flag:'🇫🇷'},
+  {k:'soccer_sweden_allsvenskan',      n:'Women Allsvenskan',    i:'fa-venus',     c:'Womens',  tier:2, color:'#a78bfa'},
+  {k:'soccer_nwsl',                    n:'NWSL (USA Women)',     i:'fa-venus',     c:'Womens',  tier:2, color:'#a78bfa', flag:'🇺🇸'},
+  // ── Basketball ──
+  {k:'basketball_nba',                 n:'NBA',                  i:'fa-basketball-ball',c:'Basketball',tier:1,color:'#f97316'},
+  {k:'basketball_wnba',                n:'WNBA',                 i:'fa-basketball-ball',c:'Basketball',tier:2,color:'#f97316'},
+  {k:'basketball_ncaab',               n:'NCAA Basketball',      i:'fa-basketball-ball',c:'Basketball',tier:2,color:'#f97316'},
+  {k:'basketball_euroleague',          n:'Euroliga',             i:'fa-basketball-ball',c:'Basketball',tier:2,color:'#00a8e8'},
+  // ── American Football ──
+  {k:'americanfootball_nfl',           n:'NFL',                  i:'fa-football-ball',c:'Football',tier:1,color:'#00a8e8'},
+  {k:'americanfootball_ncaaf',         n:'NCAA Football',        i:'fa-football-ball',c:'Football',tier:2,color:'#00a8e8'},
+  // ── Ice Hockey ──
+  {k:'icehockey_nhl',                  n:'NHL',                  i:'fa-hockey-puck', c:'Hockey', tier:1,color:'#00a8e8'},
+  // ── Baseball ──
+  {k:'baseball_mlb',                   n:'MLB',                  i:'fa-baseball-ball',c:'Baseball',tier:1,color:'#e65e4c'},
+  // ── Combat Sports ──
+  {k:'mma_mixed_martial_arts',         n:'UFC / MMA',            i:'fa-fist-raised', c:'Combat', tier:1,color:'#e65e4c'},
+  {k:'boxing_boxing',                  n:'Boxing',               i:'fa-fist-raised', c:'Combat', tier:2,color:'#e65e4c'},
+  // ── Tennis ──
+  {k:'tennis_atp_french_open',         n:'Tennis ATP',           i:'fa-table-tennis', c:'Tennis',tier:1,color:'#7cc245'},
+  {k:'tennis_wta_french_open',         n:'Tennis WTA',           i:'fa-table-tennis', c:'Tennis',tier:1,color:'#a78bfa'},
+  // ── Golf / Rugby / Cricket ──
+  {k:'golf_pga_championship',          n:'PGA Golf',             i:'fa-golf-ball',    c:'Other',  tier:2,color:'#7cc245'},
+  {k:'rugbyleague_nrl',                n:'NRL Rugby',            i:'fa-football-ball',c:'Other',  tier:2,color:'#f97316'},
+  {k:'cricket_test_match',             n:'Cricket Test',         i:'fa-cricket',      c:'Other',  tier:2,color:'#7cc245'},
 ];
 
 const MKT_CATEGORIES = [
@@ -1759,25 +1811,87 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.act
 function buildSportsNav() {
   var nav = document.getElementById('sports-sub');
   if (!nav) return;
-  var navHtml = '';
+
+  // Group sports by category
+  var categories = {};
+  var catOrder = ['UEFA','Soccer','America','FIFA','Womens','Basketball','Football','Hockey','Baseball','Combat','Tennis','Other'];
+  var catMeta = {
+    'UEFA':       {icon:'fa-star',       label:'UEFA', color:'#fbbf24'},
+    'Soccer':     {icon:'fa-futbol',     label:'Futebol', color:'#7cc245'},
+    'America':    {icon:'fa-globe-americas', label:'América', color:'#f97316'},
+    'FIFA':       {icon:'fa-globe',      label:'FIFA / Seleções', color:'#00a8e8'},
+    'Womens':     {icon:'fa-venus',      label:'Futebol Feminino', color:'#a78bfa'},
+    'Basketball': {icon:'fa-basketball-ball', label:'Basketball', color:'#f97316'},
+    'Football':   {icon:'fa-football-ball', label:'American Football', color:'#00a8e8'},
+    'Hockey':     {icon:'fa-hockey-puck',label:'Ice Hockey', color:'#00a8e8'},
+    'Baseball':   {icon:'fa-baseball-ball', label:'Baseball', color:'#e65e4c'},
+    'Combat':     {icon:'fa-fist-raised',label:'Combat Sports', color:'#e65e4c'},
+    'Tennis':     {icon:'fa-table-tennis', label:'Tennis', color:'#7cc245'},
+    'Other':      {icon:'fa-award',      label:'Outros', color:'#9aa5b1'}
+  };
+
   SPORTS.forEach(function(s) {
-    navHtml += '<div class="sub-item" data-sk="' + s.k + '" onclick="quickSport(this.dataset.sk)">';
-    navHtml += '<span style="width:18px;text-align:center">' + s.i + '</span>';
-    navHtml += '<span>' + s.n + '</span></div>';
+    if (!categories[s.c]) categories[s.c] = [];
+    categories[s.c].push(s);
   });
+
+  var navHtml = '';
+  catOrder.forEach(function(cat) {
+    if (!categories[cat] || !categories[cat].length) return;
+    var meta = catMeta[cat] || {icon:'fa-circle', label:cat, color:'var(--t3)'};
+    navHtml += '<div class="sub-cat-hdr">';
+    navHtml += '<i class="fas ' + meta.icon + '" style="color:' + meta.color + '"></i>';
+    navHtml += meta.label;
+    navHtml += '</div>';
+
+    categories[cat].forEach(function(s) {
+      var icoColor = s.color || 'var(--t3)';
+      var tierBadge = s.tier === 3
+        ? '<span class="s-tier" style="background:rgba(107,114,128,.15);color:var(--t4)">2nd</span>'
+        : s.tier === 2
+        ? '<span class="s-tier" style="background:rgba(0,168,232,.08);color:rgba(0,168,232,.6)">SUB</span>'
+        : '';
+      navHtml += '<div class="sub-item" data-sk="' + s.k + '" onclick="quickSport(this.dataset.sk)">';
+      navHtml += '<div class="s-ico" style="background:' + icoColor + '22">';
+      navHtml += '<i class="fas ' + s.i + '" style="color:' + icoColor + '"></i></div>';
+      if (s.flag) {
+        navHtml += '<span class="s-flag">' + s.flag + '</span>';
+        navHtml += '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + s.n + '</span>';
+      } else {
+        navHtml += '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + s.n + '</span>';
+      }
+      navHtml += tierBadge;
+      navHtml += '</div>';
+    });
+  });
+
   nav.innerHTML = navHtml;
+
+  // Populate selects
   var opts = '<option value="">Sport…</option>';
-  SPORTS.forEach(function(s) {
-    opts += '<option value="' + s.k + '">' + s.i + ' ' + s.n + '</option>';
+  catOrder.forEach(function(cat) {
+    if (!categories[cat]) return;
+    opts += '<optgroup label="' + (catMeta[cat] ? catMeta[cat].label : cat) + '">';
+    categories[cat].forEach(function(s) {
+      opts += '<option value="' + s.k + '">' + s.n + '</option>';
+    });
+    opts += '</optgroup>';
   });
   var sbSp = document.getElementById('sb-sport');
   if (sbSp) sbSp.innerHTML = opts;
+
   ['ev-sport','arb-sport'].forEach(function(id) {
     var el = document.getElementById(id);
     if (!el) return;
-    el.innerHTML = '<option value="all">Todos</option>' + SPORTS.map(function(s) {
-      return '<option value="' + s.k + '">' + s.i + ' ' + s.n + '</option>';
-    }).join('');
+    el.innerHTML = '<option value="all">Todos</option>';
+    catOrder.forEach(function(cat) {
+      if (!categories[cat]) return;
+      el.innerHTML += '<optgroup label="' + (catMeta[cat] ? catMeta[cat].label : cat) + '">';
+      categories[cat].forEach(function(s) {
+        el.innerHTML += '<option value="' + s.k + '">' + s.n + '</option>';
+      });
+      el.innerHTML += '</optgroup>';
+    });
   });
 }
 function quickSport(k){go('sportsbook');var s=document.getElementById('sb-sport');if(s)s.value=k;G.sbSport=k;sbLoad();}
@@ -1905,7 +2019,8 @@ function renderOjDashboard() {
 }
 
 // ── PROFESSIONAL CHART ──
-function drawOjChart(canvasId, bets, balance, period, height = 200) {
+function drawOjChart(canvasId, bets, balance, period, height) {
+  height = height || 200;
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
@@ -1917,181 +2032,270 @@ function drawOjChart(canvasId, bets, balance, period, height = 200) {
     const dt = new Date(b.date ? b.date.split('/').reverse().join('-') : Date.now());
     let key;
     if (period === 'd') key = b.date || '?';
-    else if (period === 'w') { const w = Math.floor((dt - new Date(dt.getFullYear(), 0, 1)) / 604800000); key = dt.getFullYear() + '-W' + String(w).padStart(2,'0'); }
-    else key = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2,'0');
+    else if (period === 'w') {
+      const w = Math.floor((dt - new Date(dt.getFullYear(), 0, 1)) / 604800000);
+      key = dt.getFullYear() + '-W' + String(w).padStart(2,'0');
+    } else {
+      key = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2,'0');
+    }
     grouped[key] = (grouped[key] || 0) + (parseFloat(b.pl) || 0);
   });
 
   const keys = Object.keys(grouped).sort();
   const profits = keys.map(k => grouped[k]);
-
-  // Build cumulative values
   const startVal = balance || 0;
   let cum = startVal;
   const cumValues = [startVal, ...profits.map(p => { cum += p; return cum; })];
   const labels = ['Início', ...keys];
 
-  if (cumValues.length < 2) {
-    // Draw empty state
-    const W = canvas.parentElement.clientWidth - 2;
-    canvas.width = W > 0 ? W : 600;
-    canvas.height = height;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'rgba(150,170,185,.3)';
-    ctx.font = '12px Inter,sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Sem dados ainda', canvas.width / 2, height / 2);
-    return;
-  }
-
-  const W = canvas.parentElement.clientWidth - 2;
-  canvas.width = W > 0 ? W : 600;
+  // Canvas setup
+  const W = canvas.parentElement ? canvas.parentElement.clientWidth - 4 : 700;
+  canvas.width = W > 0 ? W : 700;
   canvas.height = height;
   const cw = canvas.width, ch = canvas.height;
   ctx.clearRect(0, 0, cw, ch);
 
-  const pad = { l: 66, r: 20, t: 18, b: 28 };
+  if (cumValues.length < 2) {
+    ctx.fillStyle = 'rgba(150,170,185,.25)';
+    ctx.font = '11px Inter,sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Adiciona apostas para ver o gráfico', cw / 2, ch / 2);
+    return;
+  }
+
+  const pad = { l: 70, r: 24, t: 20, b: 32 };
   const dw = cw - pad.l - pad.r;
   const dh = ch - pad.t - pad.b;
+  const n = profits.length;
+  const barW = n > 0 ? Math.max(3, Math.min(28, dw / n * 0.55)) : 20;
 
-  const minV = Math.min(...cumValues);
-  const maxV = Math.max(...cumValues);
-  const range = (maxV - minV) || Math.max(1, Math.abs(startVal) * 0.1) || 1;
-  const padded = range * 0.1;
-  const vMin = minV - padded;
-  const vMax = maxV + padded;
-  const vRange = vMax - vMin;
+  // Value ranges
+  const allVals = [...cumValues, ...profits];
+  const rawMin = Math.min(0, ...profits);
+  const rawMax = Math.max(0, ...profits, ...cumValues.map(v => v - startVal));
+  const cumMin = Math.min(...cumValues);
+  const cumMax = Math.max(...cumValues);
 
-  const toX = i => pad.l + (i / (cumValues.length - 1)) * dw;
-  const toY = v => pad.t + dh - ((v - vMin) / vRange) * dh;
+  // We'll use a DUAL scale: bars for period P&L, line for cumulative
+  const barRange = Math.max(Math.abs(rawMin), Math.abs(rawMax)) || 1;
+  const lineMin = cumMin - (cumMax - cumMin) * 0.08;
+  const lineMax = cumMax + (cumMax - cumMin) * 0.08;
+  const lineRange = (lineMax - lineMin) || 1;
+
+  const toX = i => pad.l + (i / Math.max(n - 1, 1)) * dw;
+  const toLineY = v => pad.t + dh - ((v - lineMin) / lineRange) * dh;
+  // Bars centered on zero
+  const zeroBarY = pad.t + dh * 0.72; // zero line for bars at 72% from top
+  const barScale = dh * 0.35 / barRange;
+  const toBarH = v => v * barScale;
 
   const isGain = cumValues[cumValues.length - 1] >= startVal;
   const lineColor = isGain ? '#7cc245' : '#e65e4c';
-  const fillColor0 = isGain ? 'rgba(124,194,69,.35)' : 'rgba(230,94,76,.35)';
-  const fillColor1 = 'rgba(10,15,20,0)';
 
-  // ── Background grid ──
-  const gridN = 4;
-  ctx.setLineDash([3, 5]);
+  // ── Grid lines ──
+  ctx.setLineDash([3, 6]);
   ctx.lineWidth = 1;
-  for (let i = 0; i <= gridN; i++) {
-    const v = vMin + (vRange / gridN) * (gridN - i);
-    const y = pad.t + (dh / gridN) * i;
-    ctx.strokeStyle = 'rgba(255,255,255,.05)';
+  const gridN = 5;
+  for (let gi = 0; gi <= gridN; gi++) {
+    const v = lineMin + (lineRange / gridN) * (gridN - gi);
+    const y = pad.t + (dh / gridN) * gi;
+    ctx.strokeStyle = 'rgba(255,255,255,.04)';
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + dw, y); ctx.stroke();
-    // Y labels
-    ctx.fillStyle = 'rgba(150,170,185,.7)';
-    ctx.font = '9px Inter,system-ui,sans-serif';
+    // Y label
+    ctx.fillStyle = 'rgba(150,170,185,.65)';
+    ctx.font = '9px Inter,sans-serif';
     ctx.textAlign = 'right';
-    const lbl = Math.abs(v) >= 1000 ? (v/1000).toFixed(1)+'k' : Math.round(v).toString();
-    ctx.fillText('MZN'+lbl, pad.l - 5, y + 3.5);
+    const absV = Math.abs(v);
+    const lbl = absV >= 10000 ? (v/1000).toFixed(0)+'k' : absV >= 1000 ? (v/1000).toFixed(1)+'k' : Math.round(v).toString();
+    ctx.fillText('MZN' + lbl, pad.l - 5, y + 3.5);
   }
   ctx.setLineDash([]);
 
   // ── Baseline (balance) ──
-  if (startVal && startVal > vMin && startVal < vMax) {
-    const zy = toY(startVal);
-    ctx.strokeStyle = 'rgba(255,255,255,.14)';
+  if (startVal >= lineMin && startVal <= lineMax) {
+    const by = toLineY(startVal);
+    ctx.strokeStyle = 'rgba(255,255,255,.15)';
     ctx.lineWidth = 1;
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath(); ctx.moveTo(pad.l, zy); ctx.lineTo(pad.l + dw, zy); ctx.stroke();
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(pad.l, by); ctx.lineTo(pad.l + dw, by); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(150,170,185,.45)';
-    ctx.font = '8px Inter,sans-serif';
+    ctx.fillStyle = 'rgba(150,170,185,.5)';
+    ctx.font = 'bold 8px Inter,sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('Base', pad.l + 3, zy - 3);
+    ctx.fillText('Base', pad.l + 4, by - 3);
   }
 
-  // ── Zero line ──
-  if (0 > vMin && 0 < vMax) {
-    const zy = toY(0);
-    ctx.strokeStyle = 'rgba(255,255,255,.1)';
+  // ── BARS (period P&L) ──
+  if (n > 0) {
+    profits.forEach(function(pl, i) {
+      const bx = toX(i) - barW / 2;
+      const isPos = pl >= 0;
+      const bh = Math.abs(toBarH(pl));
+      const by = isPos ? zeroBarY - bh : zeroBarY;
+
+      // Bar gradient
+      const grad = ctx.createLinearGradient(0, by, 0, by + bh);
+      if (isPos) {
+        grad.addColorStop(0, 'rgba(124,194,69,.85)');
+        grad.addColorStop(1, 'rgba(124,194,69,.25)');
+      } else {
+        grad.addColorStop(0, 'rgba(230,94,76,.25)');
+        grad.addColorStop(1, 'rgba(230,94,76,.85)');
+      }
+      ctx.fillStyle = grad;
+      const radius = Math.min(3, barW / 3);
+      ctx.beginPath();
+      ctx.roundRect(bx, by, barW, Math.max(bh, 2), isPos ? [radius, radius, 0, 0] : [0, 0, radius, radius]);
+      ctx.fill();
+
+      // Bar top value label (only if wide enough)
+      if (barW > 16 && Math.abs(pl) > 0) {
+        ctx.fillStyle = isPos ? '#7cc245' : '#e65e4c';
+        ctx.font = 'bold 8px Inter,sans-serif';
+        ctx.textAlign = 'center';
+        const lbl2 = Math.abs(pl) >= 1000 ? (pl/1000).toFixed(1)+'k' : (pl > 0 ? '+' : '') + Math.round(pl);
+        ctx.fillText(lbl2, bx + barW/2, isPos ? by - 3 : by + bh + 9);
+      }
+    });
+
+    // ── Zero line for bars ──
+    ctx.strokeStyle = 'rgba(255,255,255,.12)';
     ctx.lineWidth = 1;
     ctx.setLineDash([2, 3]);
-    ctx.beginPath(); ctx.moveTo(pad.l, zy); ctx.lineTo(pad.l + dw, zy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad.l, zeroBarY); ctx.lineTo(pad.l + dw, zeroBarY); ctx.stroke();
     ctx.setLineDash([]);
   }
 
-  // ── Gradient fill ──
-  const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + dh);
-  grad.addColorStop(0, fillColor0);
-  grad.addColorStop(0.6, isGain ? 'rgba(124,194,69,.08)' : 'rgba(230,94,76,.08)');
-  grad.addColorStop(1, fillColor1);
-  ctx.beginPath();
-  cumValues.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
-  ctx.lineTo(toX(cumValues.length - 1), pad.t + dh);
-  ctx.lineTo(toX(0), pad.t + dh);
-  ctx.closePath();
-  ctx.fillStyle = grad;
-  ctx.fill();
-
-  // ── Main line (smooth) ──
+  // ── TREND LINE (cumulative) ──
+  // Glow effect
+  ctx.shadowColor = lineColor;
+  ctx.shadowBlur = 8;
   ctx.beginPath();
   cumValues.forEach((v, i) => {
-    if (i === 0) { ctx.moveTo(toX(i), toY(v)); return; }
-    // Smooth curve via quadratic bezier
-    const x0 = toX(i-1), y0 = toY(cumValues[i-1]);
-    const x1 = toX(i), y1 = toY(v);
-    const cx = (x0 + x1) / 2;
-    ctx.bezierCurveTo(cx, y0, cx, y1, x1, y1);
+    const x = toX(Math.max(0, i - 1));
+    const y = toLineY(v);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
   ctx.strokeStyle = lineColor;
   ctx.lineWidth = 2.5;
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
   ctx.stroke();
+  ctx.shadowBlur = 0;
 
-  // ── Highlight peak/trough dots ──
+  // ── Fill under line ──
+  const grad2 = ctx.createLinearGradient(0, pad.t, 0, pad.t + dh);
+  grad2.addColorStop(0, isGain ? 'rgba(124,194,69,.18)' : 'rgba(230,94,76,.18)');
+  grad2.addColorStop(1, 'rgba(10,15,20,0)');
+  ctx.beginPath();
+  cumValues.forEach((v, i) => {
+    const x = toX(Math.max(0, i - 1));
+    const y = toLineY(v);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.lineTo(toX(cumValues.length - 2), pad.t + dh);
+  ctx.lineTo(toX(0), pad.t + dh);
+  ctx.closePath();
+  ctx.fillStyle = grad2;
+  ctx.fill();
+
+  // ── Moving average line (7-period) ──
+  if (profits.length >= 3) {
+    const maWin = Math.min(7, Math.floor(profits.length / 2));
+    const maVals = [];
+    for (let mi = 0; mi < profits.length; mi++) {
+      const lo2 = Math.max(0, mi - Math.floor(maWin/2));
+      const hi2 = Math.min(profits.length - 1, mi + Math.floor(maWin/2));
+      const avg = profits.slice(lo2, hi2+1).reduce((a,b) => a+b, 0) / (hi2-lo2+1);
+      maVals.push(avg);
+    }
+    // Convert MA to cumulative scale for display
+    let maCum = startVal;
+    const maCumVals = maVals.map(v => { maCum += v; return maCum; });
+
+    ctx.beginPath();
+    maCumVals.forEach((v, i) => {
+      const x = toX(i);
+      const y = toLineY(v);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = isGain ? 'rgba(124,194,69,.5)' : 'rgba(230,94,76,.5)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // ── Peak/Trough dots ──
   const maxIdx = cumValues.indexOf(Math.max(...cumValues));
   const minIdx = cumValues.indexOf(Math.min(...cumValues));
   [maxIdx, minIdx].forEach(idx => {
-    if (idx < 0 || idx === 0) return;
+    if (idx <= 0) return;
     const v = cumValues[idx];
     const isMax = idx === maxIdx;
-    const dotX = toX(idx), dotY = toY(v);
+    const dotX = toX(idx - 1), dotY = toLineY(v);
     ctx.beginPath();
-    ctx.arc(dotX, dotY, 4, 0, Math.PI * 2);
+    ctx.arc(dotX, dotY, 4.5, 0, Math.PI * 2);
     ctx.fillStyle = isMax ? '#7cc245' : '#e65e4c';
     ctx.strokeStyle = '#0a0f14';
     ctx.lineWidth = 2;
-    ctx.fill();
-    ctx.stroke();
+    ctx.fill(); ctx.stroke();
     // Tooltip
+    const absV2 = Math.abs(v);
+    const vLbl = (v >= 0 ? '+' : '') + (absV2 >= 1000 ? (v/1000).toFixed(1)+'k' : Math.round(v));
     ctx.fillStyle = isMax ? '#7cc245' : '#e65e4c';
-    ctx.font = 'bold 8px Inter,sans-serif';
+    ctx.font = 'bold 9px Inter,sans-serif';
     ctx.textAlign = dotX > cw * 0.75 ? 'right' : 'left';
-    const lv = Math.round(v);
-    ctx.fillText('MZN' + lv.toLocaleString(), dotX + (ctx.textAlign === 'right' ? -7 : 7), dotY - 6);
+    ctx.fillText('MZN' + vLbl, dotX + (ctx.textAlign === 'right' ? -8 : 8), dotY - 8);
   });
 
   // ── Last point ──
-  const lx = toX(cumValues.length - 1);
-  const ly = toY(cumValues[cumValues.length - 1]);
+  const lx = toX(cumValues.length - 2);
+  const ly = toLineY(cumValues[cumValues.length - 1]);
+  ctx.shadowColor = lineColor;
+  ctx.shadowBlur = 12;
   ctx.beginPath();
-  ctx.arc(lx, ly, 5.5, 0, Math.PI * 2);
+  ctx.arc(lx, ly, 6, 0, Math.PI * 2);
   ctx.fillStyle = lineColor;
   ctx.strokeStyle = '#0a0f14';
   ctx.lineWidth = 2.5;
-  ctx.fill();
-  ctx.stroke();
+  ctx.fill(); ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Last value label
+  const lastV = cumValues[cumValues.length - 1];
+  const lastLbl = (lastV >= 0 ? '+' : '') + (Math.abs(lastV) >= 1000 ? (lastV/1000).toFixed(1)+'k' : Math.round(lastV));
   ctx.fillStyle = lineColor;
-  ctx.font = 'bold 9px Inter,sans-serif';
+  ctx.font = 'bold 10px Inter,sans-serif';
   ctx.textAlign = lx > cw * 0.75 ? 'right' : 'left';
-  ctx.fillText('MZN' + Math.round(cumValues[cumValues.length - 1]).toLocaleString(), lx + (ctx.textAlign === 'right' ? -10 : 10), ly - 8);
+  ctx.fillText('MZN' + lastLbl, lx + (ctx.textAlign === 'right' ? -11 : 11), ly - 10);
 
   // ── X axis labels ──
   ctx.fillStyle = 'rgba(150,170,185,.6)';
   ctx.font = '9px Inter,sans-serif';
   ctx.textAlign = 'center';
-  const maxLabels = Math.min(labels.length, 8);
-  const step = Math.ceil(labels.length / maxLabels);
-  for (let i = 0; i < labels.length; i += step) {
-    const lbl = labels[i];
+  const maxLbls = Math.min(labels.length, Math.floor(dw / 50));
+  const step = Math.max(1, Math.ceil(labels.length / maxLbls));
+  labels.forEach(function(lbl, i) {
+    if (i % step !== 0 && i !== labels.length - 1) return;
     const short = lbl.length > 8 ? lbl.slice(-6) : lbl;
-    ctx.fillText(short, toX(i), ch - 6);
-  }
-}
+    ctx.fillText(short, toX(Math.max(0, i - 1)), ch - 6);
+  });
 
+  // ── Legend ──
+  const legendY = pad.t + 8;
+  ctx.fillStyle = 'rgba(124,194,69,.8)';
+  ctx.fillRect(cw - 120, legendY, 14, 3);
+  ctx.fillStyle = 'rgba(150,170,185,.6)';
+  ctx.font = '8px Inter,sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('Capital', cw - 102, legendY + 4);
+
+  ctx.fillStyle = 'rgba(0,168,232,.6)';
+  ctx.fillRect(cw - 120, legendY + 10, 14, 3);
+  ctx.fillStyle = 'rgba(150,170,185,.6)';
+  ctx.fillText('P/L período', cw - 102, legendY + 14);
+}
 // ── SWEAT STATION ──
 let G_SWEAT_MONTH = new Date();
 let G_SWEAT_TAB = 'live';
@@ -2385,15 +2589,4 @@ document.addEventListener('DOMContentLoaded', function() {
     var q = e.target.value.trim().toLowerCase();
     if (!q || q.length < 2) return;
     var hits = G.ev.filter(function(b){ return b.game.toLowerCase().includes(q); });
-    if (hits.length) toast(hits.length+' resultado(s) para "'+q+'"…','i');
-  });
-
-  go('live');
-  loadLive();
-  // Open tracker on dashboard tab by default
-  switchTrkTab('dash');
-  toast('Manuel Danca v7 carregado!', 's');
-});
-</script>
-</body>
-</html>
+    if (
