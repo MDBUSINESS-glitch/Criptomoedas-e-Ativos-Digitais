@@ -1051,7 +1051,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 </div>
 <div class="tw" id="tw"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 /* ═══════════════════════════════════════════════════════
    MANUEL DANÇA v7 — ENGINE COMPLETO
@@ -2589,4 +2589,14 @@ document.addEventListener('DOMContentLoaded', function() {
     var q = e.target.value.trim().toLowerCase();
     if (!q || q.length < 2) return;
     var hits = G.ev.filter(function(b){ return b.game.toLowerCase().includes(q); });
-    if (
+    if (hits.length) toast(hits.length + ' resultado(s) para "' + q + '"...','i');
+  });
+
+  go('live');
+  loadLive();
+  switchTrkTab('dash');
+  toast('Manuel Danca v7 carregado! ✅', 's');
+});
+</script>
+</body>
+</html>
