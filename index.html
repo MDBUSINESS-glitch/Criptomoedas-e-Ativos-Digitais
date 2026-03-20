@@ -452,7 +452,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
     </div>
     <a href="https://wa.me/258840330540" target="_blank" class="wa-row"><i class="fab fa-whatsapp" style="color:#25d366;width:14px"></i>840 330 540 -- 24/7</a>
     <a href="https://wa.me/258877480775" target="_blank" class="wa-row"><i class="fab fa-whatsapp" style="color:#25d366;width:14px"></i>877 480 775 -- 24/7</a>
-    <a href="/cdn-cgi/l/email-protection#5831363e37183539362d3d343c39363b39763b3735" class="wa-row"><i class="fas fa-envelope" style="color:var(--blue);width:14px"></i><span class="__cf_email__" data-cfemail="10797e767f507d717e65757c74717e73713e737f7d">[email&#160;protected]</span></a>
+    <a href="mailto:info@manueldanca.com" class="wa-row"><i class="fas fa-envelope" style="color:var(--blue);width:14px"></i>info@manueldanca.com</a>
   </div>
 </nav>
 <main id="main">
@@ -492,7 +492,6 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
         </div>
         <div class="sec-row"><div class="sec-h"><i class="fas fa-fire" style="color:var(--orange)"></i>Top Apostas +EV</div><button class="see-all" onclick="go('ev')">Ver todas &rarr;</button></div>
         <div class="data-box" style="margin-bottom:12px"><table class="gt" style="min-width:600px"><thead><tr><th>Sport</th><th>Jogo</th><th>Aposta</th><th>Casa</th><th>Odd</th><th>Fair</th><th>EV%</th><th>Hora</th></tr></thead><tbody id="d-ev-body"><tr><td colspan="8" class="empty">Carrega dados na pagina +EV</td></tr></tbody></table></div>
-
       </div>
     </div>
 
@@ -841,7 +840,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
   <div class="modal-box"><div class="modal-hdr"><h3 id="m-ttl"></h3><button class="modal-cls" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-bdy" id="m-bdy"></div></div>
 </div>
 <div class="tw" id="tw"></div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 // ── CONFIG ──
 let ODDS_KEY = localStorage.getItem('md_odds_key') || '901f7b8b61b01403304d0ba1a7d7f8ee';
@@ -1446,4 +1445,9 @@ document.addEventListener('DOMContentLoaded',function(){
   go('dashboard');
   // FIX BUG 6: sincroniza botao Pre-Game como ativo
   var evPreBtn=$('evt-pre');if(evPreBtn){evPreBtn.style.background='var(--green-dim)';evPreBtn.style.color='var(--green)';}
-  if(ODDS_KEY&&ODDS_KEY.length>10){setTimeout(f
+  if(ODDS_KEY&&ODDS_KEY.length>10){setTimeout(function(){testApiKey(ODDS_KEY);},1500);}
+  else{setApiStatus('err','Clica para configurar chave API');setTimeout(function(){var p=$('api-settings-panel');if(p&&p.style.display==='none')toggleApiSettings();},1000);}
+});
+</script>
+</body>
+</html>
