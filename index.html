@@ -592,7 +592,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
         <div style="text-align:center;padding:70px 20px">
           <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div>
           <div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">Pronto para gerar palpites</div>
-          <div style="font-size:.78rem;color:var(--t3);max-width:380px;margin:0 auto 16px;line-height:1.6">Clica em <strong style="color:#c4b5fd">Gerar Palpites</strong> para buscar dados da API, ou <strong style="color:var(--blue)">Usar Cache</strong> se ja carregaste o +EV.</div>
+          <div style="font-size:.78rem;color:var(--t3);max-width:380px;margin:0 auto 16px;line-height:1.6">Se ja esteve na pagina <strong style="color:var(--green)">+EV</strong>, clica <strong style="color:var(--blue)">Usar Cache</strong> — zero chamadas API. Ou clica <strong style="color:#c4b5fd">Gerar Palpites</strong> para buscar dados frescos.</div>
           <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
             <button class="btn btn-ai" onclick="loadPalpites()"><i class="fas fa-magic"></i>Gerar Palpites</button>
             <button class="btn btn-ghost" onclick="loadPalpitesFromCache()"><i class="fas fa-database"></i>Usar Cache</button>
@@ -932,6 +932,14 @@ function go(pid){
     if(pid==='ev')loadEV();
     else if(pid==='live')loadLive();
     else if(pid==='dashboard')loadDash();
+    else if(pid==='palpites'&&G.allData&&G.allData.length){
+      // Cache disponivel — auto-gera sem chamada API
+      setTimeout(function(){
+        if($('palpites-content')&&$('palpites-content').innerHTML.indexOf('Pronto para gerar')!==-1){
+          loadPalpitesFromCache();
+        }
+      },150);
+    }
     else if(pid==='pricing')renderPricing();
     else if(pid==='models')initModels();
     else if(pid==='tracker'){renderTracker();setTimeout(function(){renderOjDashboard();renderSweat();},80);}
@@ -1023,50 +1031,67 @@ function renderLive(){var grid=$('live-grid');var data=G_liveData;if(G.liveFilte
 
 // ── PALPITES (v2 — COM TODOS OS FIXES) ──
 
-// FIX 1: loadPalpites com fallback para G.allData cache
+// FIX 1 v2: loadPalpites — usa cache existente se disponível, API só se necessário
 async function loadPalpites(){
   var btn=$('btn-gen-palpites');
   if(btn){btn.disabled=true;btn.innerHTML='<div class="spin" style="width:14px;height:14px;border-width:2px;margin:0"></div> A analisar...';}
   var pc=$('palpites-content');
-  var hadData=G.allData&&G.allData.length>0;
-  var setStep=function(t,s){pc.innerHTML='<div style="text-align:center;padding:60px 20px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div><div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">'+t+'</div><div style="font-size:.78rem;color:var(--t3);max-width:400px;margin:0 auto">'+s+'</div></div>';};
+  function setStep(t,s){pc.innerHTML='<div style="text-align:center;padding:60px 20px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div><div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">'+t+'</div><div style="font-size:.78rem;color:var(--t3);max-width:400px;margin:0 auto">'+s+'</div></div>';}
   try{
+    // ── PRIORIDADE 1: usa cache se já temos dados ──
+    if(G.allData&&G.allData.length>0){
+      toast('A usar '+G.allData.length+' jogos em cache...','i');
+      setStep('A calcular EV...',G.allData.length+' jogos em cache');
+      await sleep(200);
+      var picksC=buildPalpitesAlgo({});
+      renderPalpites(Array.isArray(picksC)?picksC:[],{});
+      var tsC=$('palpites-ts');if(tsC)tsC.textContent='Cache '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
+      var daiC=$('dot-ai');if(daiC)daiC.style.background='var(--green)';
+      toast('Palpites gerados!','s');
+      return;
+    }
+    // ── PRIORIDADE 2: busca da API (só se cache vazio) ──
     if(!ODDS_KEY)throw new Error('Chave API necessaria \u2014 configura no banner amarelo acima.');
-    var PAL_SPORTS=SPORTS.filter(function(s){return s.tier===1;}).slice(0,15);
+    // Apenas 5 ligas top + h2h,totals (sem btts/draw_no_bet que causam 422 em não-futebol)
+    var PAL_SPORTS=SPORTS.filter(function(s){return['soccer_epl','soccer_spain_la_liga','soccer_italy_serie_a','soccer_germany_bundesliga','soccer_france_ligue_one','soccer_uefa_champs_league','basketball_nba','americanfootball_nfl','icehockey_nhl','baseball_mlb'].includes(s.k);});
     var pData=[];
     for(var si=0;si<PAL_SPORTS.length;si++){
       var s=PAL_SPORTS[si];
-      setStep('A carregar odds... ('+(si+1)+'/'+PAL_SPORTS.length+')',s.e+' '+s.n);
-      var d=await apiOdds(s.k,'h2h,spreads,totals,btts,draw_no_bet');
-      if(d&&d.length){d.forEach(function(g){g._sn=s.n;g._si=s.e||'\u26BD';g._sk=s.k;g._tier=1;});pData.push.apply(pData,d);}
-      await sleep(100);
+      setStep('A carregar... ('+(si+1)+'/'+PAL_SPORTS.length+')',s.e+' '+s.n);
+      // Mercados seguros: h2h+totals para todos; btts/dnb só para futebol
+      var isSoccer=s.k.startsWith('soccer');
+      var mkts=isSoccer?'h2h,spreads,totals,btts,draw_no_bet':'h2h,spreads,totals';
+      var d=await apiOdds(s.k,mkts);
+      // null = erro de rede (salta), [] = sem jogos (normal), array = dados
+      if(d===null){console.warn('[Palpites] Falha em '+s.k+' — a continuar...');}
+      else if(d.length){d.forEach(function(g){g._sn=s.n;g._si=s.e||'\u26BD';g._sk=s.k;g._tier=1;});pData.push.apply(pData,d);}
+      await sleep(120);
     }
-    // FIX: fallback para cache existente quando API retorna vazio
     if(pData.length){
       G.allData=pData;
+      var do_=$('dot-odds');if(do_)do_.style.background='var(--green)';
       toast(G.allData.length+' jogos carregados','s');
     } else if(G.allData&&G.allData.length){
-      toast('API sem novos dados \u2014 usando cache ('+G.allData.length+' jogos). Para refresh completo vai a +EV.','w');
+      toast('API sem novos dados \u2014 usando cache ('+G.allData.length+' jogos)','w');
     } else {
       throw new Error('API sem dados. Verifica: (1) Quota em the-odds-api.com/account (2) Chave valida (3) Abre +EV e clica Refresh, depois usa o botao Usar Cache.');
     }
     setStep('A calcular EV...',G.allData.length+' jogos');
-    await sleep(200);
+    await sleep(180);
     setStep('A verificar clima...','Open Meteo');
     var weather={};
-    var gfW=[...new Set(G.allData.map(function(g){return g.home_team;}))].slice(0,6);
+    var gfW=[...new Set(G.allData.filter(function(g){return g._sk&&g._sk.startsWith('soccer');}).map(function(g){return g.home_team;}))].slice(0,5);
     for(var gi=0;gi<gfW.length;gi++){var home=gfW[gi];var coords=getCoords(home);var w=await fetchWeather(coords[0],coords[1]);var game=G.allData.find(function(g){return g.home_team===home;});if(game&&w)weather[game.home_team+' vs '+game.away_team]=w;await sleep(40);}
     var dm=$('dot-meteo');if(dm)dm.style.background='var(--green)';
-    setStep('A construir palpites...','A seleccionar com maior EV+');
-    await sleep(300);
+    setStep('A construir palpites...','EV+ selection');
+    await sleep(250);
     var picks=buildPalpitesAlgo(weather);
     var dai=$('dot-ai');if(dai)dai.style.background='var(--green)';
     var ts=$('palpites-ts');if(ts)ts.textContent='Gerado as '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
     renderPalpites(Array.isArray(picks)?picks:[],weather);
     toast('Palpites gerados!','s');
   }catch(e){
-    // FIX: se falhou mas temos cache, tenta gerar do cache
-    if(hadData&&G.allData&&G.allData.length){
+    if(G.allData&&G.allData.length){
       toast('API falhou \u2014 a usar cache com '+G.allData.length+' jogos...','w');
       try{
         var picks2=buildPalpitesAlgo({});
