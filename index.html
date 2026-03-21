@@ -133,6 +133,9 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 .odd-cell.best .odd-v{color:var(--green)}
 .odd-v{font-size:.82rem;font-weight:600;color:var(--t1)}
 .odd-ev-tag{font-size:.6rem;color:var(--green);font-weight:600;margin-top:1px}
+.ev-filter-tag{font-size:.68rem;font-weight:600;padding:4px 11px;border-radius:5px;border:1px solid var(--border);background:var(--bg-card2);color:var(--t2);cursor:pointer;transition:all .15s}
+.ev-filter-tag:hover{border-color:var(--blue-brd);color:var(--blue)}
+.ev-filter-tag.on{background:rgba(0,168,232,.12);border-color:var(--blue-brd);color:var(--blue)}
 .odd-ev-neg{color:var(--red)}
 .ev-wrap{overflow-x:auto;padding-bottom:50px}
 .ev-tbl{width:100%;border-collapse:collapse;min-width:900px}
@@ -549,6 +552,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
         <div class="stat-c"><span class="stat-v sv-g" id="ev-best-v">0%</span><div class="stat-l">Best EV</div></div>
         <div class="stat-c"><span class="stat-v sv-y" id="ev-nsports">0</span><div class="stat-l">Desportos</div></div>
       </div>
+      <div id="ev-smart-filters" style="padding:0 0 8px 0"></div>
       <div class="ev-wrap"><table class="ev-tbl"><thead><tr><th style="width:72px">EV%</th><th style="width:68px">Stake</th><th style="width:90px">Hora</th><th>Jogo</th><th style="width:100px">Mercado</th><th style="width:170px">Aposta</th><th style="width:110px">Casa</th><th style="width:75px">No-Vig</th><th style="width:62px;text-align:center">Kelly</th></tr></thead>
       <tbody id="ev-body"><tr><td colspan="9" class="empty"><div class="spin"></div><div style="margin-top:8px">A carregar odds...</div></td></tr></tbody></table></div>
     </div>
@@ -883,6 +887,320 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 // -- CONFIG --
 let ODDS_KEY = localStorage.getItem('md_odds_key') || '901f7b8b61b01403304d0ba1a7d7f8ee';
 const BASE_ODDS = 'https://api.the-odds-api.com/v4';
+
+// 
+// STATS ENGINE - WhoScored-style stats from ESPN + market data
+// 
+
+// ESPN league slug map
+var ESPN_SLUGS={
+  'soccer_epl':'soccer/eng.1','soccer_spain_la_liga':'soccer/esp.1',
+  'soccer_italy_serie_a':'soccer/ita.1','soccer_germany_bundesliga':'soccer/ger.1',
+  'soccer_france_ligue_one':'soccer/fra.1','soccer_uefa_champs_league':'soccer/uefa.champions',
+  'soccer_portugal_primeira_liga':'soccer/por.1','soccer_usa_mls':'soccer/usa.1',
+  'soccer_brazil_campeonato':'soccer/bra.1','soccer_conmebol_copa_libertadores':'soccer/conmebol.libertadores',
+  'basketball_nba':'basketball/nba','americanfootball_nfl':'football/nfl',
+  'icehockey_nhl':'hockey/nhl','baseball_mlb':'baseball/mlb'
+};
+
+// Team stats cache: {teamKey: {shots,shotsOnTarget,yellowCards,redCards,corners,possession,cleanSheets,btts,over25,form,elo,xg,fetchedAt}}
+var G_TEAM_STATS={};
+// Match stats cache: {eventId: {home:{...},away:{...},fetchedAt}}
+var G_MATCH_STATS={};
+
+// Fetch ESPN team stats (season averages)
+async function fetchESPNTeamStats(teamName,leagueSlug){
+  var key=teamName+'|'+leagueSlug;
+  if(G_TEAM_STATS[key]&&(Date.now()-G_TEAM_STATS[key].fetchedAt<3600000))return G_TEAM_STATS[key];
+  try{
+    // Step 1: find team ID from scoreboard
+    var sbUrl='https://site.api.espn.com/apis/site/v2/sports/'+leagueSlug+'/scoreboard';
+    var r=await fetch(sbUrl,{cache:'no-store',signal:AbortSignal.timeout(7000)});
+    if(!r.ok)return null;
+    var sbData=await r.json();
+    var teamId=null;
+    (sbData.events||[]).forEach(function(ev){
+      (ev.competitions||[]).forEach(function(comp){
+        (comp.competitors||[]).forEach(function(c){
+          if(c.team&&(c.team.displayName||'').toLowerCase().includes(teamName.toLowerCase().split(' ')[0])){
+            teamId=c.team.id;
+          }
+        });
+      });
+    });
+    if(!teamId)return null;
+    // Step 2: fetch team statistics
+    var statsUrl='https://site.api.espn.com/apis/site/v2/sports/'+leagueSlug+'/teams/'+teamId+'/statistics';
+    var r2=await fetch(statsUrl,{cache:'no-store',signal:AbortSignal.timeout(7000)});
+    if(!r2.ok)return null;
+    var statsData=await r2.json();
+    var stats={teamId:teamId,leagueSlug:leagueSlug,fetchedAt:Date.now(),form:[],raw:{}};
+    // Parse statistics array
+    var cats=statsData.results&&statsData.results.stats||[];
+    cats.forEach(function(cat){
+      (cat.stats||[]).forEach(function(s){
+        stats.raw[s.name]=s.value;
+      });
+    });
+    G_TEAM_STATS[key]=stats;
+    return stats;
+  }catch(e){return null;}
+}
+
+// Fetch ESPN match summary stats (for a specific event)
+async function fetchESPNMatchStats(eventId,leagueSlug){
+  var key=eventId+'|'+leagueSlug;
+  if(G_MATCH_STATS[key]&&(Date.now()-G_MATCH_STATS[key].fetchedAt<1800000))return G_MATCH_STATS[key];
+  try{
+    var url='https://site.api.espn.com/apis/site/v2/sports/'+leagueSlug+'/summary?event='+eventId;
+    var r=await fetch(url,{signal:AbortSignal.timeout(8000)});
+    if(!r.ok)return null;
+    var data=await r.json();
+    var result={home:{},away:{},fetchedAt:Date.now()};
+    // boxscore.teams[0/1].statistics
+    var teams=(data.boxscore&&data.boxscore.teams)||[];
+    teams.forEach(function(t){
+      var isHome=(t.homeAway||'').toLowerCase()==='home';
+      var obj=isHome?result.home:result.away;
+      (t.statistics||[]).forEach(function(s){obj[s.name]=s.displayValue||s.value;});
+    });
+    G_MATCH_STATS[key]=result;
+    return result;
+  }catch(e){return null;}
+}
+
+// Fetch ELO rating from clubelo.com (soccer only, free, CORS-open)
+var G_ELO_CACHE={};
+async function fetchTeamELO(teamName){
+  var norm=teamName.replace(/\s+/g,'-');
+  if(G_ELO_CACHE[norm]!==undefined)return G_ELO_CACHE[norm];
+  try{
+    var url='http://api.clubelo.com/'+encodeURIComponent(norm);
+    var r=await fetch(url,{signal:AbortSignal.timeout(5000)});
+    if(!r.ok){G_ELO_CACHE[norm]=null;return null;}
+    var txt=await r.text();
+    var lines=txt.trim().split('\n');
+    if(lines.length<2){G_ELO_CACHE[norm]=null;return null;}
+    // CSV: Rank,Club,Country,Level,Elo,From,To
+    var last=lines[lines.length-1].split(',');
+    var elo=parseFloat(last[4]);
+    G_ELO_CACHE[norm]=isNaN(elo)?null:elo;
+    return G_ELO_CACHE[norm];
+  }catch(e){G_ELO_CACHE[norm]=null;return null;}
+}
+
+// Extract market-implied stats from Odds API game data
+function extractMarketStats(game){
+  if(!game||!game.bookmakers)return null;
+  var stats={impliedGoals:null,homeGoals:null,awayGoals:null,handicap:null,spread:null};
+  // Find totals market for xG proxy
+  game.bookmakers.forEach(function(bm){
+    (bm.markets||[]).forEach(function(mkt){
+      if(mkt.key==='totals'&&!stats.impliedGoals){
+        var over=(mkt.outcomes||[]).find(function(o){return o.name.toLowerCase().includes('over');});
+        if(over&&over.point)stats.impliedGoals=over.point;
+      }
+      if(mkt.key==='team_totals'){
+        (mkt.outcomes||[]).forEach(function(o){
+          if(o.description&&o.description.toLowerCase().includes(game.home_team.split(' ')[0].toLowerCase())&&o.name.toLowerCase().includes('over')&&!stats.homeGoals)stats.homeGoals=o.point;
+          if(o.description&&o.description.toLowerCase().includes(game.away_team.split(' ')[0].toLowerCase())&&o.name.toLowerCase().includes('over')&&!stats.awayGoals)stats.awayGoals=o.point;
+        });
+      }
+      if(mkt.key==='spreads'&&!stats.handicap){
+        var h=(mkt.outcomes||[]).find(function(o){return o.name===game.home_team;});
+        if(h&&h.point!=null)stats.handicap=h.point;
+      }
+    });
+  });
+  return stats;
+}
+
+// Derive form-based stats from Odds API historical data
+// Returns smart heuristics: over25%, btts%, cleanSheet%, highCards%
+function deriveFormStats(teamName,allData){
+  var teamGames=allData.filter(function(g){return g.home_team===teamName||g.away_team===teamName;});
+  if(!teamGames.length)return null;
+  var stats={gamesAnalyzed:teamGames.length,avgImpliedGoals:0,overGames:0,bttsRate:0};
+  var totalGoals=0,n=0;
+  teamGames.forEach(function(g){
+    var ms=extractMarketStats(g);
+    if(ms&&ms.impliedGoals){totalGoals+=ms.impliedGoals;n++;}
+  });
+  if(n)stats.avgImpliedGoals=(totalGoals/n).toFixed(2);
+  return stats;
+}
+
+// Master function: build full stats profile for a match
+async function buildMatchStatsProfile(game,leagueSlug){
+  var profile={
+    home:{name:game.home_team,elo:null,stats:null},
+    away:{name:game.away_team,elo:null,stats:null},
+    marketStats:null,
+    matchStats:null,
+    filters:{}
+  };
+  // Market-implied stats (instant, no API call needed)
+  profile.marketStats=extractMarketStats(game);
+  // Form stats from cached allData
+  if(G.allData&&G.allData.length){
+    profile.home.formStats=deriveFormStats(game.home_team,G.allData);
+    profile.away.formStats=deriveFormStats(game.away_team,G.allData);
+  }
+  // Smart filters based on market data
+  var mg=profile.marketStats;
+  if(mg){
+    profile.filters.over25=mg.impliedGoals&&mg.impliedGoals>=2.5?true:false;
+    profile.filters.lowScoring=mg.impliedGoals&&mg.impliedGoals<2.0?true:false;
+    profile.filters.homeAdvantage=mg.handicap&&mg.handicap<0?true:false;
+    profile.filters.awayValue=mg.handicap&&mg.handicap>1?true:false;
+    profile.filters.highGoals=mg.impliedGoals&&mg.impliedGoals>=3.0?true:false;
+  }
+  // Async: ELO ratings (soccer only)
+  if(leagueSlug&&leagueSlug.startsWith('soccer')){
+    try{
+      var eloH=await fetchTeamELO(game.home_team);
+      var eloA=await fetchTeamELO(game.away_team);
+      if(eloH)profile.home.elo=eloH;
+      if(eloA)profile.away.elo=eloA;
+      if(eloH&&eloA){
+        // ELO win probability (logistic function)
+        var eloDiff=eloH-eloA;
+        profile.eloWinProb=Math.round(1/(1+Math.pow(10,-eloDiff/400))*100);
+        profile.eloDiff=eloDiff;
+        profile.filters.strongFavELO=Math.abs(eloDiff)>150;
+        profile.filters.bigMismatch=Math.abs(eloDiff)>250;
+      }
+    }catch(e){}
+  }
+  return profile;
+}
+
+// Render WhoScored-style stats panel HTML
+function renderStatsPanel(profile,picks){
+  if(!profile)return '';
+  var mg=profile.marketStats;
+  var hElo=profile.home&&profile.home.elo;
+  var aElo=profile.away&&profile.away.elo;
+  var rows=[];
+
+  // ELO rating row
+  if(hElo&&aElo){
+    var hPct=profile.eloWinProb||50;
+    var aPct=100-hPct;
+    rows.push(
+      '<div style="margin-bottom:10px">'+
+      '<div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--t3);margin-bottom:4px">'+
+      '<span>'+profile.home.name.split(' ').slice(-1)[0]+' <strong style="color:var(--blue)">'+Math.round(hElo)+'</strong> ELO</span>'+
+      '<span style="color:var(--t3);font-weight:600">ELO Win Prob</span>'+
+      '<span>'+profile.away.name.split(' ').slice(-1)[0]+' <strong style="color:var(--blue)">'+Math.round(aElo)+'</strong> ELO</span>'+
+      '</div>'+
+      '<div style="display:flex;height:6px;border-radius:3px;overflow:hidden">'+
+      '<div style="width:'+hPct+'%;background:var(--green);border-radius:3px 0 0 3px"></div>'+
+      '<div style="width:'+aPct+'%;background:var(--red);border-radius:0 3px 3px 0"></div>'+
+      '</div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:.58rem;color:var(--t3);margin-top:2px">'+
+      '<span>'+hPct+'%</span><span>'+aPct+'%</span>'+
+      '</div></div>'
+    );
+  }
+
+  // Market-implied goals
+  if(mg&&mg.impliedGoals){
+    var g=parseFloat(mg.impliedGoals);
+    var barW=Math.min(100,g/5*100);
+    var gCol=g>=3?'var(--green)':g>=2.5?'var(--yellow)':'var(--red)';
+    rows.push(
+      '<div style="margin-bottom:8px">'+
+      '<div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--t3);margin-bottom:3px">'+
+      '<span>Total de Golos Esperado (xG mercado)</span><span style="font-weight:700;color:'+gCol+'">'+g.toFixed(1)+'</span>'+
+      '</div>'+
+      '<div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px">'+
+      '<div style="width:'+barW+'%;height:100%;background:'+gCol+';border-radius:3px;transition:width .4s"></div>'+
+      '</div>'+
+      '<div style="display:flex;gap:8px;margin-top:3px;font-size:.58rem;color:var(--t3)">'+
+      (mg.homeGoals?'<span>'+profile.home.name.split(' ').slice(-1)[0]+': ~'+mg.homeGoals+'</span>':'')+
+      (mg.awayGoals?'<span>'+profile.away.name.split(' ').slice(-1)[0]+': ~'+mg.awayGoals+'</span>':'')+
+      '</div></div>'
+    );
+  }
+
+  // Handicap/spread indicator
+  if(mg&&mg.handicap!=null){
+    var hcp=parseFloat(mg.handicap);
+    var hcpTxt=hcp===0?'Equilibrado':hcp<0?profile.home.name.split(' ').slice(-1)[0]+' favorito ('+hcp+')':profile.away.name.split(' ').slice(-1)[0]+' favorito (+'+Math.abs(hcp)+')';
+    rows.push(
+      '<div style="margin-bottom:8px">'+
+      '<div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--t3);margin-bottom:3px">'+
+      '<span>Handicap Asiatico</span><span style="font-weight:700;color:var(--blue)">'+hcpTxt+'</span>'+
+      '</div></div>'
+    );
+  }
+
+  // Smart filter tags
+  var tags=[];
+  var f=profile.filters||{};
+  if(f.over25)tags.push({t:'Over 2.5 Provavel',c:'var(--green)',bg:'rgba(124,194,69,.12)'});
+  if(f.highGoals)tags.push({t:'Alta Producao Ofensiva',c:'var(--green)',bg:'rgba(124,194,69,.12)'});
+  if(f.lowScoring)tags.push({t:'Baixa Pontuacao Esperada',c:'var(--yellow)',bg:'rgba(251,191,36,.1)'});
+  if(f.strongFavELO)tags.push({t:'Favorito ELO Forte',c:'var(--blue)',bg:'rgba(0,168,232,.1)'});
+  if(f.bigMismatch)tags.push({t:'Grande Desequilibrio',c:'var(--orange)',bg:'rgba(251,146,60,.1)'});
+  if(f.homeAdvantage)tags.push({t:'Vantagem Casa Clara',c:'var(--green)',bg:'rgba(124,194,69,.12)'});
+  if(f.awayValue)tags.push({t:'Valor no Visitante',c:'var(--purple)',bg:'rgba(167,139,250,.12)'});
+
+  if(tags.length){
+    rows.push(
+      '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">'+
+      tags.map(function(t){return'<span style="font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:5px;border:1px solid '+t.c+'44;background:'+t.bg+';color:'+t.c+'"><i class="fas fa-tag" style="font-size:.55rem;margin-right:3px"></i>'+t.t+'</span>';}).join('')+
+      '</div>'
+    );
+  }
+
+  if(!rows.length)return '';
+  return '<div id="stats-panel" style="background:rgba(0,168,232,.04);border:1px solid rgba(0,168,232,.15);border-radius:8px;padding:12px 14px;margin-bottom:10px">'+
+    '<div style="font-size:.6rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:5px"><i class="fas fa-chart-bar"></i> Analise Estatistica</div>'+
+    rows.join('')+
+    '</div>';
+}
+
+// Stats Filters Panel for EV+ page
+var G_EV_FILTERS={minGoals:null,maxGoals:null,onlyOverGames:false,onlyHomeAdv:false,onlyHighELO:false,onlyHandicap:false};
+function buildEVStatsFilters(){
+  return '<div id="ev-stats-f" style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:12px">'+
+    '<div style="font-size:.7rem;font-weight:700;color:var(--t2);margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="fas fa-sliders-h" style="color:var(--blue)"></i> Filtros de Mercado Inteligentes <span style="font-size:.6rem;font-weight:400;color:var(--t3)">(baseados nos dados de odds activos)</span></div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:7px">'+
+    '<button onclick="toggleEVF2(\'over25\')" id="evf-over25" class="ev-filter-tag">Over 2.5 Golos</button>'+
+    '<button onclick="toggleEVF2(\'handicap\')" id="evf-handicap" class="ev-filter-tag">Tem Handicap Asiatico</button>'+
+    '<button onclick="toggleEVF2(\'totals\')" id="evf-totals" class="ev-filter-tag">Team Totals disponiveis</button>'+
+    '<button onclick="toggleEVF2(\'highev\')" id="evf-highev" class="ev-filter-tag">EV+ Acima de 5%</button>'+
+    '<button onclick="toggleEVF2(\'lowodds\')" id="evf-lowodds" class="ev-filter-tag">Odds Favorito (1.30-1.85)</button>'+
+    '<button onclick="toggleEVF2(\'midodds\')" id="evf-midodds" class="ev-filter-tag">Odds Valor (1.85-3.00)</button>'+
+    '<button onclick="toggleEVF2(\'highkelly\')" id="evf-highkelly" class="ev-filter-tag">Kelly Alto (+3%)</button>'+
+    '<button onclick="resetEVF2()" style="font-size:.68rem;color:var(--t3);background:none;border:1px dashed var(--border);border-radius:5px;padding:4px 10px;cursor:pointer">Limpar Filtros</button>'+
+    '</div>'+
+    '</div>';
+}
+function toggleEVF2(f){
+  var btn=$('evf-'+f);
+  if(btn){var on=btn.classList.contains('on');btn.classList.toggle('on');G_EV_FILTERS[f]=!on;}
+  applyEVF2();
+}
+function resetEVF2(){
+  Object.keys(G_EV_FILTERS).forEach(function(k){G_EV_FILTERS[k]=false;});
+  $$('.ev-filter-tag').forEach(function(b){b.classList.remove('on');});
+  evRender(G.evTab==='live'?G.ev.filter(function(b){return new Date(b.time)<new Date();}):G.ev.filter(function(b){return new Date(b.time)>=new Date();}));
+}
+function applyEVF2(){
+  var bets=G.evTab==='live'?G.ev.filter(function(b){return new Date(b.time)<new Date();}):G.ev.filter(function(b){return new Date(b.time)>=new Date();});
+  if(G_EV_FILTERS.over25)bets=bets.filter(function(b){var ms=b._game?extractMarketStats(b._game):null;return ms&&ms.impliedGoals&&parseFloat(ms.impliedGoals)>=2.5;});
+  if(G_EV_FILTERS.handicap)bets=bets.filter(function(b){return b.mktKey==='spreads'||b.mktKey==='alternate_spreads';});
+  if(G_EV_FILTERS.totals)bets=bets.filter(function(b){return b.mktKey==='team_totals'||b.mktKey==='alternate_totals';});
+  if(G_EV_FILTERS.highev)bets=bets.filter(function(b){return parseFloat(b.ev)>=5;});
+  if(G_EV_FILTERS.lowodds)bets=bets.filter(function(b){return b.odds>=1.30&&b.odds<=1.85;});
+  if(G_EV_FILTERS.midodds)bets=bets.filter(function(b){return b.odds>1.85&&b.odds<=3.00;});
+  if(G_EV_FILTERS.highkelly)bets=bets.filter(function(b){return parseFloat(b.kelly)>=3;});
+  evRender(bets);
+}
+
 const ESPN_ENDPOINTS = {
   'epl':    {url:'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard',    label:'\u26BD Premier League',sport:'soccer'},
   'laliga': {url:'https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard',    label:'\u26BD La Liga',sport:'soccer'},
@@ -1235,6 +1553,9 @@ async function loadEV(force){
   if(mk!=='all')bets=bets.filter(function(b){return b.mktKey===mk;});
   G.ev=bets;
   $('ev-total').textContent=bets.length;
+  // Inject smart filters panel
+  var sfContainer=$('ev-smart-filters');
+  if(sfContainer)sfContainer.innerHTML=buildEVStatsFilters();
   if(bets.length){var avg=bets.reduce(function(s,b){return s+parseFloat(b.ev);},0)/bets.length;$('ev-avg-v').textContent=(avg>=0?'+':'')+avg.toFixed(1)+'%';var bestEV=bets[0]?parseFloat(bets[0].ev):0;$('ev-best-v').textContent=(bestEV>=0?'+':'')+bets[0].ev+'%';$('ev-nsports').textContent=[...new Set(bets.map(function(b){return b.sport;}))].length;}
   var now=new Date();
   evRender(G.evTab==='live'?bets.filter(function(b){return new Date(b.time)<now;}):bets.filter(function(b){return new Date(b.time)>=now;}));
@@ -1506,18 +1827,27 @@ async function fetchAIAnalysis(p) {
     var _bal=getBalance()||5000;var stakeRec=Math.max(100,Math.round((_bal*kelly/100)/50)*50);
     var gameDate='hoje';
     try{if(p.game_time)gameDate=new Date(p.game_time).toLocaleDateString('pt-PT',{weekday:'long',day:'2-digit',month:'long'});}catch(de){}
+    var _gData=G.allData&&G.allData.find(function(g){return g.home_team===p.home&&g.away_team===p.away;});
+    var _ms=_gData?extractMarketStats(_gData):null;
+    var _msTxt='';
+    if(_ms){
+      if(_ms.impliedGoals)_msTxt+='Golos esperados (mercado): '+_ms.impliedGoals+'. ';
+      if(_ms.homeGoals)_msTxt+=p.home+' total esperado: '+_ms.homeGoals+'. ';
+      if(_ms.awayGoals)_msTxt+=p.away+' total esperado: '+_ms.awayGoals+'. ';
+      if(_ms.handicap!=null)_msTxt+='Handicap asiatico: '+(p.home)+' '+(_ms.handicap>0?'+':'')+_ms.handicap+'. ';
+    }
     var prompt='Jogo: '+p.home+' vs '+p.away+
       ' | Liga: '+p.sport+' | Data: '+gameDate+
       ' | Aposta: '+p.pick+' ('+p.market+')'+
       ' | Odd: '+odds+' Fair: '+fair+' EV: +'+ev.toFixed(1)+'%'+
-      ' | Probabilidade real: ~'+prob.toFixed(0)+'%'+
+      ' | Probabilidade: ~'+prob.toFixed(0)+'%'+
       ' | Kelly: '+kelly.toFixed(1)+'% | Stake: MZN '+stakeRec+
-      ' | Casa: '+p.bookmaker+' (media mercado: '+p.odds_avg+')'+
-      '\n\nEscreve uma analise do evento em 3-4 frases em portugues de Mocambique.'+
-      ' Foca no contexto desportivo do jogo (as equipas, o campeonato, o momento da epoca),'+
-      ' explica tacticamente porque esta aposta faz sentido,'+
-      ' e menciona o edge de valor (+'+ev.toFixed(1)+'%).'+
-      ' Nao repitas apenas os numeros. Fala do jogo. Maximo 90 palavras.';
+      ' | Casa: '+p.bookmaker+
+      (_msTxt?' | Dados de mercado: '+_msTxt:'')+
+      '\n\nEscreve analise em 3-4 frases em portugues de Mocambique.'+
+      ' Foca no contexto desportivo e tattico (equipas, campeonato, forma).'+
+      ' Usa dados de mercado se disponiveis (golos esperados, handicap).'+
+      ' Explica o edge de valor. Nao repitas numeros. Maximo 90 palavras.';
     var body=JSON.stringify({
       model:'claude-sonnet-4-20250514',
       max_tokens:250,
