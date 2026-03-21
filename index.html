@@ -416,6 +416,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
   </div>
   <div class="sb-nav">
     <div class="nav-item" data-pg="palpites"><i class="fas fa-magic nav-icon" style="color:#c4b5fd"></i>Palpites Hoje<span class="nav-badge nb-ai">AI</span></div>
+    <div class="nav-item" data-pg="tripla"><i class="fas fa-star nav-icon" style="color:var(--gold)"></i>Tripla do Dia<span class="nav-badge" style="background:rgba(245,158,11,.1);color:var(--gold);border:1px solid rgba(245,158,11,.3)">HOT</span></div>
     <div style="height:1px;background:var(--border);margin:4px 0"></div>
     <div class="nav-item" data-pg="ev"><i class="fas fa-chart-line nav-icon"></i>Positive EV</div>
     <div class="nav-item" data-pg="sportsbook"><i class="fas fa-table nav-icon"></i>Sportsbook<span class="nav-badge nb-new">Live</span></div>
@@ -490,7 +491,8 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
         <div class="qa-grid">
           <div class="qa qa-g" onclick="go('ev')"><div class="qa-ico" style="background:rgba(124,194,69,.1);color:var(--green)"><i class="fas fa-chart-line"></i></div><div class="qa-t">Positive EV</div><div class="qa-d">Apostas com valor esperado positivo</div></div>
           <div class="qa qa-b" onclick="go('sportsbook')"><div class="qa-ico" style="background:rgba(0,168,232,.1);color:var(--blue)"><i class="fas fa-table"></i></div><div class="qa-t">Sportsbook Screen</div><div class="qa-d">Comparar odds em tempo real</div></div>
-          <div class="qa qa-y" onclick="go('palpites')"><div class="qa-ico" style="background:rgba(167,139,250,.1);color:#c4b5fd"><i class="fas fa-magic"></i></div><div class="qa-t">Palpites IA</div><div class="qa-d">Dupla + Tripla com EV positivo</div></div>
+          <div class="qa qa-y" onclick="go('palpites')"><div class="qa-ico" style="background:rgba(167,139,250,.1);color:#c4b5fd"><i class="fas fa-magic"></i></div><div class="qa-t">Palpites IA</div><div class="qa-d">Seleccoes com EV positivo</div></div>
+          <div class="qa" style="border-left-color:var(--gold)" onclick="go('tripla')"><div class="qa-ico" style="background:rgba(245,158,11,.1);color:var(--gold)"><i class="fas fa-star"></i></div><div class="qa-t" style="color:var(--gold)">Tripla do Dia</div><div class="qa-d">Seleccao premium do sistema</div></div>
         </div>
         <div class="sec-row"><div class="sec-h"><i class="fas fa-fire" style="color:var(--orange)"></i>Top Apostas +EV</div><button class="see-all" onclick="go('ev')">Ver todas &rarr;</button></div>
         <div class="data-box" style="margin-bottom:12px"><table class="gt" style="min-width:600px"><thead><tr><th>Sport</th><th>Jogo</th><th>Aposta</th><th>Casa</th><th>Odd</th><th>Fair</th><th>EV%</th><th>Hora</th></tr></thead><tbody id="d-ev-body"><tr><td colspan="8" class="empty">Carrega dados na pagina +EV</td></tr></tbody></table></div>
@@ -816,6 +818,47 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
       <div class="plans-sec"><div class="plans-grid" id="plans-grid"></div></div>
       <div class="faq-sec"><h3 class="faq-h">Perguntas Frequentes</h3><div id="faq-list"></div></div>
     </div>
+    <!-- TRIPLA DO DIA PAGE -->
+    <div id="pg-tripla" class="page" style="overflow-y:auto">
+      <div style="max-width:760px;margin:0 auto;padding:20px 16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+              <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(245,158,11,.25),rgba(251,191,36,.1));border:1px solid rgba(245,158,11,.4);display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-star" style="color:var(--gold);font-size:.9rem"></i>
+              </div>
+              <div>
+                <div style="font-size:1.2rem;font-weight:800;color:var(--gold);letter-spacing:-.5px">Tripla do Dia</div>
+                <div style="font-size:.72rem;color:var(--t3)">Selecao do sistema -- alta probabilidade combinada -- reservada diariamente</div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button onclick="refreshTriplaPage()" class="btn btn-ghost" style="font-size:.79rem"><i class="fas fa-sync-alt"></i> Actualizar</button>
+            <button onclick="go('palpites')" class="btn btn-ghost" style="font-size:.79rem"><i class="fas fa-magic"></i> Ver todos os Palpites</button>
+          </div>
+        </div>
+        <!-- Info banner -->
+        <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px 16px;margin-bottom:18px;display:flex;align-items:flex-start;gap:10px">
+          <i class="fas fa-info-circle" style="color:var(--gold);margin-top:2px;flex-shrink:0"></i>
+          <div style="font-size:.76rem;color:var(--t2);line-height:1.65">
+            A <strong style="color:var(--gold)">Tripla do Dia</strong> e seleccionada automaticamente pelo modelo quantitativo com base em 3 criterios: (1) <strong>EV+ positivo</strong> em cada leg, (2) <strong>probabilidade combinada maxima</strong> (picks com ~55-70% de prob. individual), (3) <strong>odd combinada entre 2.10 e 3.50</strong> para equilibrio risco/retorno. Nao e uma garantia -- e valor esperado positivo a longo prazo.
+          </div>
+        </div>
+        <!-- Tripla card container -->
+        <div id="tripla-page-content">
+          <div style="text-align:center;padding:60px 20px;color:var(--t3)">
+            <div class="spin" style="margin:0 auto 16px"></div>
+            <div>A calcular Tripla do Dia...</div>
+          </div>
+        </div>
+        <!-- History -->
+        <div id="tripla-history-section" style="margin-top:20px;display:none">
+          <div style="font-size:.84rem;font-weight:700;color:var(--t1);margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="fas fa-history" style="color:var(--t3)"></i>Historico de Triplas</div>
+          <div id="tripla-history-list"></div>
+        </div>
+      </div>
+    </div>
     <div id="pg-deposit" class="page"><div class="coming"><i class="fas fa-piggy-bank"></i><h2>Deposit Optimizer -- Em Breve</h2></div></div>
     <div id="pg-sharp" class="page"><div class="coming"><i class="fas fa-crosshairs"></i><h2>Sharp Money -- Em Breve</h2></div></div>
   </div>
@@ -970,6 +1013,7 @@ function go(pid){
     else if(pid==='live')loadLive();
     else if(pid==='dashboard')loadDash();
     else if(pid==='palpites'){/* user clicks manually */}
+    else if(pid==='tripla'){setTimeout(refreshTriplaPage,100);}
     else if(pid==='pricing')renderPricing();
     else if(pid==='models')initModels();
     else if(pid==='tracker'){renderTracker();setTimeout(function(){renderOjDashboard();renderSweat();},80);}
@@ -1654,15 +1698,154 @@ function addTriplaToTracker(){
   var triStake=Math.max(100,Math.round(_bal*0.03/50)*50);
   var bets=getBets();
   bets.unshift({id:Date.now(),date:new Date().toLocaleDateString('pt-PT'),game:G_TRIPLA.legs.map(function(l){return l.home.split(' ')[0];}).join('+'),mkt:'TRIPLA DO DIA 3-Fold',odd:G_TRIPLA.combOdds,fair:G_TRIPLA.combOdds*0.95,clv:null,stake:triStake,res:'p',pl:0,isTicket:true});
-  saveBets(bets);renderTracker();renderOjDashboard();toast('Tripla adicionada ao tracker!','s');
+  saveBets(bets);renderTracker();renderOjDashboard();
+  // Save to history
+  saveTripla(G_TRIPLA);
+  syncBalanceDisplay();
+  toast('Tripla adicionada ao tracker!','s');
+}
+
+// Tripla history storage
+function saveTripla(tripla){
+  if(!tripla)return;
+  var hist=JSON.parse(localStorage.getItem('md_triplas')||'[]');
+  hist.unshift({date:new Date().toLocaleDateString('pt-PT'),legs:tripla.legs,combOdds:tripla.combOdds,combProb:tripla.combProb,avgEV:tripla.avgEV,result:'p'});
+  if(hist.length>30)hist=hist.slice(0,30);
+  localStorage.setItem('md_triplas',JSON.stringify(hist));
+}
+function getTriplas(){try{return JSON.parse(localStorage.getItem('md_triplas')||'[]');}catch(e){return[];}}
+
+async function refreshTriplaPage(){
+  var container=$('tripla-page-content');
+  if(!container)return;
+  container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--t3)"><div class="spin" style="margin:0 auto 16px"></div><div>A calcular Tripla do Dia...</div></div>';
+  // Need data
+  if(!G.allData||!G.allData.length){
+    if(!ODDS_KEY){
+      container.innerHTML='<div style="text-align:center;padding:60px 20px"><i class="fas fa-key" style="font-size:2rem;color:var(--yellow);display:block;margin-bottom:12px"></i><div style="color:var(--yellow);font-weight:600;margin-bottom:8px">Chave API necessaria</div><div style="font-size:.75rem;color:var(--t3)">Configura a chave no banner amarelo para calcular a Tripla do Dia.</div></div>';
+      return;
+    }
+    toast('A carregar dados para a Tripla...','i');
+    // Load top soccer leagues only (efficient)
+    var triKeys=['soccer_epl','soccer_spain_la_liga','soccer_italy_serie_a','soccer_germany_bundesliga','soccer_france_ligue_one','soccer_uefa_champs_league','basketball_nba','icehockey_nhl'];
+    var triSports=SPORTS.filter(function(s){return triKeys.includes(s.k);});
+    G.allData=await fetchMulti(triSports);
+    if(!G.allData.length){
+      container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--t3)"><i class="fas fa-calendar-times" style="font-size:2.5rem;margin-bottom:16px;display:block"></i><div style="font-size:.88rem;font-weight:600;color:var(--t2);margin-bottom:6px">Sem jogos disponiveis agora</div><div style="font-size:.76rem">Tenta mais tarde ou abre +EV primeiro.</div></div>';
+      return;
+    }
+  }
+  // Build picks and find tripla
+  var picks=[];
+  try{picks=buildPalpitesAlgo({});}catch(e){picks=[];}
+  G_TRIPLA=buildTriplaDodia(picks);
+  if(!G_TRIPLA){
+    container.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--t3)"><i class="fas fa-search" style="font-size:2.5rem;margin-bottom:16px;display:block"></i><div style="font-size:.88rem;font-weight:600;color:var(--t2);margin-bottom:6px">Sem Tripla disponivel hoje</div><div style="font-size:.76rem">O modelo nao encontrou 3 jogos com probabilidade suficiente nas odds actuais. Tenta mais tarde.</div></div>';
+    return;
+  }
+  container.innerHTML=renderTriplaPageCard(G_TRIPLA);
+  renderTripla_History();
+}
+
+function renderTriplaPageCard(tripla){
+  if(!tripla||!tripla.legs)return '';
+  var legs=tripla.legs,combOdds=tripla.combOdds,combProb=tripla.combProb;
+  var _bal=getBalance()||5000;
+  var triStake=Math.max(100,Math.round(_bal*0.03/50)*50);
+  var potWin=(triStake*combOdds).toFixed(0);
+  var avgEV=tripla.avgEV||0;
+  return '<div style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(251,191,36,.05));border:2px solid rgba(245,158,11,.4);border-radius:14px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden">'+
+    '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--orange),var(--gold))"></div>'+
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">'+
+    '<div style="display:flex;align-items:center;gap:10px">'+
+    '<div style="background:var(--gold);color:#0a0a0a;padding:5px 14px;border-radius:6px;font-size:.72rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase">TRIPLA DO DIA</div>'+
+    '<div style="font-size:.7rem;color:var(--t3)">'+new Date().toLocaleDateString('pt-PT',{weekday:'long',day:'2-digit',month:'long'})+'</div>'+
+    '</div>'+
+    '<div style="display:flex;gap:16px;align-items:center">'+
+    '<div style="text-align:center"><div style="font-size:.55rem;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Odd Combinada</div><div style="font-size:2rem;font-weight:800;color:var(--gold);line-height:1">'+combOdds.toFixed(2)+'</div></div>'+
+    '<div style="text-align:center"><div style="font-size:.55rem;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Prob. Combinada</div><div style="font-size:1.5rem;font-weight:700;color:var(--blue)">~'+combProb.toFixed(0)+'%</div></div>'+
+    '<div style="text-align:center"><div style="font-size:.55rem;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Avg EV+</div><div style="font-size:1.5rem;font-weight:700;color:var(--green)">+'+avgEV.toFixed(1)+'%</div></div>'+
+    '</div>'+
+    '</div>'+
+    '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">'+
+    legs.map(function(p,i){
+      var ev=parseFloat(p.ev_pct),prob=parseFloat(p.prob_real),odds=parseFloat(p.odds_best);
+      var pk=(p.pick||'').toLowerCase();
+      var arr=pk.startsWith('over')||pk==='yes'?'UP':pk.startsWith('under')||pk==='no'?'DOWN':'RIGHT';
+      var arrIcon=arr==='UP'?'fa-arrow-up':arr==='DOWN'?'fa-arrow-down':'fa-arrow-right';
+      return '<div style="background:rgba(0,0,0,.25);border:1px solid rgba(245,158,11,.15);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center">'+
+        '<div>'+
+        '<div style="font-size:.6rem;font-weight:700;color:var(--t3);text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px">'+
+        '<span>'+(p.icon||'')+' '+p.sport+'</span>'+
+        '<span style="color:var(--border)">|</span>'+
+        '<span>'+p.market+'</span>'+
+        '</div>'+
+        '<div style="font-size:.88rem;font-weight:700;color:var(--t1);margin-bottom:6px">'+p.home+' <span style="color:var(--t3);font-weight:400">vs</span> '+p.away+'</div>'+
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'+
+        '<span style="background:rgba(124,194,69,.15);border:1px solid rgba(124,194,69,.35);padding:4px 12px;border-radius:6px;font-size:.86rem;font-weight:700;color:var(--green);display:flex;align-items:center;gap:5px"><i class="fas '+arrIcon+'" style="font-size:.68rem"></i> '+p.pick+'</span>'+
+        '<span style="font-size:.7rem;color:var(--t3)">via '+p.bookmaker+'</span>'+
+        '<span style="font-size:.7rem;color:var(--t3)">Fair: '+p.fair_odd+'</span>'+
+        '</div>'+
+        '</div>'+
+        '<div style="text-align:right">'+
+        '<div style="font-size:1.5rem;font-weight:800;color:var(--green);line-height:1">'+odds.toFixed(2)+'</div>'+
+        '<div style="font-size:.65rem;color:var(--gold);font-weight:700">+'+ev.toFixed(1)+'% EV</div>'+
+        '<div style="font-size:.62rem;color:var(--t3)">~'+prob.toFixed(0)+'% prob</div>'+
+        '</div>'+
+        '</div>';
+    }).join('')+
+    '</div>'+
+    '<div style="background:rgba(0,0,0,.2);border-radius:8px;padding:12px 14px;margin-bottom:14px">'+
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px">'+
+    '<div style="text-align:center"><div style="font-size:.54rem;color:var(--t3);text-transform:uppercase;margin-bottom:3px">Stake Kelly (3%)</div><div style="font-size:1.1rem;font-weight:800;color:var(--gold)">MZN '+triStake+'</div></div>'+
+    '<div style="text-align:center"><div style="font-size:.54rem;color:var(--t3);text-transform:uppercase;margin-bottom:3px">Retorno Potencial</div><div style="font-size:1.1rem;font-weight:800;color:var(--green)">MZN '+potWin+'</div></div>'+
+    '<div style="text-align:center"><div style="font-size:.54rem;color:var(--t3);text-transform:uppercase;margin-bottom:3px">Banca Actual</div><div style="font-size:1.1rem;font-weight:800;color:var(--blue)">MZN '+(getBalance()||5000).toFixed(0)+'</div></div>'+
+    '</div>'+
+    '<div style="font-size:.65rem;color:var(--t3);text-align:center">Apostas de Valor Esperado Positivo com probabilidade real superior ao implicado pelas odds do mercado.</div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+    '<button onclick="addTriplaToTracker()" style="background:var(--gold);color:#0a0a0a;border:none;padding:12px;border-radius:9px;font-size:.82rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px"><i class="fas fa-plus-circle"></i> Adicionar ao Tracker</button>'+
+    '<a href="'+buildTriplaWA(legs,combOdds)+'" target="_blank" style="background:linear-gradient(135deg,#1da462,#138a4e);color:#fff;text-decoration:none;padding:12px;border-radius:9px;font-size:.82rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px"><i class="fab fa-whatsapp"></i> Partilhar WhatsApp</a>'+
+    '</div>'+
+    '</div>';
+}
+
+function renderTripla_History(){
+  var hist=getTriplas();
+  var sec=$('tripla-history-section'),list=$('tripla-history-list');
+  if(!sec||!list)return;
+  if(!hist.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  list.innerHTML=hist.map(function(t,i){
+    var col=t.result==='w'?'var(--green)':t.result==='l'?'var(--red)':'var(--yellow)';
+    var lbl=t.result==='w'?'GANHOU':t.result==='l'?'PERDEU':'PENDENTE';
+    return '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">'+
+      '<div>'+
+      '<div style="font-size:.7rem;color:var(--t3);margin-bottom:4px">'+t.date+'</div>'+
+      '<div style="font-size:.8rem;font-weight:600;color:var(--t1)">'+t.legs.map(function(l){return l.home.split(' ')[0];}).join(' + ')+'</div>'+
+      '</div>'+
+      '<div style="display:flex;align-items:center;gap:12px">'+
+      '<div style="text-align:right"><div style="font-size:.56rem;color:var(--t3)">Odd</div><div style="font-weight:700;color:var(--t1)">'+parseFloat(t.combOdds).toFixed(2)+'</div></div>'+
+      '<div style="text-align:right"><div style="font-size:.56rem;color:var(--t3)">EV</div><div style="font-weight:700;color:var(--green)">+'+parseFloat(t.avgEV||0).toFixed(1)+'%</div></div>'+
+      '<div style="display:flex;align-items:center;gap:6px">'+
+      '<span style="font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba('+( t.result==='w'?'124,194,69':t.result==='l'?'230,94,76':'251,191,36')+',.15);color:'+col+'">'+lbl+'</span>'+
+      (t.result==='p'?'<select onchange="updateTripla('+i+',this.value)" style="background:var(--bg-card2);border:1px solid var(--border);color:var(--t1);padding:3px 7px;border-radius:5px;font-size:.68rem"><option value="p">Pendente</option><option value="w">Ganhou</option><option value="l">Perdeu</option></select>':'')+
+      '</div>'+
+      '</div>'+
+      '</div>';
+  }).join('');
+}
+
+function updateTripla(idx,result){
+  var hist=getTriplas();if(idx>=hist.length)return;
+  hist[idx].result=result;localStorage.setItem('md_triplas',JSON.stringify(hist));
+  renderTripla_History();
+  toast(result==='w'?'Tripla marcada como GANHOU!':'Tripla marcada como PERDEU','s');
 }
 
 function renderPalpites(picks,weather){
   var pc=$('palpites-content');G_PAL_PICKS=picks||[];G_PAL_SEL=new Set();
   if(!G_PAL_PICKS.length){pc.innerHTML='<div class="empty">Sem palpites gerados</div>';return;}
-  // Build Tripla do Dia
-  G_TRIPLA=buildTriplaDodia(picks);
-  var triplaHtml=renderTriplaCard(G_TRIPLA);
   function renderCards(){
     var sel=G_PAL_SEL;var selCount=sel.size;
     var cardsHtml=G_PAL_PICKS.map(function(p,i){
