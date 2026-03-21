@@ -454,7 +454,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
     </div>
     <a href="https://wa.me/258840330540" target="_blank" class="wa-row"><i class="fab fa-whatsapp" style="color:#25d366;width:14px"></i>840 330 540 -- 24/7</a>
     <a href="https://wa.me/258877480775" target="_blank" class="wa-row"><i class="fab fa-whatsapp" style="color:#25d366;width:14px"></i>877 480 775 -- 24/7</a>
-    <a href="mailto:info@manueldanca.com" class="wa-row"><i class="fas fa-envelope" style="color:var(--blue);width:14px"></i>info@manueldanca.com</a>
+    <a href="mailto:dancamanuel@gmail.com" class="wa-row"><i class="fas fa-envelope" style="color:var(--blue);width:14px"></i>dancamanuel@gmail.com</a>
   </div>
 </nav>
 <main id="main">
@@ -618,9 +618,10 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
           <div class="pg-title" style="color:var(--blue)"><i class="fas fa-chart-bar"></i>Bet Tracker</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-            <div style="display:flex;align-items:center;gap:4px;background:var(--bg-card2);border:1px solid var(--border);border-radius:7px;padding:5px 10px">
+            <div style="display:flex;align-items:center;gap:4px;background:var(--bg-card2);border:1px solid var(--border);border-radius:7px;padding:5px 10px;cursor:default" title="Saldo = Depositos - Levantamentos + Profit Apostas">
               <span style="font-size:.76rem;color:var(--t3);font-weight:600">MZN</span>
-              <input type="number" id="tr-balance" placeholder="0" step="100" style="background:none;border:none;color:var(--green);font-size:.9rem;font-weight:700;width:90px;outline:none" oninput="saveBalance()" value="">
+              <span id="header-balance" style="color:var(--green);font-size:.9rem;font-weight:800;min-width:70px">0</span>
+              <input type="hidden" id="tr-balance" value="">
             </div>
             <button class="btn-reset-bal" onclick="resetBalance()"><i class="fas fa-undo-alt"></i>Reset</button>
           </div>
@@ -775,10 +776,10 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
         </div>
         <div class="trk-pane" id="trkp-deps">
           <div class="dep-kpi-row">
-            <div class="dep-kpi"><div class="dep-kpi-lbl">Total Deposits</div><div class="dep-kpi-val" id="dep-total-dep">MZN 0</div></div>
-            <div class="dep-kpi"><div class="dep-kpi-lbl">Total Withdrawals</div><div class="dep-kpi-val" id="dep-total-wd">MZN 0</div></div>
-            <div class="dep-kpi"><div class="dep-kpi-lbl">Profit</div><div class="dep-kpi-val" id="dep-profit">MZN 0</div></div>
-            <div class="dep-kpi"><div class="dep-kpi-lbl">Profit %</div><div class="dep-kpi-val" id="dep-pct">0%</div></div>
+            <div class="dep-kpi"><div class="dep-kpi-lbl">Total Depositado</div><div class="dep-kpi-val" id="dep-total-dep">MZN 0</div></div>
+            <div class="dep-kpi"><div class="dep-kpi-lbl">Total Levantado</div><div class="dep-kpi-val" id="dep-total-wd">MZN 0</div></div>
+            <div class="dep-kpi"><div class="dep-kpi-lbl">Saldo Actual (Dep. + Apostas)</div><div class="dep-kpi-val" id="dep-profit">MZN 0</div></div>
+            <div class="dep-kpi"><div class="dep-kpi-lbl">ROI sobre Depositos</div><div class="dep-kpi-val" id="dep-pct">0%</div></div>
           </div>
           <div class="oj-section" style="border-radius:10px">
             <div class="dep-form-row">
@@ -1843,9 +1844,33 @@ function convOdds(src){
 // -- TRACKER --
 function getBets(){try{return JSON.parse(localStorage.getItem('md_bets')||'[]');}catch(e){return[];}}
 function saveBets(bets){localStorage.setItem('md_bets',JSON.stringify(bets||[]));}
-function getBalance(){return parseFloat(localStorage.getItem('md_balance')||'0');}
-function saveBalance(){var v=parseFloat($('tr-balance')&&$('tr-balance').value)||0;localStorage.setItem('md_balance',v);}
-function resetBalance(){if(!confirm('Repor saldo a zero?'))return;localStorage.removeItem('md_balance');var tb=$('tr-balance');if(tb)tb.value='';renderTracker();toast('Saldo reposto','s');}
+// getBalance: computed from deposits + bet results (integrated)
+function getBalance(){
+  var deps=getDeposits();
+  var totDep=deps.filter(function(d){return d.type==='dep'&&d.status==='complete';}).reduce(function(s,d){return s+d.amount;},0);
+  var totWd=deps.filter(function(d){return d.type==='wd'&&d.status==='complete';}).reduce(function(s,d){return s+d.amount;},0);
+  var netDeposits=totDep-totWd;
+  var bets=getBets();
+  var netBets=bets.reduce(function(s,b){return s+calcPL(b);},0);
+  // Fallback: if no deposits recorded, use manual balance input
+  if(totDep===0){var manual=parseFloat(localStorage.getItem('md_balance')||'0');return manual+netBets;}
+  return netDeposits+netBets;
+}
+function getManualBalance(){return parseFloat(localStorage.getItem('md_balance')||'0');}
+function saveBalance(){var v=parseFloat($('tr-balance')&&$('tr-balance').value)||0;localStorage.setItem('md_balance',v);syncBalanceDisplay();}
+function syncBalanceDisplay(){
+  var bal=getBalance();
+  var tb=$('tr-balance');if(tb)tb.value=bal.toFixed(0);
+  var hb=$('header-balance');if(hb)hb.textContent='MZN '+bal.toFixed(0);
+}
+function resetBalance(){
+  if(!confirm('Repor saldo? Isto apaga todos os depositos e levantamentos registados.'))return;
+  localStorage.removeItem('md_balance');
+  saveDeposits([]);
+  var tb=$('tr-balance');if(tb)tb.value='';
+  renderTracker();renderDeposits();renderOjDashboard();
+  toast('Saldo e depositos reposto','s');
+}
 function calcPL(bet){
   var o=parseFloat(bet.odd||1),s=parseFloat(bet.stake||0),r=bet.res;
   if(r==='w')return s*(o-1);if(r==='l')return -s;if(r==='hw')return s*(o-1)*0.5;if(r==='hl')return -s*0.5;return 0;
@@ -1873,7 +1898,7 @@ function addBet(){
 function deleteBet(id){var bets=getBets().filter(function(b){return b.id!==id;});saveBets(bets);renderTracker();renderOjDashboard();renderSweat();toast('Removida','s');}
 function updateBetRes(id,res){
   var bets=getBets();var i=bets.findIndex(function(b){return b.id===id;});
-  if(i===-1)return;bets[i].res=res;bets[i].pl=calcPL(bets[i]);saveBets(bets);renderTracker();renderOjDashboard();toast('Resultado actualizado','s');
+  if(i===-1)return;bets[i].res=res;bets[i].pl=calcPL(bets[i]);saveBets(bets);syncBalanceDisplay();renderTracker();renderOjDashboard();toast('Resultado actualizado','s');
 }
 function exportCSV(){
   var bets=getBets();if(!bets.length){toast('Sem apostas','w');return;}
@@ -1934,7 +1959,7 @@ function renderAnalytics(){
 }
 
 function renderTracker(){
-  var bets=getBets();var bal=getBalance();var tb=$('tr-balance');if(tb&&!tb.value)tb.value=bal||'';
+  var bets=getBets();var bal=getBalance();var tb=$('tr-balance');if(tb)tb.value=bal.toFixed(0);
   var settled=bets.filter(function(b){return b.res==='w'||b.res==='l'||b.res==='hw'||b.res==='hl';});
   var pending=bets.filter(function(b){return b.res==='p';});
   var profit=settled.reduce(function(s,b){return s+calcPL(b);},0);
@@ -1946,7 +1971,9 @@ function renderTracker(){
   if($('tr-prof'))$('tr-prof').textContent='MZN '+(profit>=0?'+':'')+profit.toFixed(0);
   if($('tr-roi'))$('tr-roi').textContent=roi;if($('tr-tot'))$('tr-tot').textContent=bets.length;
   if($('tr-wr'))$('tr-wr').textContent=wr;if($('tr-stk'))$('tr-stk').textContent='MZN '+wagered.toFixed(0);
-  if($('tr-avgodds'))$('tr-avgodds').textContent=avgOdd;if($('tr-capital'))$('tr-capital').textContent='MZN '+bal;
+  if($('tr-avgodds'))$('tr-avgodds').textContent=avgOdd;if($('tr-capital'))$('tr-capital').textContent='MZN '+bal.toFixed(0);
+  // Also sync header balance
+  var hb=$('header-balance');if(hb)hb.textContent='MZN '+bal.toFixed(0);
   var clvBets=bets.filter(function(b){return b.clv!==null&&b.clv!==undefined;});
   var clvBeat=clvBets.length?(clvBets.filter(function(b){return b.clv>0;}).length/clvBets.length*100).toFixed(0)+'%':'0%';
   var pendingStake=pending.reduce(function(s,b){return s+parseFloat(b.stake||0);},0);
@@ -2065,6 +2092,9 @@ function renderOjDashboard(){
   if($('oj-record'))$('oj-record').textContent=wins+'W-'+(settled.length-wins)+'L';
   if($('oj-wagered'))$('oj-wagered').textContent='MZN '+wagered.toFixed(0);
   if($('oj-at-risk'))$('oj-at-risk').textContent='MZN '+pendingStake.toFixed(0)+' em risco';
+  // Show computed balance in OJ dashboard
+  var computedBal=getBalance();
+  var hb=$('header-balance');if(hb)hb.textContent='MZN '+computedBal.toFixed(0);
   if($('oj-avg-odd'))$('oj-avg-odd').textContent=avgOdd;
   if($('oj-max-profit'))$('oj-max-profit').textContent='Max Profit: MZN '+maxProfit.toFixed(0);
   if($('dash-total-profit'))$('dash-total-profit').textContent=(profit>=0?'+':'')+'MZN '+profit.toFixed(0);
@@ -2152,9 +2182,18 @@ function saveDeposits(deps){localStorage.setItem('md_deposits',JSON.stringify(de
 function addDeposit(){
   var type=$('dep-type-sel')&&$('dep-type-sel').value,book=$('dep-book')&&$('dep-book').value,state=$('dep-state')&&$('dep-state').value,amount=parseFloat($('dep-amount')&&$('dep-amount').value),date=$('dep-date')&&$('dep-date').value,status=$('dep-status-sel')&&$('dep-status-sel').value||'complete';
   if(!amount||!date){toast('Preenche valor e data','w');return;}
-  var deps=getDeposits();deps.unshift({id:Date.now(),type:type||'dep',book:book||'--',state:state||'',amount:amount,date:date,status:status});saveDeposits(deps);renderDeposits();toast((type==='dep'?'Deposito':'Levantamento')+' adicionado!','s');
+  var deps=getDeposits();
+  var fmtDate=date; // store as-is (ISO from input)
+  deps.unshift({id:Date.now(),type:type||'dep',book:book||'--',state:state||'',amount:amount,date:fmtDate,status:status});
+  saveDeposits(deps);
+  // Clear form
+  var ba=$('dep-book'),da=$('dep-amount');if(ba)ba.value='';if(da)da.value='';
+  // Sync balance everywhere
+  syncBalanceDisplay();
+  renderDeposits();renderOjDashboard();renderTracker();
+  toast((type==='dep'?'Deposito de MZN '+amount+' registado!':'Levantamento de MZN '+amount+' registado!'),'s');
 }
-function deleteDeposit(id){var deps=getDeposits().filter(function(d){return d.id!==id;});saveDeposits(deps);renderDeposits();toast('Removido','s');}
+function deleteDeposit(id){var deps=getDeposits().filter(function(d){return d.id!==id;});saveDeposits(deps);syncBalanceDisplay();renderDeposits();renderOjDashboard();renderTracker();toast('Removido','s');}
 function depSelAll(cb){$$('#dep-body input[type=checkbox]').forEach(function(c){c.checked=cb.checked;});}
 function viewTotals(){
   var deps=getDeposits();
@@ -2162,6 +2201,7 @@ function viewTotals(){
   var totWd=deps.filter(function(d){return d.type==='wd'&&d.status==='complete';}).reduce(function(s,d){return s+d.amount;},0);
   var profit=totWd-totDep;openModal('Totais de Depositos','<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><div style="background:rgba(124,194,69,.08);border:1px solid rgba(124,194,69,.2);border-radius:8px;padding:14px;text-align:center"><div style="font-size:.62rem;color:var(--t3);margin-bottom:4px">Total Depositos</div><div style="font-size:1.4rem;font-weight:700;color:var(--green)">MZN '+totDep.toFixed(0)+'</div></div><div style="background:rgba(230,94,76,.08);border:1px solid rgba(230,94,76,.2);border-radius:8px;padding:14px;text-align:center"><div style="font-size:.62rem;color:var(--t3);margin-bottom:4px">Total Levantamentos</div><div style="font-size:1.4rem;font-weight:700;color:var(--red)">MZN '+totWd.toFixed(0)+'</div></div></div><div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center"><div style="font-size:.62rem;color:var(--t3);margin-bottom:4px">Profit Liquido</div><div style="font-size:1.6rem;font-weight:700;color:'+(profit>=0?'var(--green)':'var(--red)')+'">MZN '+(profit>=0?'+':'')+profit.toFixed(0)+'</div></div>');
 }
+function fmtDepDate(d){if(!d)return'--';var p=d.split('-');if(p.length===3)return p[2]+'/'+p[1]+'/'+p[0];return d;}
 function renderDeposits(){
   var deps=getDeposits();var q=$('dep-search-inp')&&$('dep-search-inp').value.toLowerCase()||'';
   var filtered=q?deps.filter(function(d){return(d.book+d.state+d.type+d.amount).toLowerCase().includes(q);}):deps;
@@ -2169,9 +2209,14 @@ function renderDeposits(){
   var totWd=deps.filter(function(d){return d.type==='wd'&&d.status==='complete';}).reduce(function(s,d){return s+d.amount;},0);
   if($('dep-total-dep'))$('dep-total-dep').textContent='MZN '+totDep.toFixed(0);
   if($('dep-total-wd'))$('dep-total-wd').textContent='MZN '+totWd.toFixed(0);
-  var profit=totWd-totDep;
-  if($('dep-profit'))$('dep-profit').textContent=(profit>=0?'+':'')+'MZN '+profit.toFixed(0);
-  if($('dep-pct'))$('dep-pct').textContent=totDep?(profit/totDep*100).toFixed(1)+'%':'0%';
+  var netDep=totDep-totWd;
+  var netBets=getBets().reduce(function(s,b){return s+calcPL(b);},0);
+  var saldoActual=netDep+netBets;
+  var profitBets=netBets;
+  if($('dep-profit'))$('dep-profit').textContent=(saldoActual>=0?'+':'')+'MZN '+saldoActual.toFixed(0);
+  if($('dep-pct'))$('dep-pct').textContent=totDep?((profitBets/totDep)*100).toFixed(1)+'% ROI':'0%';
+  // Also update the balance field
+  syncBalanceDisplay();
   if($('dep-count'))$('dep-count').textContent=filtered.length;
   var body=$('dep-body');if(!body)return;
   body.innerHTML=filtered.map(function(d){
@@ -2251,6 +2296,8 @@ function boot(){
   // Restore API key
   var savedKey=localStorage.getItem('md_odds_key');if(savedKey){ODDS_KEY=savedKey;var inp=$('odds-key-input');if(inp)inp.value=ODDS_KEY;var si=$('sb-api-key-input');if(si)si.value=ODDS_KEY;}
   buildSportsSidebar();initNav();initSearch();initDepDate();startCountdown();
+  // Sync integrated balance on startup
+  setTimeout(function(){syncBalanceDisplay();},100);
   // Set initial page
   go('dashboard');
   // Banner check
