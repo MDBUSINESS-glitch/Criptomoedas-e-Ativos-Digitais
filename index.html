@@ -836,7 +836,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;cursor:pointer}
 <div class="tw" id="tw"></div>
 <script>
 'use strict';
-// ── CONFIG ──
+// -- CONFIG --
 let ODDS_KEY = localStorage.getItem('md_odds_key') || '901f7b8b61b01403304d0ba1a7d7f8ee';
 const BASE_ODDS = 'https://api.the-odds-api.com/v4';
 const ESPN_ENDPOINTS = {
@@ -854,7 +854,7 @@ const ESPN_ENDPOINTS = {
 };
 
 const SPORTS = [
-  // ── UEFA / Futebol Internacional ──
+  // -- UEFA / Futebol Internacional --
   {k:'soccer_uefa_champs_league',n:'Champions League',e:'\u2b50',c:'UEFA',tier:1},
   {k:'soccer_uefa_europa_league',n:'Europa League',e:'\uD83D\uDFE0',c:'UEFA',tier:1},
   {k:'soccer_uefa_conference_league',n:'Conference League',e:'\uD83C\uDF0D',c:'UEFA',tier:1},
@@ -862,7 +862,7 @@ const SPORTS = [
   {k:'soccer_conmebol_copa_america',n:'Copa America',e:'\uD83C\uDFC6',c:'FIFA',tier:1},
   {k:'soccer_africa_cup_of_nations',n:'AFCON',e:'\uD83C\uDF10',c:'FIFA',tier:1},
   {k:'soccer_conmebol_copa_libertadores',n:'Copa Libertadores',e:'\uD83C\uDFC6',c:'America',tier:1},
-  // ── Futebol Europa ──
+  // -- Futebol Europa --
   {k:'soccer_epl',n:'Premier League',e:'\u26BD',c:'Soccer',tier:1,flag:'\uD83C\uDDEC\uD83C\uDDE7'},
   {k:'soccer_spain_la_liga',n:'La Liga',e:'\u26BD',c:'Soccer',tier:1,flag:'\uD83C\uDDEA\uD83C\uDDF8'},
   {k:'soccer_italy_serie_a',n:'Serie A',e:'\u26BD',c:'Soccer',tier:1,flag:'\uD83C\uDDEE\uD83C\uDDF9'},
@@ -874,25 +874,25 @@ const SPORTS = [
   {k:'soccer_scotland_premiership',n:'Scottish Prem',e:'\u26BD',c:'Soccer',tier:2},
   {k:'soccer_turkey_super_league',n:'Super Lig (TR)',e:'\u26BD',c:'Soccer',tier:2},
   {k:'soccer_belgium_first_div',n:'Pro League (BE)',e:'\u26BD',c:'Soccer',tier:2},
-  // ── Futebol Americas ──
+  // -- Futebol Americas --
   {k:'soccer_brazil_campeonato',n:'Brasileirao',e:'\u26BD',c:'America',tier:2},
   {k:'soccer_argentina_primera_division',n:'Primera Division',e:'\u26BD',c:'America',tier:2},
   {k:'soccer_usa_mls',n:'MLS',e:'\u26BD',c:'America',tier:2},
   {k:'soccer_mexico_ligamx',n:'Liga MX',e:'\u26BD',c:'America',tier:2},
-  // ── Basquetebol ──
+  // -- Basquetebol --
   {k:'basketball_nba',n:'NBA',e:'\uD83C\uDFC0',c:'Basquete',tier:1},
   {k:'basketball_nba_championship_winner',n:'NBA Title Futures',e:'\uD83C\uDFC0',c:'Basquete',tier:2},
   {k:'basketball_euroleague',n:'Euroliga',e:'\uD83C\uDFC0',c:'Basquete',tier:2},
   {k:'basketball_ncaab',n:'NCAA Basketball',e:'\uD83C\uDFC0',c:'Basquete',tier:2},
-  // ── Futebol Americano ──
+  // -- Futebol Americano --
   {k:'americanfootball_nfl',n:'NFL',e:'\uD83C\uDFC8',c:'NFL',tier:1},
   {k:'americanfootball_ncaaf',n:'NCAA Football',e:'\uD83C\uDFC8',c:'NFL',tier:2},
-  // ── Hoquei no Gelo ──
+  // -- Hoquei no Gelo --
   {k:'icehockey_nhl',n:'NHL',e:'\uD83C\uDFD2',c:'Hockey',tier:1},
   {k:'icehockey_sweden_hockey_league',n:'SHL (Suecia)',e:'\uD83C\uDFD2',c:'Hockey',tier:2},
-  // ── Baseball ──
+  // -- Baseball --
   {k:'baseball_mlb',n:'MLB',e:'\u26BE',c:'Baseball',tier:1},
-  // ── Tenis ──
+  // -- Tenis --
   {k:'tennis_atp_french_open',n:'Tennis ATP Roland Garros',e:'\uD83C\uDFBE',c:'Tenis',tier:1},
   {k:'tennis_wta_french_open',n:'Tennis WTA Roland Garros',e:'\uD83C\uDFBE',c:'Tenis',tier:1},
   {k:'tennis_atp_wimbledon',n:'Tennis ATP Wimbledon',e:'\uD83C\uDFBE',c:'Tenis',tier:1},
@@ -903,19 +903,19 @@ const SPORTS = [
   {k:'tennis_wta_australian_open',n:'Tennis WTA Australian Open',e:'\uD83C\uDFBE',c:'Tenis',tier:1},
   {k:'tennis_atp_singles',n:'Tennis ATP Tour',e:'\uD83C\uDFBE',c:'Tenis',tier:1},
   {k:'tennis_wta_singles',n:'Tennis WTA Tour',e:'\uD83C\uDFBE',c:'Tenis',tier:1},
-  // ── Rugby ──
+  // -- Rugby --
   {k:'rugbyleague_nrl',n:'NRL Rugby League',e:'\uD83C\uDFC9',c:'Rugby',tier:1},
   {k:'rugbyunion_super_rugby',n:'Super Rugby',e:'\uD83C\uDFC9',c:'Rugby',tier:1},
   {k:'rugbyunion_six_nations',n:'Six Nations',e:'\uD83C\uDFC9',c:'Rugby',tier:1},
   {k:'rugbyunion_world_cup',n:'Rugby World Cup',e:'\uD83C\uDFC9',c:'Rugby',tier:1},
-  // ── Cricket ──
+  // -- Cricket --
   {k:'cricket_odi',n:'Cricket ODI',e:'\uD83C\uDFCF',c:'Cricket',tier:1},
   {k:'cricket_test_match',n:'Cricket Test',e:'\uD83C\uDFCF',c:'Cricket',tier:1},
   {k:'cricket_ipl',n:'IPL Cricket',e:'\uD83C\uDFCF',c:'Cricket',tier:1},
-  // ── MMA / Boxe ──
+  // -- MMA / Boxe --
   {k:'mma_mixed_martial_arts',n:'UFC / MMA',e:'\uD83E\uDD4A',c:'Combate',tier:1},
   {k:'boxing_boxing',n:'Boxe',e:'\uD83E\uDD4A',c:'Combate',tier:1},
-  // ── Outros ──
+  // -- Outros --
   {k:'golf_pga_championship',n:'PGA Golf',e:'\u26F3',c:'Outros',tier:2},
   {k:'golf_the_masters_tournament',n:'The Masters',e:'\u26F3',c:'Outros',tier:1},
   {k:'aussierules_afl',n:'AFL (Aussie Rules)',e:'\uD83C\uDFC9',c:'Outros',tier:2},
@@ -947,17 +947,17 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function bkClr(n){if(!n)return'#37474f';const k=n.toLowerCase().replace(/[^a-z0-9]/g,'');for(const[key,v]of Object.entries(BK_CLR))if(k.includes(key))return v;let h=0;for(let i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return'hsl('+(((h%360)+360)%360)+',42%,36%)';}
 function fmtTime(ts){const d=new Date(ts),now=new Date();if(d<now)return'<span style="color:var(--red);font-weight:600">\u25CF LIVE</span>';const diff=d-now,h=Math.floor(diff/3.6e6),m=Math.floor((diff%3.6e6)/60000);if(h<24)return h+'h '+m+'m';return d.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});}
 
-// ── TOAST ──
+// -- TOAST --
 function toast(msg,type){type=type||'i';const icons={s:'fa-check-circle',e:'fa-times-circle',i:'fa-info-circle',w:'fa-exclamation-triangle'};const el=document.createElement('div');el.className='t t-'+type;el.innerHTML='<i class="fas '+icons[type]+'"></i><span>'+msg+'</span>';$('tw').appendChild(el);setTimeout(function(){el.style.cssText='opacity:0;transform:translateX(110%);transition:all .3s';setTimeout(function(){el.remove();},320);},3800);}
 function openModal(t,h){var ttl=$('m-ttl');if(ttl){ttl.innerHTML='';if(typeof t==='string'&&t.startsWith('<')){ttl.innerHTML=t;}else{ttl.textContent=t;}}$('m-bdy').innerHTML=h;$('modal-ov').classList.add('on');}
 function closeModal(){$('modal-ov').classList.remove('on');}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal();closeAuth();}});
 
-// ── API KEY ──
+// -- API KEY --
 function dismissBanner(){var b=$('api-banner');if(b)b.style.display='none';localStorage.setItem('md_banner_dismissed','1');}
 function checkBanner(){if(ODDS_KEY&&ODDS_KEY.length>10){dismissBanner();return;}var dismissed=localStorage.getItem('md_banner_dismissed');if(dismissed){var b=$('api-banner');if(b)b.style.display='none';}else{var inp=$('odds-key-input');if(inp&&ODDS_KEY)inp.value=ODDS_KEY;}}
 
-// ── NAVIGATION ──
+// -- NAVIGATION --
 function go(pid){
   $$('.page').forEach(function(p){p.classList.remove('active');});
   var pg=$('pg-'+pid);if(pg)pg.classList.add('active');
@@ -965,17 +965,10 @@ function go(pid){
   $$('.nav-item[data-pg="'+pid+'"]').forEach(function(a){a.classList.add('active');});
   G.page=pid;$('sidebar').classList.remove('open');
   try{
-    if(pid==='ev')loadEV();
+    if(pid==='ev'){if(G.ev.length)evRender(G.ev);} // only render existing, don't auto-fetch
     else if(pid==='live')loadLive();
     else if(pid==='dashboard')loadDash();
-    else if(pid==='palpites'&&G.allData&&G.allData.length){
-      // Cache disponivel — auto-gera sem chamada API
-      setTimeout(function(){
-        if($('palpites-content')&&$('palpites-content').innerHTML.indexOf('Pronto para gerar')!==-1){
-          loadPalpitesFromCache();
-        }
-      },150);
-    }
+    else if(pid==='palpites'){/* user clicks manually */}
     else if(pid==='pricing')renderPricing();
     else if(pid==='models')initModels();
     else if(pid==='tracker'){renderTracker();setTimeout(function(){renderOjDashboard();renderSweat();},80);}
@@ -986,7 +979,7 @@ function toggleSidebar(){$('sidebar').classList.toggle('open');}
 function fpAll(el){$$('.fpill').forEach(function(p){p.classList.remove('active');});el.classList.add('active');}
 function toggleSub(lid,cid){var l=$(lid),c=$(cid);var o=l.classList.contains('open');l.classList.toggle('open',!o);if(c)c.style.transform=o?'':'rotate(180deg)';}
 
-// ── THE ODDS API ──
+// -- THE ODDS API --
 async function apiOdds(sport,mkt){
   mkt=mkt||'h2h';
   if(!ODDS_KEY){setApiStatus('err','Sem chave API');return null;}
@@ -1006,7 +999,7 @@ async function apiOdds(sport,mkt){
     return null;
   }
 
-  // ── 1. Chamada directa com timeout ──
+  // -- 1. Chamada directa com timeout --
   try{
     var r=await fetch(url,{cache:'no-store',signal:SIG()});
     var h=handleStatus(r.status);
@@ -1021,20 +1014,20 @@ async function apiOdds(sport,mkt){
     }
   }catch(e){console.debug('[apiOdds] direct failed:',sport,e.name||e.message);}
 
-  // ── 2. corsproxy.io ──
+  // -- 2. corsproxy.io --
   try{
     var r2=await fetch('https://corsproxy.io/?'+encodeURIComponent(url),{cache:'no-store',signal:SIG()});
     if(r2.ok){var d2=await r2.json();if(Array.isArray(d2))return ok(d2,'corsproxy');}
     if(r2.status===401||r2.status===429){var h2=handleStatus(r2.status);if(h2==='fatal')return null;}
   }catch(e){console.debug('[apiOdds] corsproxy failed:',sport);}
 
-  // ── 3. allorigins raw (retorna texto directo, sem wrapper JSON) ──
+  // -- 3. allorigins raw (retorna texto directo, sem wrapper JSON) --
   try{
     var r3=await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url),{cache:'no-store',signal:SIG()});
     if(r3.ok){var txt=await r3.text();if(txt&&txt.trim().startsWith('[')){var d3=JSON.parse(txt);if(Array.isArray(d3))return ok(d3,'allorigins-raw');}}
   }catch(e){console.debug('[apiOdds] allorigins-raw failed:',sport);}
 
-  // ── 4. allorigins wrapped ──
+  // -- 4. allorigins wrapped --
   try{
     var r4=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url),{cache:'no-store',signal:SIG()});
     if(r4.ok){
@@ -1050,13 +1043,13 @@ async function apiOdds(sport,mkt){
     }
   }catch(e){console.debug('[apiOdds] allorigins-wrapped failed:',sport);}
 
-  // ── 5. cors.sh ──
+  // -- 5. cors.sh --
   try{
     var r5=await fetch('https://proxy.cors.sh/'+url,{cache:'no-store',signal:SIG(),headers:{'x-cors-api-key':'temp_'+(Math.random().toString(36).slice(2))}});
     if(r5.ok){var d5=await r5.json();if(Array.isArray(d5))return ok(d5,'cors.sh');}
   }catch(e){console.debug('[apiOdds] cors.sh failed:',sport);}
 
-  // Todos os proxies falharam — nao alterar status se já OK de sport anterior
+  // Todos os proxies falharam -- nao alterar status se ja OK de sport anterior
   console.warn('[apiOdds] todos os proxies falharam para:',sport);
   return null;
 }
@@ -1080,29 +1073,29 @@ async function fetchMulti(sportKeys){var all=[];for(var i=0;i<sportKeys.length;i
   var mkts=isSoc?'h2h,spreads,totals,btts,draw_no_bet,alternate_totals,team_totals':isTen?'h2h':'h2h,spreads,totals,alternate_totals,team_totals';
   var d=await apiOdds(s.k,mkts);
   if(d===null){console.warn('[fetchMulti] skip null:',s.k);}else if(d.length){d.forEach(function(g){g._sn=s.n;g._si=s.e||'\u26BD';g._sk=s.k;});all.push.apply(all,d);}
-}catch(e){console.warn('[fetchMulti] erro em',s.k,e);}await sleep(500);}  // 500ms entre calls evita rate-limit em burstreturn all;}
+}catch(e){console.warn('[fetchMulti] erro em',s.k,e);}await sleep(500);}return all;}
 
-// ── WEATHER ──
+// -- WEATHER --
 async function fetchWeather(lat,lon){try{var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,precipitation,wind_speed_10m,weather_code&forecast_days=1';var r=await fetch(url);if(!r.ok)return null;var d=$('dot-meteo');if(d)d.style.background='var(--green)';return await r.json();}catch(e){return null;}}
 var STADIUM_COORDS={'Arsenal':[51.5549,-0.1084],'Manchester City':[53.4831,-2.2004],'Manchester United':[53.4631,-2.2913],'Liverpool':[53.4308,-2.9608],'Chelsea':[51.4816,-0.191],'Barcelona':[41.3809,2.1228],'Real Madrid':[40.4531,-3.6883],'Bayern Munich':[48.2188,11.6246],'Juventus':[45.1096,7.6413],'default':[51.5074,-0.1278]};
 function getCoords(name){for(var k in STADIUM_COORDS){if(name.toLowerCase().includes(k.toLowerCase())||k.toLowerCase().includes(name.toLowerCase().split(' ')[0]))return STADIUM_COORDS[k];}return STADIUM_COORDS.default;}
 function wCode(c){if(c<=1)return{i:'fa-sun',t:'Sol',r:0};if(c<=3)return{i:'fa-cloud',t:'Nublado',r:.5};if(c<=49)return{i:'fa-smog',t:'Nevoeiro',r:1};if(c<=67)return{i:'fa-cloud-rain',t:'Chuva',r:2};if(c<=77)return{i:'fa-snowflake',t:'Neve',r:3};if(c<=82)return{i:'fa-cloud-showers-heavy',t:'Aguaceiros',r:2};return{i:'fa-bolt',t:'Trovoada',r:3};}
 
-// ── SPORTSBOOK ──
+// -- SPORTSBOOK --
 async function sbLoad(){var sport=$('sb-sport')&&$('sb-sport').value;G.sbSport=sport;if(!sport){$('sb-wrap').innerHTML='<div class="empty" style="padding:80px">Seleciona um desporto para ver odds em tempo real</div>';return;}$('sb-wrap').innerHTML='<div class="empty" style="padding:70px"><div class="spin"></div></div>';if(!ODDS_KEY){$('sb-wrap').innerHTML='<div class="empty" style="padding:60px;color:var(--yellow)">Chave API necessaria</div>';return;}var mktParam=G.mkt==='h2h'?'h2h':G.mkt==='spreads'?'h2h,spreads':G.mkt==='totals'?'h2h,totals':G.mkt==='alternate_totals'?'h2h,alternate_totals':G.mkt==='btts'?'h2h,btts':G.mkt==='draw_no_bet'?'h2h,draw_no_bet':G.mkt==='alternate_spreads'?'h2h,alternate_spreads':G.mkt==='team_totals'?'h2h,team_totals':G.mkt==='h2h_lay'?'h2h,h2h_lay':G.mkt;var data=await apiOdds(sport,mktParam);if(!data){$('sb-wrap').innerHTML='<div class="empty" style="padding:60px;color:var(--red)">Erro ao carregar.</div>';return;}if(!data.length){$('sb-wrap').innerHTML='<div class="empty" style="padding:60px">Sem jogos disponiveis agora.</div>';return;}var bmSet=new Set();data.forEach(function(g){g.bookmakers&&g.bookmakers.forEach(function(b){bmSet.add(b.title);});});G.sbData=data;G.sbBMs=[...bmSet].sort();var bs=$('sb-bk-filter');bs.innerHTML='<option value="">Todas as Casas</option>'+G.sbBMs.map(function(b){return'<option>'+b+'</option>';}).join('');var sp=SPORTS.find(function(s){return s.k===sport;});data.forEach(function(g){g._sn=sp?sp.n:sport;g._si=sp?sp.e:'\u26BD';g._sk=sport;});G.allData=[...G.allData.filter(function(g){return g._sk!==sport;}),...data];sbRender();toast(data.length+' jogos \u00b7 '+G.sbBMs.length+' casas','s');}
 function sbMkt(v,el){G.mkt=v;$$('.mkt-pill').forEach(function(p){p.classList.remove('active');});var mp=$('mk-'+v);if(mp)mp.classList.add('active');G.sbData=[];if(G.sbSport)sbLoad();else toast('Seleciona um desporto primeiro','w');}
 function sbRender(){if(!G.sbData.length)return;var fBM=($('sb-bk-filter')&&$('sb-bk-filter').value)||'';var bms=fBM?[fBM]:G.sbBMs;if(!bms.length){$('sb-wrap').innerHTML='<div class="empty">Sem casas disponiveis</div>';return;}var html='<div class="sb-outer"><table class="sb-tbl"><thead><tr><th class="tl" style="width:38px">#</th><th class="tl" style="min-width:175px">EQUIPA</th><th style="min-width:75px">MELHOR</th><th style="min-width:70px">MEDIA</th>'+bms.map(function(b){return'<th style="min-width:56px"><div class="bk-hdr"><div class="bk-ico" style="background:'+bkClr(b)+'">'+b.slice(0,3).toUpperCase()+'</div><div class="bk-lbl">'+(b.length>11?b.slice(0,9)+'\u2026':b)+'</div></div></th>';}).join('')+'</tr></thead><tbody>';var rowNum=1;G.sbData.forEach(function(game){var _refBm=game.bookmakers&&game.bookmakers.find(function(bm){return bm.markets&&bm.markets.some(function(m){return m.key===G.mkt;});});var outs=_refBm&&_refBm.markets&&_refBm.markets.find(function(m){return m.key===G.mkt;})&&_refBm.markets.find(function(m){return m.key===G.mkt;}).outcomes||[];if(!outs.length)return;var isLive=new Date(game.commence_time)<new Date();var dt=isLive?'<span class="ldot"></span> LIVE':new Date(game.commence_time).toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'})+' '+new Date(game.commence_time).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});html+='<tr class="game-sep"><td colspan="'+(4+bms.length)+'"><div class="game-info">'+(isLive?'<span class="live-badge">'+dt+'</span>':'<span style="color:var(--t3);font-size:.75rem">'+dt+'</span>')+'<span>'+game._si+' '+game._sn+'</span><span style="color:var(--t2)">'+game.home_team+' vs '+game.away_team+'</span></div></td></tr>';outs.forEach(function(out,idx){var bestP=0,bestB='',prices=[];game.bookmakers&&game.bookmakers.forEach(function(bm){var m=bm.markets&&bm.markets.find(function(mk){return mk.key===G.mkt;});var o=m&&m.outcomes&&m.outcomes.find(function(oc){return oc.name===out.name&&(out.point==null||oc.point==null||oc.point===out.point);});if(o){prices.push(o.price);if(o.price>bestP){bestP=o.price;bestB=bm.title;}}});var avg=prices.length?prices.reduce(function(a,b){return a+b;})/prices.length:0;var lbl=out.name;if(out.point!=null){if(G.mkt==='totals'||G.mkt==='alternate_totals'||G.mkt==='team_totals')lbl+=' '+Math.abs(out.point);else lbl+=' '+(out.point>0?'+':'')+out.point;}html+='<tr class="out-row"><td class="td-num">'+rowNum+'</td><td style="padding-left:16px;vertical-align:middle"><div style="font-size:.84rem;font-weight:600;color:var(--t1)">'+lbl+'</div></td><td class="td-best"><div class="best-chip"><div class="best-odd">'+fmtOdd(bestP)+'</div><div class="best-bk">'+(bestB.length>10?bestB.slice(0,9)+'\u2026':bestB)+'</div></div></td><td class="td-avg">'+fmtOdd(avg)+'</td>'+bms.map(function(bm){var b=game.bookmakers&&game.bookmakers.find(function(x){return x.title===bm;});var m=b&&b.markets&&b.markets.find(function(mk){return mk.key===G.mkt;});var o=m&&m.outcomes&&m.outcomes.find(function(oc){return oc.name===out.name;});if(!o)return'<td class="td-odd"><span style="font-size:.7rem;color:var(--t4)">\u2014</span></td>';var isBest=bm===bestB;var fv=fairOdd(game,G.mkt,out.name);var ev=fv?calcEV(o.price,fv):0;var evTag=ev>=1?'<div class="odd-ev-tag">+'+ev.toFixed(1)+'%</div>':ev<-5?'<div class="odd-ev-tag odd-ev-neg">'+ev.toFixed(1)+'%</div>':'';return'<td class="td-odd"><div class="odd-cell'+(isBest?' best':'')+'"><div class="odd-v">'+fmtOdd(o.price)+'</div>'+evTag+'</div></td>';}).join('')+'</tr>';rowNum++;});});html+='</tbody></table></div>';$('sb-wrap').innerHTML=html;}
 
 function fairOdd(game,mktKey,outName){var sharp=['pinnacle','betfair_ex_eu','betfair','smarkets','matchbook'];var sO=[],aO=[];game.bookmakers&&game.bookmakers.forEach(function(bm){bm.markets&&bm.markets.forEach(function(m){if(m.key===mktKey)m.outcomes&&m.outcomes.forEach(function(o){if(o.name===outName){if(sharp.includes(bm.key))sO.push(o.price);aO.push(o.price);}});});});var ref;if(sO.length)ref=sO.reduce(function(a,b){return a+b;})/sO.length;else if(aO.length>=2){aO.sort(function(a,b){return a-b;});var m=Math.floor(aO.length/2);ref=aO.length%2?aO[m]:(aO[m-1]+aO[m])/2;}else return null;var refBm=game.bookmakers&&game.bookmakers.find(function(b){return sharp.includes(b.key);})||game.bookmakers&&game.bookmakers[0];if(refBm){var refM=refBm.markets&&refBm.markets.find(function(m){return m.key===mktKey;});if(refM){var tp=refM.outcomes.reduce(function(s,o){return s+1/o.price;},0);return 1/((1/ref)/tp);}}return ref*1.04;}
 
-// ── EV ──
+// -- EV --
 function findEV(data,minEV){minEV=(minEV===undefined||minEV===null)?0:minEV;var res=[];data.forEach(function(game){if(!game.bookmakers||game.bookmakers.length<2)return;game.bookmakers.forEach(function(bm){bm.markets&&bm.markets.forEach(function(mkt){mkt.outcomes&&mkt.outcomes.forEach(function(out){var fair=fairOdd(game,mkt.key,out.name);if(!fair||out.price<=fair)return;var ev=calcEV(out.price,fair);if(ev<minEV)return;var avgPrices=[];game.bookmakers&&game.bookmakers.forEach(function(b2){var m2=b2.markets&&b2.markets.find(function(mk){return mk.key===mkt.key;});var o2=m2&&m2.outcomes&&m2.outcomes.find(function(oc){return oc.name===out.name;});if(o2)avgPrices.push(o2.price);});var avgPrice=avgPrices.length?avgPrices.reduce(function(a,b){return a+b;})/avgPrices.length:out.price;res.push({sport:game._sn||'',icon:game._si||'\u26BD',sk:game._sk||'',home:game.home_team,away:game.away_team,game:game.home_team+' vs '+game.away_team,mkt:mkt.key==='h2h'?'Moneyline':mkt.key==='spreads'?'Spread':mkt.key==='totals'?'O/U':mkt.key,mktKey:mkt.key,outcome:out.name,point:out.point!=null?out.point:null,book:bm.title,bkey:bm.key,odds:out.price,avgOdds:avgPrice,fair:fair.toFixed(2),ev:ev.toFixed(2),kelly:calcKelly(out.price,fair).toFixed(2),time:game.commence_time,_game:game});});});});});res.sort(function(a,b){return parseFloat(b.ev)-parseFloat(a.ev);});res.forEach(function(r,i){r._i=i;});return res;}
 function getCounter(b){var g=b._game;if(!g)return null;var cn=null;if(b.outcome.toLowerCase().startsWith('over'))cn=b.outcome.replace(/over/i,'Under');else if(b.outcome.toLowerCase().startsWith('under'))cn=b.outcome.replace(/under/i,'Over');else{var m=g.bookmakers&&g.bookmakers[0]&&g.bookmakers[0].markets&&g.bookmakers[0].markets.find(function(mk){return mk.key==='h2h';});var ot=m&&m.outcomes&&m.outcomes.filter(function(o){return o.name!==b.outcome;});if(ot&&ot.length)cn=ot[0].name;}if(!cn)return null;var bp=0,bb='';g.bookmakers&&g.bookmakers.forEach(function(bm){bm.markets&&bm.markets.forEach(function(m){m.outcomes&&m.outcomes.forEach(function(o){if(o.name===cn&&o.price>bp){bp=o.price;bb=bm.title;}});});});if(!bp)return null;return{outcome:cn,odds:bp,book:bb,nv:fairOdd(g,b.mktKey,cn)};}
 async function loadEV(force){
   if(!force&&G.ev.length){evRender(G.ev);return;}
   if(!ODDS_KEY){$('ev-body').innerHTML='<tr><td colspan="9" class="empty"><i class="fas fa-key" style="font-size:2rem;color:var(--yellow);display:block;margin-bottom:12px"></i><div style="color:var(--yellow);font-weight:600">Chave API necessaria</div></td></tr>';return;}
   $('ev-body').innerHTML='<tr><td colspan="9" class="empty"><div class="spin"></div><div style="margin-top:8px;color:var(--t3)">A carregar odds...</div></td></tr>';
-  // +EV: todos os desportos Tier 1 disponíveis
+  // +EV: todos os desportos Tier 1 disponiveis
   var keys=SPORTS.filter(function(s){return s.tier===1;});
   G.allData=await fetchMulti(keys);
   if(!G.allData.length){$('ev-body').innerHTML='<tr><td colspan="9" class="empty"><div style="margin-bottom:10px"><i class="fas fa-calendar-times" style="font-size:2rem;color:var(--t4)"></i></div><div style="color:var(--t2);font-weight:600;margin-bottom:6px">Sem jogos agendados agora nas ligas activas</div><div style="font-size:.74rem;color:var(--t3)">A API esta activa. Tenta novamente mais tarde ou verifica se ha jogos disponiveis.</div></td></tr>';return;}
@@ -1125,26 +1118,26 @@ function setEVTab(mode,el){G.evTab=mode;$$('#pg-ev button[id^="evt"]').forEach(f
 function toggleEVF(){var p=$('ev-filter-panel');p.style.display=p.style.display==='none'?'block':'none';}
 function evDetail(i){var b=G.ev[i];if(!b)return;var ctr=getCounter(b);openModal('+EV \u2014 Detalhe da Aposta','<div style="display:grid;gap:10px"><div style="padding:12px;background:var(--bg-card2);border-radius:8px"><div style="font-weight:700;font-size:.9rem;color:var(--t1)">'+b.game+'</div><div style="font-size:.7rem;color:var(--t3);margin-top:3px">'+b.icon+' '+b.sport+'</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:14px;background:var(--bg-card2);border:1px solid var(--green-brd);border-radius:8px;text-align:center"><div style="font-size:.58rem;color:var(--t3);margin-bottom:4px;text-transform:uppercase">Expected Value</div><div style="font-size:2rem;font-weight:800;color:var(--green)">+'+b.ev+'%</div></div><div style="padding:14px;background:var(--bg-card2);border:1px solid var(--blue-brd);border-radius:8px;text-align:center"><div style="font-size:.58rem;color:var(--t3);margin-bottom:4px;text-transform:uppercase">Kelly %</div><div style="font-size:2rem;font-weight:800;color:var(--blue)">'+b.kelly+'%</div></div></div><table style="width:100%;font-size:.8rem;border-collapse:collapse">'+[['Aposta','<strong>'+b.outcome+'</strong>'],['Casa',b.book],['Odd',b.odds.toFixed(2)],['No-Vig',b.fair],['Stake Rec.','MZN '+Math.max(100,Math.round(parseFloat(b.kelly)*2)*100)],...(ctr?[['Contra-Aposta',ctr.outcome+' @ '+d2am(ctr.odds)+' ('+ctr.book+')']]:[])] .map(function(r){return'<tr style="border-bottom:1px solid rgba(255,255,255,.025)"><td style="padding:6px 0;color:var(--t3)">'+r[0]+'</td><td style="padding:6px 0;text-align:right;color:var(--t1)">'+r[1]+'</td></tr>';}).join('')+'</table><a href="https://wa.me/258840330540?text=+EV: '+encodeURIComponent(b.game+' | '+b.outcome+' '+d2am(b.odds)+' EV: +'+b.ev+'%')+'" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#1da462,#138a4e);color:#fff;padding:10px;border-radius:7px;font-size:.78rem;font-weight:700;text-decoration:none"><i class="fab fa-whatsapp" style="font-size:1rem"></i>Partilhar WA</a></div>');}
 
-// ── DASHBOARD ──
-async function loadDash(){if(!G.allData.length)await loadEV(true);renderDashEV(G.ev);}
+// -- DASHBOARD --
+function loadDash(){renderDashEV(G.ev);}
 function renderDashEV(bets){$('d-ev-body').innerHTML=bets.slice(0,6).map(function(b){return'<tr onclick="evDetail('+b._i+')" style="cursor:pointer"><td><span class="sp-tag">'+b.icon+' '+b.sport+'</span></td><td><strong style="font-size:.8rem;color:var(--t1)">'+b.home+'</strong><div style="font-size:.67rem;color:var(--t3)">vs '+b.away+'</div></td><td style="color:var(--t1)">'+b.outcome+'</td><td><span style="display:flex;align-items:center;gap:5px"><span class="dot8" style="background:'+bkClr(b.book)+'"></span>'+b.book+'</span></td><td class="g-txt">'+fmtOdd(b.odds)+'</td><td style="color:var(--t2)">'+fmtOdd(parseFloat(b.fair))+'</td><td style="color:var(--green);font-weight:700">+'+b.ev+'%</td><td style="font-size:.7rem;color:var(--t3)">'+fmtTime(b.time)+'</td></tr>';}).join('')||'<tr><td colspan="8" class="empty">Sem dados. Configura a chave API.</td></tr>';}
 
-// ── LIVE SCORES ──
+// -- LIVE SCORES --
 var G_liveData=[];
 async function loadLive(){var grid=$('live-grid');grid.innerHTML='<div class="lv-empty"><div class="spin"></div><div style="margin-top:8px;color:var(--t3)">A carregar resultados ESPN...</div></div>';var cards=[];var loaded=0;var entries=Object.entries(ESPN_ENDPOINTS);await Promise.allSettled(entries.map(async function(entry){var key=entry[0],src=entry[1];try{var r=await fetch(src.url,{cache:'no-store',signal:AbortSignal.timeout(8000)});if(!r.ok)throw new Error(r.status);var data=await r.json();loaded++;(data.events||[]).forEach(function(ev){var comp=ev.competitions&&ev.competitions[0];if(!comp)return;var home=comp.competitors&&comp.competitors.find(function(t){return t.homeAway==='home';});var away=comp.competitors&&comp.competitors.find(function(t){return t.homeAway==='away';});cards.push({key:key,label:src.label,sport:src.sport,homeName:home&&home.team&&home.team.displayName||'Casa',awayName:away&&away.team&&away.team.displayName||'Fora',homeScore:home&&home.score!=null?home.score:null,awayScore:away&&away.score!=null?away.score:null,isLive:ev.status&&ev.status.type&&ev.status.type.state==='in',isFinal:ev.status&&ev.status.type&&ev.status.type.state==='post',clock:ev.status&&ev.status.displayClock||'',detail:ev.status&&ev.status.type&&ev.status.type.detail||'',period:ev.status&&ev.status.period||null,startTime:ev.date});});}catch(e){}}));G_liveData=cards;renderLive();if(loaded===0)grid.innerHTML='<div class="lv-empty">Nao foi possivel conectar a ESPN API.</div>';else toast('Live Scores: '+cards.length+' jogos de '+loaded+' ligas','s');}
 function filterLive(sport,el){G.liveFilter=sport;$$('#live-sport-tabs button').forEach(function(b){b.classList.remove('active');});el.classList.add('active');renderLive();}
 function renderLive(){var grid=$('live-grid');var data=G_liveData;if(G.liveFilter!=='all')data=data.filter(function(c){return c.sport===G.liveFilter||c.key===G.liveFilter;});if(!data.length){grid.innerHTML='<div class="lv-empty">Sem jogos disponiveis agora</div>';return;}grid.innerHTML=data.map(function(c){var isLive=c.isLive,isFinal=c.isFinal;var hScore=c.homeScore!==null?c.homeScore:'\u2014';var aScore=c.awayScore!==null?c.awayScore:'\u2014';var statusBadge=isLive?'<span class="lv-live-tag"><span class="ldot"></span>LIVE</span>':'<span class="lv-ft" style="'+(isFinal?'color:var(--t2)':'')+'">'+(isFinal?'FT':c.detail||new Date(c.startTime).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}))+'</span>';return'<div class="lv-card"><div class="lv-top"><span class="lv-lg">'+c.label+'</span>'+statusBadge+'</div><div class="lv-team"><span class="lv-tn">'+c.homeName+'</span><span class="lv-sc">'+hScore+'</span></div><div style="margin:2px 0"></div><div class="lv-team"><span class="lv-tn">'+c.awayName+'</span><span class="lv-sc">'+aScore+'</span></div>'+(isLive&&c.clock?'<div class="lv-info">'+c.clock+(c.period?' \u00b7 P'+c.period:'')+'</div>':'')+'</div>';}).join('');}
 
-// ── PALPITES (v2 — COM TODOS OS FIXES) ──
+// -- PALPITES (v2 -- COM TODOS OS FIXES) --
 
-// FIX 1 v2: loadPalpites — usa cache existente se disponível, API só se necessário
+// FIX 1 v2: loadPalpites -- usa cache existente se disponivel, API so se necessario
 async function loadPalpites(){
   var btn=$('btn-gen-palpites');
   if(btn){btn.disabled=true;btn.innerHTML='<div class="spin" style="width:14px;height:14px;border-width:2px;margin:0"></div> A analisar...';}
   var pc=$('palpites-content');
   function setStep(t,s){pc.innerHTML='<div style="text-align:center;padding:60px 20px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div><div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">'+t+'</div><div style="font-size:.78rem;color:var(--t3);max-width:400px;margin:0 auto">'+s+'</div></div>';}
   try{
-    // ── PRIORIDADE 1: usa cache se já temos dados ──
+    // -- PRIORIDADE 1: usa cache se ja temos dados --
     if(G.allData&&G.allData.length>0){
       toast('A usar '+G.allData.length+' jogos em cache...','i');
       setStep('A calcular EV...',G.allData.length+' jogos em cache');
@@ -1156,10 +1149,10 @@ async function loadPalpites(){
       toast('Palpites gerados!','s');
       return;
     }
-    // ── PRIORIDADE 2: busca da API (só se cache vazio) ──
+    // -- PRIORIDADE 2: busca da API (so se cache vazio) --
     if(!ODDS_KEY)throw new Error('Chave API necessaria \u2014 configura no banner amarelo acima.');
-    // Apenas 5 ligas top + h2h,totals (sem btts/draw_no_bet que causam 422 em não-futebol)
-    // Todos os desportos Tier 1 disponíveis
+    // Apenas 5 ligas top + h2h,totals (sem btts/draw_no_bet que causam 422 em nao-futebol)
+    // Todos os desportos Tier 1 disponiveis
     var PAL_SPORTS=SPORTS.filter(function(s){return s.tier===1;});
     var pData=[];
     for(var si=0;si<PAL_SPORTS.length;si++){
@@ -1172,7 +1165,7 @@ async function loadPalpites(){
       // Mercados por desporto
       var mkts;
       if(isSoccer)          mkts='h2h,spreads,totals,btts,draw_no_bet,alternate_totals,team_totals';
-      else if(isTennis)     mkts='h2h';  // ténis só moneyline
+      else if(isTennis)     mkts='h2h';  // tenis so moneyline
       else if(isCricket||isRugby) mkts='h2h,spreads,totals';
       else                  mkts='h2h,spreads,totals,alternate_totals,team_totals';
       var d=await apiOdds(s.k,mkts);
@@ -1225,7 +1218,7 @@ async function loadPalpites(){
   }
 }
 
-// FIX 2: loadPalpitesFromCache — zero chamadas API
+// FIX 2: loadPalpitesFromCache -- zero chamadas API
 function loadPalpitesFromCache(){
   if(!G.allData||!G.allData.length){
     toast('Cache vazio \u2014 abre +EV e clica Refresh primeiro','w');
@@ -1370,7 +1363,7 @@ function buildAnalysisTags(p){
   return tags.slice(0,5);
 }
 
-// Cache de análises IA por jogo
+// Cache de analises IA por jogo
 var G_AI_CACHE = {};
 
 async function fetchAIAnalysis(p) {
@@ -1440,30 +1433,30 @@ function buildFallbackAnalysis(p){
 
   // Linha 1: contexto da aposta no evento
   if(mkt.includes('moneyline')||mkt.includes('h2h')){
-    if(isSoccer) lines.push(p.pick+' é favorito/underdog neste encontro de '+p.sport+'. A vitória direta é o mercado mais limpo para capturar valor.');
-    else if(isHockey) lines.push(p.pick+' numa partida de '+p.sport+' onde o modelo detecta desequilíbrio nas linhas. Moneyline em hóquei com EV+ é raro e valioso.');
-    else if(isBasket) lines.push('No basquetebol, '+p.pick+' enfrenta '+( p.pick===p.home?p.away:p.home)+' num encontro onde as odds de mercado não reflectem a força real das equipas.');
-    else if(isTennis) lines.push('No tênis, '+p.pick+' tem vantagem de valor em relação ao que as odds implicam. O modelo detecta subavaliação clara neste confronto.');
-    else if(isFootball) lines.push(p.pick+' no NFL/NCAA — aposta na vitória directa com edge identificado pelo modelo quantitativo vs o fair value de mercado.');
+    if(isSoccer) lines.push(p.pick+' e favorito/underdog neste encontro de '+p.sport+'. A vitoria direta e o mercado mais limpo para capturar valor.');
+    else if(isHockey) lines.push(p.pick+' numa partida de '+p.sport+' onde o modelo detecta desequilibrio nas linhas. Moneyline em hoquei com EV+ e raro e valioso.');
+    else if(isBasket) lines.push('No basquetebol, '+p.pick+' enfrenta '+( p.pick===p.home?p.away:p.home)+' num encontro onde as odds de mercado nao reflectem a forca real das equipas.');
+    else if(isTennis) lines.push('No tenis, '+p.pick+' tem vantagem de valor em relacao ao que as odds implicam. O modelo detecta subavaliacao clara neste confronto.');
+    else if(isFootball) lines.push(p.pick+' no NFL/NCAA -- aposta na vitoria directa com edge identificado pelo modelo quantitativo vs o fair value de mercado.');
     else if(isCombat) lines.push('Em combate ('+p.sport+'), '+p.pick+' aparece subavaliado pelas casas. O modelo de probabilidade detecta edge significativo neste duelo.');
-    else if(isRugby) lines.push('No Rugby, '+p.pick+' enfrenta '+( p.pick===p.home?p.away:p.home)+' com odds acima do fair value calculado. Mercado em desequilíbrio.');
-    else lines.push(p.home+' vs '+p.away+' — aposta em '+p.pick+' com edge detectado. As odds de '+odds+' estão acima do fair value de '+fair+'.');
+    else if(isRugby) lines.push('No Rugby, '+p.pick+' enfrenta '+( p.pick===p.home?p.away:p.home)+' com odds acima do fair value calculado. Mercado em desequilibrio.');
+    else lines.push(p.home+' vs '+p.away+' -- aposta em '+p.pick+' com edge detectado. As odds de '+odds+' estao acima do fair value de '+fair+'.');
   } else if(mkt.toLowerCase().includes('over')||mkt.toLowerCase().includes('under')){
     var dir=mkt.toLowerCase().includes('over')?'muitos golos/pontos':'jogo fechado e defensivo';
-    lines.push('Modelo antecipa '+dir+' em '+p.home+' vs '+p.away+'. O total indicado é suportado pela análise dos padrões ofensivos/defensivos das equipas na liga.');
+    lines.push('Modelo antecipa '+dir+' em '+p.home+' vs '+p.away+'. O total indicado e suportado pela analise dos padroes ofensivos/defensivos das equipas na liga.');
   } else if(mkt.includes('Ambas')||mkt.includes('btts')){
-    lines.push('Em '+p.home+' vs '+p.away+', o modelo de Poisson sugere que ambas as equipas têm capacidade para marcar, com probabilidade real (~'+prob.toFixed(0)+'%) acima do que as odds implicam.');
+    lines.push('Em '+p.home+' vs '+p.away+', o modelo de Poisson sugere que ambas as equipas tem capacidade para marcar, com probabilidade real (~'+prob.toFixed(0)+'%) acima do que as odds implicam.');
   } else if(mkt.includes('Handicap')){
     lines.push('Aposta de handicap em '+p.home+' vs '+p.away+'. O modelo detecta superioridade suficiente para cobrir a linha, com a odd de '+odds+' a oferecer valor vs o fair value de '+fair+'.');
   } else if(mkt.includes('Total')){
-    lines.push('Total de pontos/golos em '+p.home+' vs '+p.away+'. O modelo de projecção para este desporto ('+p.sport+') aponta para este resultado no total especificado.');
+    lines.push('Total de pontos/golos em '+p.home+' vs '+p.away+'. O modelo de projeccao para este desporto ('+p.sport+') aponta para este resultado no total especificado.');
   } else {
     lines.push('Mercado especializado em '+p.home+' vs '+p.away+' ('+p.sport+'). Edge de +'+ev.toFixed(1)+'% identificado com probabilidade real ~'+prob.toFixed(0)+'%.');
   }
   // Linha 2: valor vs mercado
-  lines.push('A casa '+p.bookmaker+' oferece '+odds+' vs fair value de '+fair+' (edge +'+ev.toFixed(1)+'%). A média do mercado está em '+p.odds_avg+', confirmando que estas odds estão acima do consenso.');
-  // Linha 3: gestão de banca
-  if(kelly>=2) lines.push('Kelly recomenda '+kelly.toFixed(1)+'% da banca — sinal forte. Stake sugerido: MZN '+stakeRec+'.');
+  lines.push('A casa '+p.bookmaker+' oferece '+odds+' vs fair value de '+fair+' (edge +'+ev.toFixed(1)+'%). A media do mercado esta em '+p.odds_avg+', confirmando que estas odds estao acima do consenso.');
+  // Linha 3: gestao de banca
+  if(kelly>=2) lines.push('Kelly recomenda '+kelly.toFixed(1)+'% da banca -- sinal forte. Stake sugerido: MZN '+stakeRec+'.');
   else lines.push('Stake sugerido pelo Kelly: MZN '+stakeRec+' ('+kelly.toFixed(1)+'% da banca).');
   return lines.join(' ');
 }
@@ -1537,34 +1530,21 @@ function renderPalpites(picks,weather){
     var tLabel=selCount===1?'Criar Simples':selCount===2?'Criar Dupla':selCount===3?'Criar Tripla':'Criar '+selCount+'-Fold';
     var tBg=selCount===1?'var(--blue)':selCount===2?'var(--green)':selCount===3?'var(--gold)':'var(--purple)';
     var tClr=(selCount===2||selCount===1)?'#fff':'#0a0a0a';
-    var oddTxt=selCount>=1?' · Odd: <strong style="color:var(--green)">'+combOdd.toFixed(2)+'</strong>':'';
+    var oddTxt=selCount>=1?' . Odd: <strong style="color:var(--green)">'+combOdd.toFixed(2)+'</strong>':'';
     var actionBar='<div style="position:sticky;bottom:0;background:linear-gradient(0deg,var(--bg-black) 80%,transparent);padding:14px 0 10px;margin-top:4px"><div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px"><div style="font-size:.78rem;color:var(--t2)">'+(selCount===0?'<span style="color:var(--t3)">Seleciona 1 a 6 jogos para criar bilhete</span>':selCount+' jogo(s) selecionado(s)'+oddTxt)+'</div><div style="display:flex;gap:6px;flex-wrap:wrap">'+(selCount>=1?'<button onclick="createPalTicket()" style="background:'+tBg+';color:'+tClr+';border:none;padding:8px 16px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px"><i class="fas fa-ticket-alt"></i> '+tLabel+'</button>':'')+'<button onclick="clearPalSel()" style="background:var(--bg-card);border:1px solid var(--border);color:var(--t3);padding:8px 12px;border-radius:8px;font-size:.8rem;cursor:pointer">Limpar</button></div></div></div>';
     pc.innerHTML='<div style="padding:12px 14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px"><div style="font-size:.78rem;color:var(--t2)"><strong style="color:var(--t1)">'+G_PAL_PICKS.length+' palpites</strong> <span class="cache-badge" id="cache-info-badge"></span></div><div style="display:flex;gap:5px"><button onclick="selectTopN(1)" style="background:rgba(0,168,232,.1);border:1px solid rgba(0,168,232,.3);color:var(--blue);padding:4px 11px;border-radius:6px;font-size:.73rem;font-weight:700;cursor:pointer">Auto Simples</button><button onclick="selectTopN(2)" style="background:var(--green-dim);border:1px solid var(--green-brd);color:var(--green);padding:4px 11px;border-radius:6px;font-size:.73rem;font-weight:700;cursor:pointer">Auto Dupla</button><button onclick="selectTopN(3)" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--gold);padding:4px 11px;border-radius:6px;font-size:.73rem;font-weight:700;cursor:pointer">Auto Tripla</button></div></div>'+cardsHtml+actionBar+'</div>';
     var cib=$('cache-info-badge');
     if(cib){cib.textContent=G.allData.length+' jogos em cache';cib.style.display=G.allData.length?'inline-flex':'none';}
   }
   renderCards();window._palRerender=function(){renderCards();};
-  // Pre-fetch AI analysis for top 3 picks silently in background
-  setTimeout(function(){
-    var topN=Math.min(3,G_PAL_PICKS.length);
-    for(var pi=0;pi<topN;pi++){
-      (function(idx){
-        var p=G_PAL_PICKS[idx];
-        if(!p)return;
-        var cacheKey=p.game+'|'+p.market+'|'+p.pick;
-        if(!G_AI_CACHE[cacheKey]){
-          fetchAIAnalysis(p).then(function(txt){G_AI_CACHE[cacheKey]=txt;});
-        }
-      })(pi);
-    }
-  },800);
+  // AI analysis loaded on-demand when user expands a pick
 }
 function togglePickSel(i){if(G_PAL_SEL.has(i)){G_PAL_SEL.delete(i);}else{if(G_PAL_SEL.size>=6){toast('Maximo 6','w');return;}G_PAL_SEL.add(i);}if(window._palRerender)window._palRerender();}
 function togglePalExp(i){
   if(G_PAL_EXP.has(i)){G_PAL_EXP.delete(i);if(window._palRerender)window._palRerender();return;}
   G_PAL_EXP.add(i);
   if(window._palRerender)window._palRerender();
-  // Inicia análise IA se ainda não foi carregada
+  // Inicia analise IA se ainda nao foi carregada
   var p=G_PAL_PICKS[i];
   if(!p)return;
   var cacheKey=p.game+'|'+p.market+'|'+p.pick;
@@ -1595,7 +1575,7 @@ function createPalTicket(){
 }
 function registerTicketToTracker(){try{var p=window._pendingTicket;if(!p){toast('Sem ticket','w');return;}var bets=getBets();bets.unshift({id:Date.now(),date:new Date().toLocaleDateString('pt-PT'),game:p.legs.map(function(l){return l.home.split(' ')[0];}).join(' + '),mkt:p.type+' '+p.legs.length+'-Fold',odd:p.totalOdds,fair:p.totalOdds*0.97,clv:null,stake:200,res:'p',pl:0,isTicket:true,legs:p.legs.map(function(l){return l.home+' vs '+l.away+' - '+l.pick+' @ '+l.odds_best;})});saveBets(bets);window._pendingTicket=null;closeModal();renderTracker();renderOjDashboard();toast(p.type+' adicionada!','s');setTimeout(function(){go('tracker');},250);}catch(err){toast('Erro: '+err.message,'e');}}
 
-// ── CALCULADORAS (MODELS) ──
+// -- CALCULADORAS (MODELS) --
 function initModels(){runPoisson();runELO();runKelly();runCLV();runDevig();}
 function runPoisson(){
   var h=parseFloat($('p-h')&&$('p-h').value)||1.5,a=parseFloat($('p-a')&&$('p-a').value)||1.1;
@@ -1663,7 +1643,7 @@ function convOdds(src){
   if(r)r.textContent=(100/dec).toFixed(1)+'%';
 }
 
-// ── TRACKER ──
+// -- TRACKER --
 function getBets(){try{return JSON.parse(localStorage.getItem('md_bets')||'[]');}catch(e){return[];}}
 function saveBets(bets){localStorage.setItem('md_bets',JSON.stringify(bets||[]));}
 function getBalance(){return parseFloat(localStorage.getItem('md_balance')||'0');}
@@ -1683,8 +1663,8 @@ function addBet(){
   var score=scoreEl&&scoreEl.value||'';
   var res=resEl&&resEl.value||'p';
   if(!game||game.length<2){toast('Preenche o campo Jogo / Evento (min 2 caracteres)','w');if(gameEl){gameEl.focus();gameEl.style.borderColor='var(--red)';}return;}
-  if(isNaN(odd)||odd<1.01){toast('Odd invalida — minimo 1.01 (ex: 1.90, 2.50)','w');if(oddEl){oddEl.focus();oddEl.style.borderColor='var(--red)';}return;}
-  if(isNaN(stake)||stake<1){toast('Stake invalido — minimo MZN 1','w');if(stakeEl){stakeEl.focus();stakeEl.style.borderColor='var(--red)';}return;}
+  if(isNaN(odd)||odd<1.01){toast('Odd invalida -- minimo 1.01 (ex: 1.90, 2.50)','w');if(oddEl){oddEl.focus();oddEl.style.borderColor='var(--red)';}return;}
+  if(isNaN(stake)||stake<1){toast('Stake invalido -- minimo MZN 1','w');if(stakeEl){stakeEl.focus();stakeEl.style.borderColor='var(--red)';}return;}
   // Reset border colors
   [gameEl,oddEl,stakeEl].forEach(function(el){if(el)el.style.borderColor='';});
   var bets=getBets();var clv=fair&&odd?((odd-fair)/fair*100):null;
@@ -1858,7 +1838,7 @@ function renderChart(canvasId,labels,data,color){
   labels.forEach(function(l,i){if(l){var x=toX(i);ctx.fillText(l,x,H-3);}});}
 }
 
-// ── OJ DASHBOARD ──
+// -- OJ DASHBOARD --
 function renderOjDashboard(){
   var bets=getBets();
   var settled=bets.filter(function(b){return b.res==='w'||b.res==='l'||b.res==='hw'||b.res==='hl';});
@@ -1903,7 +1883,7 @@ function renderOjDashboard(){
 function setOjPeriod(p,el){$$('[id^="ptb-"]').forEach(function(b){b.classList.remove('active');});if(el)el.classList.add('active');renderOjDashboard();}
 function switchTrkTab(t){$$('.trk-tab').forEach(function(b){b.classList.remove('active');});$$('.trk-pane').forEach(function(p){p.classList.remove('active');});var tab=$('trkt-'+t),pane=$('trkp-'+t);if(tab)tab.classList.add('active');if(pane)pane.classList.add('active');if(t==='sweat')renderSweat();else if(t==='deps')renderDeposits();else if(t==='dash')renderOjDashboard();}
 
-// ── SWEAT STATION ──
+// -- SWEAT STATION --
 var G_cal={year:new Date().getFullYear(),month:new Date().getMonth()};var G_sweatDay=null;var G_sweatTab='live';var G_sweatPeriod='w';
 function renderSweat(){
   var bets=getBets();var today=new Date();
@@ -1969,7 +1949,7 @@ function renderSweatChart(){
 }
 function setSweatPeriod(p,el){G_sweatPeriod=p;$$('.oj-section .period-tabs .pt-btn').forEach(function(b){b.classList.remove('active');});if(el)el.classList.add('active');renderSweatChart();}
 
-// ── DEPOSITS ──
+// -- DEPOSITS --
 function getDeposits(){try{return JSON.parse(localStorage.getItem('md_deposits')||'[]');}catch(e){return[];}}
 function saveDeposits(deps){localStorage.setItem('md_deposits',JSON.stringify(deps||[]));}
 function addDeposit(){
@@ -2004,7 +1984,7 @@ function renderDeposits(){
   }).join('')||'<tr><td colspan="8" class="empty" style="padding:40px 20px">Sem registos</td></tr>';
 }
 
-// ── PRICING ──
+// -- PRICING --
 var G_period='m';
 function setPeriod(p){G_period=p;$$('.psw').forEach(function(b){b.classList.remove('active');});var btn=$(('per-'+p));if(btn)btn.classList.add('active');renderPricing();}
 function renderPricing(){
@@ -2026,7 +2006,7 @@ function renderPricing(){
 }
 function toggleFaq(i){var a=$('fq-a-'+i),c=$('fq-c-'+i);if(!a)return;var o=a.style.display!=='none'&&a.style.display!=='';a.style.display=o?'none':'block';if(c)c.style.transform=o?'':'rotate(180deg)';}
 
-// ── AUTH ──
+// -- AUTH --
 function openAuth(){$('auth-ov').classList.add('on');}
 function closeAuth(){$('auth-ov').classList.remove('on');}
 function authTab(t){$$('.atb').forEach(function(b){b.classList.remove('active');});$('atb-'+t).classList.add('active');$('af-in').style.display=t==='in'?'flex':'none';$('af-up').style.display=t==='up'?'flex':'none';}
@@ -2034,7 +2014,7 @@ function doLogin(){var em=$('ai-em').value.trim(),pw=$('ai-pw').value;var err=$(
 function doReg(){var nm=$('au-nm').value.trim(),em=$('au-em').value.trim(),pw=$('au-pw').value,pw2=$('au-pw2').value;var err=$('au-err');if(!nm||!em||!pw){err.textContent='Preenche todos os campos';err.style.display='block';return;}if(pw.length<8){err.textContent='Password minimo 8 caracteres';err.style.display='block';return;}if(pw!==pw2){err.textContent='Passwords nao coincidem';err.style.display='block';return;}var users=JSON.parse(localStorage.getItem('md_users')||'[]');if(users.find(function(u){return u.email===em;})){err.textContent='Email ja registado';err.style.display='block';return;}users.push({name:nm,email:em,pw:pw});localStorage.setItem('md_users',JSON.stringify(users));G.user={name:nm,email:em};localStorage.setItem('md_session',JSON.stringify(G.user));closeAuth();updateUserUI();toast('Conta criada! Bem-vindo, '+nm+'!','s');}
 function updateUserUI(){var uc=$('user-circle'),nb=$('nav-auth-btn');if(!G.user){if(uc){uc.textContent='?';uc.onclick=openAuth;}if(nb){nb.innerHTML='<i class="fas fa-sign-in-alt nav-icon"></i>Entrar';nb.onclick=openAuth;}return;}var initials=G.user.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();if(uc){uc.textContent=initials;uc.onclick=function(){if(confirm('Sair?')){G.user=null;localStorage.removeItem('md_session');updateUserUI();toast('Sessao terminada','s');}};uc.title=G.user.name;}if(nb){nb.innerHTML='<i class="fas fa-user nav-icon"></i>'+G.user.name.split(' ')[0];nb.onclick=function(){if(confirm('Sair de '+G.user.name+'?')){G.user=null;localStorage.removeItem('md_session');updateUserUI();toast('Sessao terminada','s');}};}}
 
-// ── SIDEBAR SPORTS ──
+// -- SIDEBAR SPORTS --
 function buildSportsSidebar(){
   var cats={};SPORTS.forEach(function(s){if(!cats[s.c])cats[s.c]=[];cats[s.c].push(s);});
   var html='';Object.entries(cats).forEach(function(entry){var c=entry[0],list=entry[1];html+='<div class="sub-cat-hdr"><span>'+c+'</span></div>';html+=list.map(function(s){return'<div class="sub-item" onclick="sbSelectSport(\''+s.k+'\')"><span style="width:18px;text-align:center">'+s.e+'</span>'+s.n+(s.flag?' '+s.flag:'')+'</div>';}).join('');});
@@ -2044,17 +2024,17 @@ function buildSportsSidebar(){
 }
 function sbSelectSport(k){var sb=$('sb-sport');if(sb)sb.value=k;G.sbSport=k;go('sportsbook');setTimeout(function(){sbLoad();},100);}
 
-// ── COUNTDOWN ──
+// -- COUNTDOWN --
 function startCountdown(){setInterval(function(){G.cd--;if(G.cd<=0){G.cd=60;if(G.page==='ev')loadEV(true);else if(G.page==='live')loadLive();}var cd=$('cd-val');if(cd)cd.textContent=G.cd;},1000);}
 
-// ── SEARCH ──
+// -- SEARCH --
 function initSearch(){var inp=$('gsearch');if(!inp)return;inp.addEventListener('input',function(){var q=inp.value.trim().toLowerCase();if(!q)return;var found=G.allData&&G.allData.filter(function(g){return(g.home_team+' '+g.away_team).toLowerCase().includes(q);});if(found&&found.length){toast(''+found.length+' jogo(s) encontrado(s)','s');}});}
 
-// ── DATE INIT ──
+// -- DATE INIT --
 function initDepDate(){var dd=$('dep-date');if(dd&&!dd.value)dd.value=new Date().toISOString().slice(0,10);}
 
-// ── BOOT ──
-async function boot(){
+// -- BOOT --
+function boot(){
   // Restore session
   try{var sess=JSON.parse(localStorage.getItem('md_session')||'null');if(sess&&sess.email){G.user=sess;updateUserUI();}}catch(_){}
   // Restore API key
@@ -2064,8 +2044,25 @@ async function boot(){
   go('dashboard');
   // Banner check
   checkBanner();
-  // Validate API key
-  if(ODDS_KEY&&ODDS_KEY.length>10){setApiStatus('wait','A verificar...');var url=BASE_ODDS+'/sports/?apiKey='+ODDS_KEY;try{var r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(6000)});if(r.ok){setApiStatus('ok','Odds API ✓');dismissBanner();}else if(r.status===401){setApiStatus('err','Chave invalida');}else{setApiStatus('err','Sem resposta');}}catch(_){try{var pr=await fetch('https://corsproxy.io/?'+encodeURIComponent(url),{signal:AbortSignal.timeout(5000)});if(pr.ok){setApiStatus('ok','Odds API ✓');dismissBanner();}}catch(_2){setApiStatus('err','Sem ligacao');}}}else{setApiStatus('err','Sem chave API');}
+  // Validate API key -- NON-BLOCKING (setTimeout, nao await)
+  if(ODDS_KEY&&ODDS_KEY.length>10){
+    setApiStatus('wait','A ligar...');
+    setTimeout(function(){
+      var vUrl=BASE_ODDS+'/sports/?apiKey='+ODDS_KEY;
+      var sig=function(){try{return AbortSignal.timeout(7000);}catch(e){return undefined;}};
+      fetch(vUrl,{cache:'no-store',signal:sig()})
+        .then(function(r){
+          if(r.ok){setApiStatus('ok','Odds API \u2713');dismissBanner();}
+          else if(r.status===401){setApiStatus('err','Chave invalida');}
+          else{setApiStatus('err','Erro '+r.status);}
+        })
+        .catch(function(){
+          fetch('https://corsproxy.io/?'+encodeURIComponent(vUrl),{signal:sig()})
+            .then(function(r2){if(r2.ok){setApiStatus('ok','Odds API \u2713');dismissBanner();}else{setApiStatus('err','Sem ligacao');} })
+            .catch(function(){setApiStatus('err','Sem ligacao');});
+        });
+    },600);
+  }else{setApiStatus('err','Sem chave API');}
   // Pre-load live scores quietly
   setTimeout(function(){loadLive().catch(function(){});},2000);
 }
