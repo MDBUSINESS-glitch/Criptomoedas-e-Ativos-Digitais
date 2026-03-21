@@ -1327,7 +1327,10 @@ function go(pid){
   $$('.nav-item[data-pg="'+pid+'"]').forEach(function(a){a.classList.add('active');});
   G.page=pid;$('sidebar').classList.remove('open');
   try{
-    if(pid==='ev'){if(G.ev.length)evRender(G.ev);} // only render existing, don't auto-fetch
+    if(pid==='ev'){
+      if(G.ev.length){evRender(G.ev);var sfc=$('ev-smart-filters');if(sfc&&!sfc.innerHTML.trim())sfc.innerHTML=buildEVStatsFilters();}
+      else if(G.allData&&G.allData.length>0){setTimeout(function(){loadEV(false);},80);}
+    }
     else if(pid==='live')loadLive();
     else if(pid==='dashboard')loadDash();
     else if(pid==='palpites'){/* user clicks manually */}
@@ -1526,6 +1529,27 @@ function findEV(data,minEV){
 function getCounter(b){var g=b._game;if(!g)return null;var cn=null;if(b.outcome.toLowerCase().startsWith('over'))cn=b.outcome.replace(/over/i,'Under');else if(b.outcome.toLowerCase().startsWith('under'))cn=b.outcome.replace(/under/i,'Over');else{var m=g.bookmakers&&g.bookmakers[0]&&g.bookmakers[0].markets&&g.bookmakers[0].markets.find(function(mk){return mk.key==='h2h';});var ot=m&&m.outcomes&&m.outcomes.filter(function(o){return o.name!==b.outcome;});if(ot&&ot.length)cn=ot[0].name;}if(!cn)return null;var bp=0,bb='';g.bookmakers&&g.bookmakers.forEach(function(bm){bm.markets&&bm.markets.forEach(function(m){m.outcomes&&m.outcomes.forEach(function(o){if(o.name===cn&&o.price>bp){bp=o.price;bb=bm.title;}});});});if(!bp)return null;return{outcome:cn,odds:bp,book:bb,nv:fairOdd(g,b.mktKey,cn)};}
 async function loadEV(force){
   if(!force&&G.ev.length){evRender(G.ev);return;}
+  // SHORTCUT: if allData exists, build EV from cache immediately
+  if(!force&&G.allData&&G.allData.length>0){
+    var minEV=parseFloat(($('ev-min')&&$('ev-min').value)||'0');
+    var sp=($('ev-sport')&&$('ev-sport').value)||'all';
+    var mk=($('ev-mkt-f')&&$('ev-mkt-f').value)||'all';
+    var fd=[...G.allData];
+    if(sp!=='all')fd=fd.filter(function(g){return g._sk===sp;});
+    var bets=findEV(fd,minEV);
+    if(mk!=='all')bets=bets.filter(function(b){return b.mktKey===mk;});
+    if(bets.length){
+      G.ev=bets;
+      $('ev-total').textContent=bets.length;
+      if(bets.length){var avg=bets.reduce(function(s,b){return s+parseFloat(b.ev);},0)/bets.length;$('ev-avg-v').textContent=(avg>=0?'+':'')+avg.toFixed(1)+'%';$('ev-best-v').textContent=(bets[0]?'+':'')+bets[0].ev+'%';$('ev-nsports').textContent=[...new Set(bets.map(function(b){return b.sport;}))].length;}
+      var now=new Date();
+      evRender(G.evTab==='live'?bets.filter(function(b){return new Date(b.time)<now;}):bets.filter(function(b){return new Date(b.time)>=now;}));
+      var sfContainer=$('ev-smart-filters');if(sfContainer)sfContainer.innerHTML=buildEVStatsFilters();
+      $('d-ev-c').textContent=bets.length;renderDashEV(bets);
+      toast('EV+ calculado de '+G.allData.length+' jogos em cache','s');
+      return;
+    }
+  }
   if(!ODDS_KEY){$('ev-body').innerHTML='<tr><td colspan="9" class="empty"><i class="fas fa-key" style="font-size:2rem;color:var(--yellow);display:block;margin-bottom:12px"></i><div style="color:var(--yellow);font-weight:600">Chave API necessaria</div></td></tr>';return;}
   $('ev-body').innerHTML='<tr><td colspan="9" class="empty"><div class="spin"></div><div style="margin-top:8px;color:var(--t3)">A carregar odds...</div></td></tr>';
   // +EV: prioridade soccer activo + top desportos (preserva quota API)
@@ -1738,7 +1762,7 @@ function buildPalpitesAlgo(weather){
     if(key==='team_totals')return 4;
     if(key==='spreads')return 5;
     if(key==='alternate_spreads')return 5;
-    if(key==='h2h_lay')return 7;
+    if(key==='h2h_lay')return 99; // Lay excluded from palpites
     return 6;
   }
   var allBets=[];
@@ -1756,6 +1780,8 @@ function buildPalpitesAlgo(weather){
           if(!price||price<minOdd||price>maxOdd)return;
           // Skip already-started games
           if(game.commence_time&&new Date(game.commence_time)<new Date())return;
+          // Skip LAY bets in palpites - Exchange only for EV+ page
+          if(mkt.key==='h2h_lay')return;
           var sharp=['pinnacle','betfair_ex_eu','betfair','smarkets','matchbook'];
           var refBm=game.bookmakers.find(function(b){return sharp.includes(b.key);})||game.bookmakers[0];
           var refMkt=refBm&&refBm.markets&&refBm.markets.find(function(m){return m.key===mkt.key;});
@@ -1888,12 +1914,41 @@ function buildFallbackAnalysis(p){
   // Line 1: Event context + tactical reason for the pick
   if(mkt.includes('moneyline')||mkt.includes('h2h')){
     if(sport.match(/league|liga|serie|bundesliga|ligue|ucl|europa|cup|primeira|mls/)){
+      // Tactical context based on home/away role and odds
       var roleStr=isFav?'casa':'fora';
-      lines.push(pick+' joga como equipa de '+roleStr+' neste encontro de '+p.sport+
-        '. O modelo de valor esperado identifica subavaliacao clara -- as odds actuais de '+p.bookmaker+
-        ' nao reflectem a forca real desta equipa neste contexto competitivo.');
-      if(prob>=60) lines.push('Com probabilidade calculada de ~'+prob.toFixed(0)+'%, esta e uma seleccao de alta confianca. Apostas nesta gama de probabilidade sao o nucleo de uma estrategia profissional de longo prazo.');
-      else lines.push('A probabilidade real (~'+prob.toFixed(0)+'%) supera o que as odds implicam. Em futebol, resultados assim ocorrem frequentemente quando o mercado sobrestima o adversario.');
+      var oppName=isFav?away:home;
+      var favName=isFav?home:away;
+      // Derive tactical insight from market data
+      var _gData=G.allData&&G.allData.find(function(g){return g.home_team===home&&g.away_team===away;});
+      var _ms=_gData?extractMarketStats(_gData):null;
+      var xgTxt='';
+      if(_ms&&_ms.impliedGoals){
+        var xg=parseFloat(_ms.impliedGoals);
+        xgTxt=' O mercado precifica '+xg.toFixed(1)+' golos totais,';
+        if(xg>=3.0)xgTxt+=' indicando jogo de alta producao ofensiva.';
+        else if(xg>=2.5)xgTxt+=' consistente com um encontro competitivo.';
+        else xgTxt+=' apontando para jogo tactico de baixa pontuacao.';
+      }
+      var hcpTxt='';
+      if(_ms&&_ms.handicap!=null){
+        var hcp=parseFloat(_ms.handicap);
+        if(hcp<=-1.5)hcpTxt=' O handicap asiatico de '+hcp+' confirma a superioridade esperada --';
+        else if(hcp<0)hcpTxt=' O handicap de '+hcp+' sugere ligeira vantagem para a equipa da casa --';
+        else if(hcp>1)hcpTxt=' O handicap positivo indica que '+oppName+' tem vantagem,';
+      }
+      // Build tactical line
+      if(isFav){
+        lines.push(favName+' joga em '+roleStr+' neste encontro de '+p.sport+
+          '. O modelo EV+ identifica que as odds do '+p.bookmaker+' ('+odds.toFixed(2)+
+          ' vs fair value '+p.fair_odd+') subavaliam esta seleccao.'+(hcpTxt||'')+(xgTxt||''));
+      } else {
+        lines.push(favName+' visita o '+oppName+' num encontro de '+p.sport+
+          ' onde o mercado pode ter exagerado na cotacao da equipa da casa.'+
+          (xgTxt||'')+' O valor real calculado aponta para uma probabilidade de '+prob.toFixed(0)+'%,'+
+          ' superior ao implicado pelas odds actuais do '+p.bookmaker+'.');
+      }
+      if(prob>=60) lines.push('Alta confianca do modelo (~'+prob.toFixed(0)+'% prob). O Kelly de '+kelly.toFixed(1)+'% reflecte um edge real e sustentavel.');
+      else lines.push('A probabilidade real (~'+prob.toFixed(0)+'%) supera as odds implicadas. Em '+p.sport+', desequilibrios assim surgem quando um dos intervenientes enfrenta restricoes de contexto que o mercado nao pondera totalmente.');
     } else if(sport.match(/nhl|hockey/)){
       lines.push('Em hoquei no gelo ('+p.sport+'), '+pick+' e favorito pelo modelo quantitativo neste duelo. O mercado de moneyline em hoquei e altamente liquido -- odds acima do fair value sao oportunidades raras.');
       lines.push('~'+prob.toFixed(0)+'% de probabilidade calculada. Kelly '+kelly.toFixed(1)+'% -- edge solido.');
@@ -1937,11 +1992,19 @@ function buildFallbackAnalysis(p){
 
 function buildTriplaDodia(picks){
   if(!picks||picks.length<3)return null;
+  // NO LAY bets in Tripla - only regular markets
+  var isValidForTripla=function(p){
+    if(p.market==='Lay (Exchange)'||p.mktKey==='h2h_lay')return false;
+    if(p.market&&p.market.toLowerCase().includes('lay'))return false;
+    return true;
+  };
   var cands=picks.filter(function(p){
+    if(!isValidForTripla(p))return false;
     var prob=parseFloat(p.prob_real),ev=parseFloat(p.ev_pct),odds=parseFloat(p.odds_best);
     return prob>=52&&ev>0&&odds>=1.20&&odds<=2.10;
   });
   if(cands.length<3)cands=picks.filter(function(p){
+    if(!isValidForTripla(p))return false;
     return parseFloat(p.prob_real)>=48&&parseFloat(p.ev_pct)>0&&parseFloat(p.odds_best)<=2.20;
   });
   if(cands.length<3)return null;
@@ -1954,7 +2017,7 @@ function buildTriplaDodia(picks){
   if(selected.length<3){
     // Try 3-combo search for best odds range 1.80-4.20
     var best=null,bestScore=0;
-    var pool=picks.filter(function(p){return parseFloat(p.ev_pct)>0&&parseFloat(p.odds_best)<=2.50;}).slice(0,15);
+    var pool=picks.filter(function(p){return isValidForTripla(p)&&parseFloat(p.ev_pct)>0&&parseFloat(p.odds_best)<=2.50;}).slice(0,15);
     for(var a=0;a<pool.length;a++)for(var b=a+1;b<pool.length;b++)for(var c=b+1;c<pool.length;c++){
       var combo=[pool[a],pool[b],pool[c]];
       var games=combo.map(function(p){return p.game;});
