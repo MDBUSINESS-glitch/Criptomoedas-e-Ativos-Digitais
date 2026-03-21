@@ -1297,6 +1297,46 @@ const FAQS = [
   {q:'O que e Positive EV?',a:'EV positivo significa que a odd oferecida esta acima da probabilidade real calculada vs Pinnacle/Betfair.'},
   {q:'Que ligas os Palpites IA analisa?',a:'Apenas ligas Tier 1 (max 15) para preservar a quota de 500 req/mes da API gratuita.'},
 ];
+
+// PALPITES priority: Soccer first, then other sports
+// Never includes h2h_lay - that's for EV+/Exchange only
+var PAL_PRIORITY=[
+  {k:'soccer_epl',n:'Premier League',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'soccer_spain_la_liga',n:'La Liga',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'soccer_italy_serie_a',n:'Serie A',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'soccer_germany_bundesliga',n:'Bundesliga',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'soccer_france_ligue_one',n:'Ligue 1',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'soccer_uefa_champs_league',n:'Champions League',e:'\u2b50',c:'Soccer',tier:1},
+  {k:'soccer_portugal_primeira_liga',n:'Liga Portugal',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'soccer_usa_mls',n:'MLS',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'soccer_conmebol_copa_libertadores',n:'Copa Libertadores',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'soccer_brazil_campeonato',n:'Brasileirao',e:'\u26bd',c:'Soccer',tier:1},
+  {k:'basketball_nba',n:'NBA',e:'\ud83c\udfc0',c:'NBA',tier:1},
+  {k:'americanfootball_nfl',n:'NFL',e:'\ud83c\udfc8',c:'NFL',tier:1},
+  {k:'icehockey_nhl',n:'NHL',e:'\ud83c\udfe5',c:'NHL',tier:1},
+  {k:'tennis_atp_french_open',n:'Tennis ATP',e:'\ud83c\udfbe',c:'Tennis',tier:1},
+  {k:'mma_mixed_martial_arts',n:'MMA/UFC',e:'\ud83e\udd4a',c:'MMA',tier:1}
+];
+// Markets per sport - NO h2h_lay anywhere in palpites
+function getPalMkts(sportKey){
+  if(sportKey.startsWith('soccer'))return'h2h,spreads,totals,btts,draw_no_bet,alternate_totals,team_totals';
+  if(sportKey.startsWith('tennis'))return'h2h';
+  if(sportKey.startsWith('basketball'))return'h2h,spreads,totals,team_totals';
+  if(sportKey.startsWith('americanfootball'))return'h2h,spreads,totals,team_totals';
+  if(sportKey.startsWith('icehockey'))return'h2h,spreads,totals';
+  if(sportKey.startsWith('mma'))return'h2h';
+  // Cricket/Rugby: h2h ONLY, NO h2h_lay - Betfair exchange gets excluded at game level
+  return'h2h,spreads,totals';
+}
+// Check if cache has useful soccer/basketball data
+function cacheHasPrimary(){
+  if(!G.allData||!G.allData.length)return false;
+  var hasSoccer=G.allData.some(function(g){return g._sk&&(g._sk.startsWith('soccer')||g._sk.startsWith('basketball_nba')||g._sk.startsWith('americanfootball_nfl'));});
+  // Cache must have at least 3 soccer/primary games, not just cricket
+  var soccerCount=G.allData.filter(function(g){return g._sk&&g._sk.startsWith('soccer');}).length;
+  return hasSoccer&&soccerCount>=3;
+}
+
 const G={page:'dashboard',mkt:'h2h',period:'m',allData:[],ev:[],evTab:'pre',sbData:[],sbBMs:[],sbSport:'',liveAll:[],liveFilter:'all',user:null,cd:60,sbEvGames:new Set()};
 const BK_CLR={pinnacle:'#c62828',bet365:'#027b5b',betfair:'#e6a800','1xbet':'#1a5685',unibet:'#147b45',williamhill:'#15355a',betano:'#d32f2f',bwin:'#213a8f','888sport':'#f97316',betclic:'#c62828',smarkets:'#7b1fa2',ladbrokes:'#004c97'};
 const $=id=>document.getElementById(id);
@@ -1602,57 +1642,51 @@ function renderLive(){var grid=$('live-grid');var data=G_liveData;if(G.liveFilte
 
 // -- PALPITES (v2 -- COM TODOS OS FIXES) --
 
-// FIX 1 v2: loadPalpites -- usa cache existente se disponivel, API so se necessario
+// Gerar Palpites: SEMPRE busca dados frescos (futebol prioritario)
+// Botao Usar Cache = loadPalpitesFromCache (zero chamadas API)
 async function loadPalpites(){
   var btn=$('btn-gen-palpites');
   if(btn){btn.disabled=true;btn.innerHTML='<div class="spin" style="width:14px;height:14px;border-width:2px;margin:0"></div> A analisar...';}
   var pc=$('palpites-content');
   function setStep(t,s){pc.innerHTML='<div style="text-align:center;padding:60px 20px"><div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(37,99,235,.2));border:2px solid rgba(124,58,237,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><i class="fas fa-magic" style="color:#c4b5fd;font-size:1.2rem"></i></div><div style="font-size:.9rem;font-weight:600;color:var(--t1);margin-bottom:6px">'+t+'</div><div style="font-size:.78rem;color:var(--t3);max-width:400px;margin:0 auto">'+s+'</div></div>';}
   try{
-    // -- PRIORIDADE 1: usa cache se ja temos dados --
-    if(G.allData&&G.allData.length>0){
-      toast('A usar '+G.allData.length+' jogos em cache...','i');
-      setStep('A calcular EV...',G.allData.length+' jogos em cache');
-      await sleep(200);
-      var picksC=buildPalpitesAlgo({});
-      renderPalpites(Array.isArray(picksC)?picksC:[],{});
-      var tsC=$('palpites-ts');if(tsC)tsC.textContent='Cache '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
-      var daiC=$('dot-ai');if(daiC)daiC.style.background='var(--green)';
-      toast('Palpites gerados!','s');
-      return;
-    }
-    // -- PRIORIDADE 2: busca da API (so se cache vazio) --
-    if(!ODDS_KEY)throw new Error('Chave API necessaria \u2014 configura no banner amarelo acima.');
-    // Apenas 5 ligas top + h2h,totals (sem btts/draw_no_bet que causam 422 em nao-futebol)
-    // Todos os desportos Tier 1 disponiveis
-    var PAL_SPORTS=SPORTS.filter(function(s){return s.tier===1;});
+    if(!ODDS_KEY)throw new Error('Chave API necessaria -- configura no banner amarelo acima.');
     var pData=[];
-    for(var si=0;si<PAL_SPORTS.length;si++){
-      var s=PAL_SPORTS[si];
-      setStep('A carregar... ('+(si+1)+'/'+PAL_SPORTS.length+')',s.e+' '+s.n);
-      var isSoccer=s.k.startsWith('soccer');
-      var isTennis=s.k.startsWith('tennis');
-      var isCricket=s.k.startsWith('cricket');
-      var isRugby=s.k.startsWith('rugby');
-      // Mercados por desporto
-      var mkts;
-      if(isSoccer)          mkts='h2h,spreads,totals,btts,draw_no_bet,alternate_totals,team_totals';
-      else if(isTennis)     mkts='h2h';  // tenis so moneyline
-      else if(isCricket||isRugby) mkts='h2h,spreads,totals';
-      else                  mkts='h2h,spreads,totals,alternate_totals,team_totals';
-      var d=await apiOdds(s.k,mkts);
-      if(d===null){console.warn('[Palpites] skip null:',s.k);}
-      else if(d.length){d.forEach(function(g){g._sn=s.n;g._si=s.e||'\u26BD';g._sk=s.k;g._tier=1;});pData.push.apply(pData,d);}
-      await sleep(150);
+    var loadedN=0;
+    // FASE 1: Futebol prioritario (batches paralelos de 4, economiza API calls)
+    var soccerList=PAL_PRIORITY.filter(function(s){return s.k.startsWith('soccer');});
+    var otherList=PAL_PRIORITY.filter(function(s){return !s.k.startsWith('soccer');});
+    for(var bi=0;bi<soccerList.length;bi+=4){
+      var batch=soccerList.slice(bi,bi+4);
+      setStep('Futebol '+(bi+1)+'-'+Math.min(bi+4,soccerList.length)+'/'+soccerList.length,batch.map(function(s){return s.e+' '+s.n;}).join(' | '));
+      var bRes=await Promise.allSettled(batch.map(async function(s){
+        var d=await apiOdds(s.k,getPalMkts(s.k));
+        if(d&&d.length){d.forEach(function(g){g._sn=s.n;g._si=s.e||'\u26BD';g._sk=s.k;g._tier=1;});return d;}
+        return[];
+      }));
+      bRes.forEach(function(r){if(r.status==='fulfilled'&&r.value&&r.value.length){pData.push.apply(pData,r.value);loadedN++;}});
+      if(bi+4<soccerList.length)await sleep(200);
+    }
+    // FASE 2: Outros desportos (NBA, NFL, NHL, Tennis, MMA)
+    if(otherList.length){
+      setStep('Outros desportos...','NBA | NFL | NHL | Tennis | MMA');
+      var oRes=await Promise.allSettled(otherList.map(async function(s){
+        var d=await apiOdds(s.k,getPalMkts(s.k));
+        if(d&&d.length){d.forEach(function(g){g._sn=s.n;g._si=s.e||'\u26BD';g._sk=s.k;g._tier=1;});return d;}
+        return[];
+      }));
+      oRes.forEach(function(r){if(r.status==='fulfilled'&&r.value&&r.value.length){pData.push.apply(pData,r.value);loadedN++;}});
+      await sleep(100);
     }
     if(pData.length){
-      G.allData=pData;
-      var do_=$('dot-odds');if(do_)do_.style.background='var(--green)';
-      toast(G.allData.length+' jogos carregados','s');
+      var palKeys=new Set(PAL_PRIORITY.map(function(p){return p.k;}));
+      G.allData=[...G.allData.filter(function(g){return!palKeys.has(g._sk);}),...pData];
+      var doEl=$('dot-odds');if(doEl)doEl.style.background='var(--green)';
+      toast(pData.length+' jogos de '+loadedN+' ligas','s');
     } else if(G.allData&&G.allData.length){
-      toast('API sem novos dados \u2014 usando cache ('+G.allData.length+' jogos)','w');
+      toast('API sem novos dados -- usando cache ('+G.allData.length+' jogos)','w');
     } else {
-      throw new Error('API sem dados. Verifica: (1) Quota em the-odds-api.com/account (2) Chave valida (3) Abre +EV e clica Refresh, depois usa o botao Usar Cache.');
+      throw new Error('API sem dados. Verifica: (1) Quota API (2) Chave valida');
     }
     setStep('A calcular EV...',G.allData.length+' jogos');
     await sleep(180);
@@ -1670,7 +1704,7 @@ async function loadPalpites(){
     toast('Palpites gerados!','s');
   }catch(e){
     if(G.allData&&G.allData.length){
-      toast('API falhou \u2014 a usar cache com '+G.allData.length+' jogos...','w');
+      toast('API falhou -- a usar cache com '+G.allData.length+' jogos...','w');
       try{
         var picks2=buildPalpitesAlgo({});
         renderPalpites(Array.isArray(picks2)?picks2:[],{});
@@ -1782,6 +1816,8 @@ function buildPalpitesAlgo(weather){
           if(game.commence_time&&new Date(game.commence_time)<new Date())return;
           // Skip LAY bets in palpites - Exchange only for EV+ page
           if(mkt.key==='h2h_lay')return;
+          // Skip ALL Betfair Exchange variants (LAY-focused, distorts cricket odds)
+          if(bm.key&&(bm.key.includes('betfair_ex')||bm.key==='betfair'))return;
           var sharp=['pinnacle','betfair_ex_eu','betfair','smarkets','matchbook'];
           var refBm=game.bookmakers.find(function(b){return sharp.includes(b.key);})||game.bookmakers[0];
           var refMkt=refBm&&refBm.markets&&refBm.markets.find(function(m){return m.key===mkt.key;});
@@ -1802,9 +1838,16 @@ function buildPalpitesAlgo(weather){
     var ev=parseFloat(b.ev),prob=b.prob;
     var evS=ev>5?ev*3:ev>2?ev*2:ev>0?ev*1.2:ev*0.1;
     var mB=b.mktPrio<=2?1.5:b.mktPrio<=4?0.5:0;
-    var w=weather[b.game];var wCode=w&&w.current&&w.current.weather_code!=null?w.current.weather_code:-1;
-    var wP=b.sport&&b.sport.match(/Premier|Liga|Serie|Bundesliga|Ligue|UCL|Europa|Soccer|Futebol/)?(wCode>=51?1.0:0):0;
-    return evS+(prob*0.03)+mB-wP;
+    var w=weather[b.game];var wCode2=w&&w.current&&w.current.weather_code!=null?w.current.weather_code:-1;
+    var wP=b.sport&&b.sport.match(/Premier|Liga|Serie|Bundesliga|Ligue|UCL|Europa|Soccer|Futebol/)?(wCode2>=51?1.0:0):0;
+    // Sport quality boost: soccer/nba/nfl rank above cricket/rugby
+    var sk=b.icon&&b.icon.includes('?')?'rugby':(b.sport||'').toLowerCase();
+    var sBoost=0;
+    if(b.mktKey&&b.mktKey==='h2h_lay')return-9999; // NEVER show LAY in palpites
+    if(sk.includes('premier')||sk.includes('liga')||sk.includes('serie')||sk.includes('bundesliga')||sk.includes('ligue')||sk.includes('soccer')||sk.includes('ucl')||sk.includes('mls')||sk.includes('libertadores'))sBoost=4;
+    else if(sk.includes('nba')||sk.includes('nfl')||sk.includes('nhl')||sk.includes('mlb'))sBoost=2;
+    else if(sk.includes('cricket')||sk.includes('rugby'))sBoost=-3;
+    return evS+(prob*0.03)+mB-wP+sBoost;
   }
   var bestMap=new Map();allBets.forEach(function(b){var key=b.game+'|'+b.mktKey+'|'+b.outcome;var ex=bestMap.get(key);if(!ex||b.odds>ex.odds)bestMap.set(key,b);});
   var candidates=[...bestMap.values()].sort(function(a,b){return score(b)-score(a);});
